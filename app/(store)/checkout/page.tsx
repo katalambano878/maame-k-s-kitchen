@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -33,13 +33,22 @@ export default function CheckoutPage() {
     region: ''
   });
 
-  // Canada regions for dropdown — replace with the regions/states you ship to.
-  const ghanaRegions = [
-    'Alberta',
-    'British Columbia',
-    'Saskatchewan',
-    'Manitoba'
-  ];
+  const CANADA_CITIES: Record<string, string[]> = {
+    'Alberta': ['Airdrie','Banff','Beaumont','Brooks','Calgary','Camrose','Canmore','Chestermere','Cochrane','Cold Lake','Crossfield','Drumheller','Edmonton','Fort McMurray','Fort Saskatchewan','Grande Prairie','High River','Lacombe','Leduc','Lethbridge','Lloydminster','Medicine Hat','Morinville','Okotoks','Olds','Peace River','Ponoka','Red Deer','Sherwood Park','Slave Lake','Spruce Grove','St. Albert','Stony Plain','Strathmore','Sylvan Lake','Taber','Wetaskiwin'],
+    'British Columbia': ['Abbotsford','Armstrong','Burnaby','Campbell River','Castlegar','Chilliwack','Colwood','Coquitlam','Courtenay','Cranbrook','Dawson Creek','Delta','Duncan','Fort St. John','Kamloops','Kelowna','Kimberley','Langley','Langford','Maple Ridge','Merritt','Mission','Nanaimo','Nelson','New Westminster','North Vancouver','Parksville','Penticton','Port Alberni','Port Coquitlam','Port Moody','Prince George','Prince Rupert','Quesnel','Richmond','Salmon Arm','Saanich','Surrey','Terrace','Trail','Vancouver','Vernon','Victoria','West Kelowna','White Rock','Williams Lake'],
+    'Manitoba': ['Altona','Beausejour','Brandon','Carman','Dauphin','Flin Flon','Gimli','Morden','Neepawa','Portage la Prairie','Selkirk','Steinbach','The Pas','Thompson','Winkler','Winnipeg'],
+    'New Brunswick': ['Bathurst','Campbellton','Dieppe','Edmundston','Florenceville-Bristol','Fredericton','Grand Falls','Miramichi','Moncton','Oromocto','Quispamsis','Riverview','Rothesay','Sackville','Saint John','Shediac','Sussex','Woodstock'],
+    'Newfoundland and Labrador': ['Carbonear','Channel-Port aux Basques','Clarenville','Corner Brook','Gander','Grand Falls-Windsor','Happy Valley-Goose Bay','Labrador City','Marystown','Mount Pearl','Paradise','Placentia','St. Johns','Stephenville','Wabush'],
+    'Northwest Territories': ['Behchoko','Fort Providence','Fort Simpson','Fort Smith','Hay River','Inuvik','Norman Wells','Yellowknife'],
+    'Nova Scotia': ['Amherst','Antigonish','Berwick','Bridgewater','Dartmouth','Digby','Glace Bay','Halifax','Kentville','New Glasgow','Pictou','Sydney','Truro','Windsor','Wolfville','Yarmouth'],
+    'Nunavut': ['Arviat','Baker Lake','Cambridge Bay','Gjoa Haven','Igloolik','Iqaluit','Rankin Inlet','Repulse Bay'],
+    'Ontario': ['Ajax','Aurora','Barrie','Belleville','Brampton','Brantford','Brockville','Burlington','Cambridge','Chatham','Cornwall','Dryden','Guelph','Hamilton','Kingston','Kitchener','London','Markham','Mississauga','Niagara Falls','North Bay','Oakville','Oshawa','Ottawa','Owen Sound','Peterborough','Pickering','Richmond Hill','Sarnia','Sault Ste. Marie','Simcoe','St. Catharines','Sudbury','Thunder Bay','Timmins','Toronto','Vaughan','Waterloo','Whitby','Windsor','Woodstock'],
+    'Prince Edward Island': ['Charlottetown','Cornwall','Kensington','Montague','Souris','Stratford','Summerside'],
+    'Quebec': ['Blainville','Brossard','Chicoutimi','Drummondville','Gatineau','Granby','Laval','Levis','Longueuil','Montreal','Quebec City','Repentigny','Rimouski','Rouyn-Noranda','Saint-Hyacinthe','Saint-Jean-sur-Richelieu','Saint-Jerome','Saguenay','Sherbrooke','Terrebonne','Trois-Rivieres','Val-d-Or'],
+    'Saskatchewan': ['Estevan','Humboldt','Kindersley','Lloydminster','Meadow Lake','Melfort','Melville','Moose Jaw','North Battleford','Prince Albert','Regina','Saskatoon','Swift Current','Weyburn','Yorkton'],
+    'Yukon': ['Carmacks','Dawson City','Haines Junction','Mayo','Watson Lake','Whitehorse'],
+  };
+  const CANADA_PROVINCES = Object.keys(CANADA_CITIES).sort();
 
   const [deliveryMethod, setDeliveryMethod] = useState('pickup');
   const [orderNotes, setOrderNotes] = useState('');
@@ -458,34 +467,36 @@ export default function CheckoutPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                          City *
-                        </label>
-                        <input
-                          type="text"
-                          value={shippingData.city}
-                          onChange={(e) => setShippingData({ ...shippingData, city: e.target.value })}
-                          className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] ${errors.city ? 'border-[#C8952A]' : 'border-gray-300'
-                            }`}
-                          placeholder="Calgary"
-                        />
-                        {errors.city && <p className="text-sm text-[#C8952A] mt-1">{errors.city}</p>}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-900 mb-2">
-                          Region *
+                          Province *
                         </label>
                         <select
                           value={shippingData.region}
-                          onChange={(e) => setShippingData({ ...shippingData, region: e.target.value })}
-                          className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] bg-white ${errors.region ? 'border-[#C8952A]' : 'border-gray-300'
-                            }`}
+                          onChange={(e) => setShippingData({ ...shippingData, region: e.target.value, city: '' })}
+                          className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] bg-white ${errors.region ? 'border-[#C8952A]' : 'border-gray-300'}`}
                         >
-                          <option value="">Select Region</option>
-                          {ghanaRegions.map((region) => (
-                            <option key={region} value={region}>{region}</option>
+                          <option value="">Select Province</option>
+                          {CANADA_PROVINCES.map((province) => (
+                            <option key={province} value={province}>{province}</option>
                           ))}
                         </select>
                         {errors.region && <p className="text-sm text-[#C8952A] mt-1">{errors.region}</p>}
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                          City *
+                        </label>
+                        <select
+                          value={shippingData.city}
+                          onChange={(e) => setShippingData({ ...shippingData, city: e.target.value })}
+                          disabled={!shippingData.region}
+                          className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] bg-white ${errors.city ? 'border-[#C8952A]' : 'border-gray-300'} ${!shippingData.region ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                          <option value="">{shippingData.region ? 'Select City' : 'Select province first'}</option>
+                          {(CANADA_CITIES[shippingData.region] || []).map((city) => (
+                            <option key={city} value={city}>{city}</option>
+                          ))}
+                        </select>
+                        {errors.city && <p className="text-sm text-[#C8952A] mt-1">{errors.city}</p>}
                       </div>
                     </div>
 
@@ -532,7 +543,7 @@ export default function CheckoutPage() {
                         />
                         <div>
                           <p className="font-semibold text-gray-900">Store Pickup</p>
-                          <p className="text-sm text-gray-600">Pick up from our store — Ready in 24 hours</p>
+                          <p className="text-sm text-gray-600">Pick up from our store â€” Ready in 24 hours</p>
                         </div>
                       </div>
                       <p className="font-bold text-[#C8952A]">FREE</p>
@@ -610,3 +621,6 @@ export default function CheckoutPage() {
     </main>
   );
 }
+
+
+
