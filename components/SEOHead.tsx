@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 
 interface SEOProps {
   title?: string;
@@ -16,8 +16,8 @@ interface SEOProps {
 }
 
 export function generateMetadata({
-  title = "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
-  description = 'Authentic Ghanaian cuisine from Maame Ks Kitchen. Order banku, jollof, waakye, fufu, and more — delivered fresh from Cornerstone, Calgary, Alberta.',
+  title = "Mama K â€” Authentic Ghanaian Cuisine in Calgary",
+  description = 'Authentic Ghanaian cuisine from Mama K. Order banku, jollof, waakye, fufu, and more â€” delivered fresh from Cornerstone, Calgary, Alberta.',
   keywords = [],
   ogImage,
   ogType = 'website',
@@ -32,11 +32,11 @@ export function generateMetadata({
   const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
   const defaultOgImage = `${siteUrl}/opengraph-image`;
   const resolvedOgImage = ogImage || defaultOgImage;
-  const siteName = "Maame Ks Kitchen";
+  const siteName = "Mama K";
   const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
   const defaultKeywords = [
-    "Maame Ks Kitchen",
+    "Mama K",
     'Ghanaian food Calgary',
     'Ghanaian restaurant Calgary',
     'African food Calgary',
@@ -117,7 +117,7 @@ export function generateProductSchema(product: {
     sku: product.sku,
     brand: {
       '@type': 'Brand',
-      name: product.brand || "Maame Ks Kitchen"
+      name: product.brand || "Mama K"
     },
     offers: {
       '@type': 'Offer',
@@ -166,7 +166,7 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: "Maame Ks Kitchen",
+    name: "Mama K",
     url: siteUrl,
     sameAs: [
       'https://www.instagram.com/maame.k_kitchen/',
@@ -181,7 +181,7 @@ export function generateWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: "Maame Ks Kitchen",
+    name: "Mama K",
     url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',

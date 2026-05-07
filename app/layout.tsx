@@ -17,12 +17,12 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
-    template: "%s | Maame Ks Kitchen"
+    default: "Mama K â€” Authentic Ghanaian Cuisine in Calgary",
+    template: "%s | Mama K"
   },
-  description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
+  description: "Order from Mama K â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
   keywords: [
-    "Maame Ks Kitchen",
+    "Mama K",
     "Ghanaian food Calgary",
     "Ghanaian restaurant Calgary",
     "Ghanaian food Alberta",
@@ -37,10 +37,10 @@ export const metadata: Metadata = {
     "Ghanaian takeout Calgary",
     "Ghanaian delivery Calgary",
   ],
-  authors: [{ name: "Maame Ks Kitchen" }],
-  creator: "Maame Ks Kitchen",
-  publisher: "Maame Ks Kitchen",
-  applicationName: "Maame Ks Kitchen",
+  authors: [{ name: "Mama K" }],
+  creator: "Mama K",
+  publisher: "Mama K",
+  applicationName: "Mama K",
   referrer: "origin-when-cross-origin",
   robots: {
     index: true,
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: "Maame Ks Kitchen",
+    title: "Mama K",
   },
   formatDetection: {
     telephone: true,
@@ -78,15 +78,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_CA",
     url: siteUrl,
-    title: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
-    siteName: "Maame Ks Kitchen",
-    images: [{ url: "/og-image.jpg", width: 500, height: 500, alt: "Maame Ks Kitchen" }],
+    title: "Mama K â€” Authentic Ghanaian Cuisine in Calgary",
+    description: "Order from Mama K â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    siteName: "Mama K",
+    images: [{ url: "/og-image.jpg", width: 500, height: 500, alt: "Mama K" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    title: "Mama K â€” Authentic Ghanaian Cuisine in Calgary",
+    description: "Order from Mama K â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
     site: "@maamekskitchenyyc",
   },
   alternates: {
@@ -102,7 +102,7 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": ["Organization", "LocalBusiness", "Restaurant"],
   "@id": `${siteUrl}/#organization`,
-  "name": "Maame Ks Kitchen",
+  "name": "Mama K",
   "url": siteUrl,
   "logo": {
     "@type": "ImageObject",
@@ -145,7 +145,7 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${siteUrl}/#website`,
-  "name": "Maame Ks Kitchen",
+  "name": "Mama K",
   "url": siteUrl,
   "description": "Authentic Ghanaian cuisine in Calgary, Canada",
   "publisher": { "@id": `${siteUrl}/#organization` },
@@ -171,7 +171,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#C8952A" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Maame Ks Kitchen" />
+        <meta name="apple-mobile-web-app-title" content="Mama K" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-TileColor" content="#111111" />
         <meta name="msapplication-tap-highlight" content="no" />
@@ -251,4 +251,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 

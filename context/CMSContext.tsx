@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -67,7 +67,7 @@ interface CMSContextType {
 }
 
 const defaultSettings: SiteSettings = {
-    site_name: "Maame Ks Kitchen",
+    site_name: "Mama K",
     site_tagline: 'Authentic Ghanaian cuisine in Calgary',
     site_logo: '/logo.png',
     contact_email: 'hello@maamekskitchen.ca',
@@ -155,3 +155,4 @@ export function useCMS() {
 }
 
 export default CMSContext;
+

@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import Link from 'next/link';
@@ -286,7 +286,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
           {/* Header */}
           <div className="flex justify-between items-start border-b-2 border-gray-800 pb-4 mb-4">
             <div>
-              <h1 className="text-2xl font-bold">Maame Ks Kitchen</h1>
+              <h1 className="text-2xl font-bold">Mama K</h1>
               <p className="text-sm text-gray-600">Order Packing Slip</p>
             </div>
             <div className="text-right">
@@ -622,3 +622,4 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
     </div>
   );
 }
+

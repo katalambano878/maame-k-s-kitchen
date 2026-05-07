@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from 'react';
 
@@ -9,7 +9,7 @@ const PERKS = [
 ];
 
 const PREVIEW_ITEMS = [
-  { icon: 'ri-restaurant-line', label: 'New dish drops — jollof, waakye, kelewele & more' },
+  { icon: 'ri-restaurant-line', label: 'New dish drops â€” jollof, waakye, kelewele & more' },
   { icon: 'ri-gift-line',       label: 'Seasonal specials & weekend-only offers' },
   { icon: 'ri-team-line',       label: 'Catering deals for events & gatherings' },
 ];
@@ -22,7 +22,13 @@ export default function NewsletterSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    await new Promise(r => setTimeout(r, 1400));
+    try {
+      await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+    } catch {}
     setSubmitting(false);
     setStatus('success');
     setEmail('');
@@ -41,7 +47,7 @@ export default function NewsletterSection() {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-7 md:p-10">
 
-            {/* Left — copy */}
+            {/* Left â€” copy */}
             <div>
               <div className="inline-flex items-center gap-2 mb-5">
                 <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
@@ -77,7 +83,7 @@ export default function NewsletterSection() {
               </ul>
             </div>
 
-            {/* Right — form */}
+            {/* Right â€” form */}
             <div className="flex items-center">
               <div className="w-full">
                 {status === 'success' ? (
@@ -175,3 +181,7 @@ export default function NewsletterSection() {
     </section>
   );
 }
+
+
+
+

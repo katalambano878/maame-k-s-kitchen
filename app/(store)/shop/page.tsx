@@ -75,19 +75,16 @@ function ShopContent() {
                 product_images!product_id(url, position),
                 product_variants(id, name, price, quantity, option1, option2, image_url)
               `, { count: 'exact' })
-              .eq('status', 'active').order('position', { foreignTable: 'product_images', ascending: true });
+              .neq('status', 'archived').order('position', { foreignTable: 'product_images', ascending: true });
 
             if (search) query = query.ilike('name', `%${search}%`);
 
             if (selectedCategory !== 'all') {
-              const categoryObj = categories.find(c => c.slug === selectedCategory);
-              if (categoryObj) {
-                const targetSlugs = [selectedCategory];
-                const childSlugs  = categories.filter(c => c.parent_id === categoryObj.id).map(c => c.slug);
-                targetSlugs.push(...childSlugs);
-                query = query.in('categories.slug', targetSlugs);
-              } else {
-                query = query.eq('categories.slug', selectedCategory);
+              const categoryObj = categories.find((c: any) => c.slug === selectedCategory);
+              if (categoryObj && categoryObj.id) {
+                const childIds = categories.filter((c: any) => c.parent_id === categoryObj.id).map((c: any) => c.id);
+                const allIds = [categoryObj.id, ...childIds].filter(Boolean);
+                query = query.in('category_id', allIds);
               }
             }
 
@@ -433,3 +430,4 @@ export default function ShopPage() {
     </Suspense>
   );
 }
+

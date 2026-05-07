@@ -357,7 +357,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">Page Title</label>
-                <input type="text" value={seoTitle} onChange={e => setSeoTitle(e.target.value)} placeholder={`${dishName || 'Dish Name'} | Maame K's Kitchen Calgary`} className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                <input type="text" value={seoTitle} onChange={e => setSeoTitle(e.target.value)} placeholder={`${dishName || 'Dish Name'} | Mama K Calgary`} className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
                 <p className="text-xs text-gray-500 mt-1">{seoTitle.length}/60 characters recommended</p>
               </div>
               <div>
@@ -384,4 +384,5 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
     </div>
   );
 }
+
 

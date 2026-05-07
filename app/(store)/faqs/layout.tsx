@@ -1,12 +1,12 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions',
-  description: 'Answers to common questions about ordering, delivery, pickup, payments, and more at Maame Ks Kitchen — authentic Ghanaian cuisine in Calgary, Alberta.',
+  description: 'Answers to common questions about ordering, delivery, pickup, payments, and more at Mama K â€” authentic Ghanaian cuisine in Calgary, Alberta.',
   keywords: [
-    'FAQ Maame Ks Kitchen',
+    'FAQ Mama K',
     'Ghanaian restaurant FAQ Calgary',
     'delivery questions Calgary',
     'payment methods Calgary',
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     canonical: `${siteUrl}/faqs`,
   },
   openGraph: {
-    title: 'Frequently Asked Questions | Maame Ks Kitchen',
-    description: 'Answers to common questions about ordering, shipping, returns, and payments at Maame Ks Kitchen.',
+    title: 'Frequently Asked Questions | Mama K',
+    description: 'Answers to common questions about ordering, shipping, returns, and payments at Mama K.',
     url: `${siteUrl}/faqs`,
     type: 'website',
   },
@@ -80,7 +80,7 @@ const faqSchema = {
       name: 'What if something is wrong with my order?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'If your order isn’t right, contact us within 24 hours of receiving it and we’ll make it right — refund, replacement, or store credit, your choice.',
+        text: 'If your order isnâ€™t right, contact us within 24 hours of receiving it and weâ€™ll make it right â€” refund, replacement, or store credit, your choice.',
       },
     },
     {
@@ -93,7 +93,7 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: 'How do I contact Maame Ks Kitchen?',
+      name: 'How do I contact Mama K?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'You can reach us by phone at (587) 582-2421, follow us on Instagram @maame.k_kitchen or TikTok @maamekskitchenyyc, or visit us at Cornerstone, Calgary, Alberta. You can also use the contact form on our website.',
@@ -113,3 +113,4 @@ export default function FaqsLayout({ children }: { children: React.ReactNode }) 
     </>
   );
 }
+

@@ -1,7 +1,7 @@
-import { ImageResponse } from 'next/og';
+﻿import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary";
+export const alt = "Mama K â€” Authentic Ghanaian Cuisine in Calgary";
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -78,7 +78,7 @@ export default function Image() {
               display: 'flex',
             }}
           >
-            Maame Ks Kitchen
+            Mama K
           </div>
 
           {/* Divider */}
@@ -103,7 +103,7 @@ export default function Image() {
               display: 'flex',
             }}
           >
-            Authentic Ghanaian Cuisine · Calgary, Canada
+            Authentic Ghanaian Cuisine Â· Calgary, Canada
           </div>
         </div>
       </div>
@@ -111,3 +111,4 @@ export default function Image() {
     { ...size }
   );
 }
+

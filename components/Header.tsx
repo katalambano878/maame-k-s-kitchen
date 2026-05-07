@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -27,12 +27,14 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen]         = useState(false);
   const [searchQuery, setSearchQuery]           = useState('');
+  const [searchResults, setSearchResults]       = useState<any[]>([]);
+  const [isSearching, setIsSearching]           = useState(false);
   const [user, setUser]                         = useState<any>(null);
   const [isScrolled, setIsScrolled]             = useState(false);
 
   const { cartCount, isCartOpen, setIsCartOpen } = useCart();
   const { getSetting } = useCMS();
-  const siteName = getSetting('site_name') || 'Maame Ks Kitchen';
+  const siteName = getSetting('site_name') || 'Mama K';
   const monogram = 'MK';
   const biz = getBusinessStatus();
 
@@ -53,10 +55,31 @@ export default function Header() {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (!searchQuery.trim() || searchQuery.length < 2) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+    setIsSearching(true);
+    const timer = setTimeout(async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, slug, price, product_images(url, position)')
+        .eq('status', 'active')
+        .ilike('name', `%${searchQuery}%`)
+        .order('name')
+        .limit(7);
+      setSearchResults(data || []);
+      setIsSearching(false);
+    }, 280);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      setIsSearchOpen(false);
+      setIsSearchOpen(false); setSearchQuery(''); setSearchResults([]);
       window.location.href = `/shop?search=${encodeURIComponent(searchQuery)}`;
     }
   };
@@ -70,7 +93,7 @@ export default function Header() {
           : 'bg-white/90 backdrop-blur-xl'
       }`}>
 
-        {/* Info strip — collapses on scroll */}
+        {/* Info strip â€” collapses on scroll */}
         <div className={`overflow-hidden transition-all duration-500 ease-out ${
           isScrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100'
         } ${biz.isOpen
@@ -88,9 +111,9 @@ export default function Header() {
                 style={{ backgroundColor: biz.isOpen ? '#C8952A' : '#f87171' }} />
               {biz.isOpen
                 ? biz.closingIn <= 1
-                  ? `Closing soon — order in the next ${Math.round(biz.closingIn * 60)} min!`
-                  : 'Open · Mon – Sun  10:00 AM – 9:00 PM MT'
-                : `Closed · Opens today at ${biz.opensAt} MT`
+                  ? `Closing soon â€” order in the next ${Math.round(biz.closingIn * 60)} min!`
+                  : 'Open Â· Mon â€“ Sun  10:00 AM â€“ 9:00 PM MT'
+                : `Closed Â· Opens today at ${biz.opensAt} MT`
               }
             </span>
             <span className="hidden lg:flex items-center gap-1.5 text-[10.5px] font-medium text-white/60 tracking-wide">
@@ -245,9 +268,9 @@ export default function Header() {
       {/* Search Overlay */}
       {isSearchOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col animate-in fade-in duration-200">
-          <div className="absolute inset-0 bg-white/97 backdrop-blur-2xl" onClick={() => setIsSearchOpen(false)} />
+          <div className="absolute inset-0 bg-white/97 backdrop-blur-2xl" onClick={() => { setIsSearchOpen(false); setSearchQuery(''); setSearchResults([]); }} />
           <button
-            onClick={() => setIsSearchOpen(false)}
+            onClick={() => { setIsSearchOpen(false); setSearchQuery(''); setSearchResults([]); }}
             className="absolute top-6 right-7 p-2 text-gray-400 hover:text-gray-900 transition-colors z-10"
             aria-label="Close search"
           >
@@ -280,6 +303,49 @@ export default function Header() {
                 Press <kbd className="px-1.5 py-0.5 text-[10px] bg-gray-100 rounded border border-gray-200 font-mono">Enter</kbd> to search
               </p>
             </form>
+
+            {/* Live recommendations */}
+            {searchQuery.length >= 2 && (
+              <div className="w-full max-w-xl mt-4">
+                {isSearching && (
+                  <p className="text-center text-[11px] text-gray-400 tracking-widest uppercase py-3">Searching...</p>
+                )}
+                {!isSearching && searchResults.length === 0 && (
+                  <p className="text-center text-[13px] text-gray-400 py-3">No dishes found for &ldquo;{searchQuery}&rdquo;</p>
+                )}
+                {!isSearching && searchResults.length > 0 && (
+                  <div className="divide-y divide-gray-100 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-white/80 backdrop-blur-sm">
+                    {searchResults.map((item: any) => {
+                      const img = item.product_images
+                        ?.slice().sort((a: any, b: any) => a.position - b.position)[0]?.url;
+                      return (
+                        <Link
+                          key={item.id}
+                          href={`/product/${item.slug}`}
+                          onClick={() => { setIsSearchOpen(false); setSearchQuery(''); setSearchResults([]); }}
+                          className="flex items-center gap-3 px-4 py-3 hover:bg-[#fdf9ec] transition-colors group"
+                        >
+                          <div className="w-11 h-11 rounded-xl overflow-hidden bg-[#fdf9ec] flex-shrink-0">
+                            {img ? (
+                              <Image src={img} alt={item.name} width={44} height={44} className="w-full h-full object-cover" unoptimized />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <i className="ri-restaurant-line text-[#C8952A]" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-gray-900 text-[14px] truncate group-hover:text-[#C8952A] transition-colors">{item.name}</p>
+                            <p className="text-[12px] text-gray-400">CA${item.price?.toFixed(2)}</p>
+                          </div>
+                          <i className="ri-arrow-right-line text-gray-300 group-hover:text-[#C8952A] transition-colors text-[14px]" />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <div className="relative pb-8 flex items-center justify-center gap-2">
             <div className="w-6 h-5 rounded-md bg-[#111111] flex items-center justify-center px-1">
@@ -325,9 +391,9 @@ export default function Header() {
                 style={biz.isOpen ? { backgroundColor: '#C8952A' } : undefined} />
               {biz.isOpen
                 ? biz.closingIn <= 1
-                  ? `Closing soon — ${Math.round(biz.closingIn * 60)} min left`
-                  : 'Open · 10:00 AM – 9:00 PM'
-                : `Closed · Opens at ${biz.opensAt}`
+                  ? `Closing soon â€” ${Math.round(biz.closingIn * 60)} min left`
+                  : 'Open Â· 10:00 AM â€“ 9:00 PM'
+                : `Closed Â· Opens at ${biz.opensAt}`
               }
             </div>
 
@@ -387,10 +453,10 @@ export default function Header() {
             <div className="px-5 py-4 border-t border-gray-100 space-y-1">
               <div className="flex items-center gap-1.5 justify-center">
                 <i className="ri-map-pin-line text-[11px] text-gray-400" />
-                <span className="text-[10px] text-gray-400">Cornerstone, NE Calgary · Free delivery CA$50+</span>
+                <span className="text-[10px] text-gray-400">Cornerstone, NE Calgary Â· Free delivery CA$50+</span>
               </div>
               <p className="text-[9px] tracking-[0.2em] uppercase text-gray-300 text-center font-medium">
-                © {new Date().getFullYear()} {siteName}
+                Â© {new Date().getFullYear()} {siteName}
               </p>
             </div>
           </div>
@@ -399,3 +465,8 @@ export default function Header() {
     </>
   );
 }
+
+
+
+
+

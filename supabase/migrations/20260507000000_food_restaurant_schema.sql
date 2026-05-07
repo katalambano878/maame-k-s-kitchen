@@ -1,5 +1,5 @@
--- ============================================================================
--- FOOD/RESTAURANT SCHEMA ADDITIONS FOR MAAME K'S KITCHEN
+﻿-- ============================================================================
+-- FOOD/RESTAURANT SCHEMA ADDITIONS FOR Mama K
 -- ============================================================================
 -- Run after: 20260218000000_allow_null_order_items_product_fks.sql
 
@@ -98,7 +98,7 @@ CREATE POLICY "Admin manages daily menu" ON public.daily_menu FOR ALL USING (EXI
 INSERT INTO public.delivery_zones (name, description, neighborhoods, postal_codes, delivery_fee, min_order, estimated_time_min, estimated_time_max)
 VALUES (
   'Calgary NE',
-  'Primary delivery zone — Cornerstone and surrounding NE communities',
+  'Primary delivery zone â€” Cornerstone and surrounding NE communities',
   ARRAY['Cornerstone','Redstone','Skyview Ranch','Cityscape','Saddle Ridge','Taradale','Martindale','Pineridge','Rundle'],
   ARRAY['T3N','T3J','T1Y'],
   5.00, 20.00, 30, 60

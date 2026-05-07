@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useTransition } from 'react';
 import { testSmsAction } from './actions';
@@ -8,7 +8,7 @@ export default function TestSmsPage() {
     const [isPending, startTransition] = useTransition();
     const [result, setResult] = useState<any>(null);
     const [phone, setPhone] = useState('');
-    const [message, setMessage] = useState('Test message from Maame Ks Kitchen admin');
+    const [message, setMessage] = useState('Test message from Mama K admin');
 
     const handleSend = () => {
         setResult(null);
@@ -88,3 +88,4 @@ export default function TestSmsPage() {
         </div>
     );
 }
+

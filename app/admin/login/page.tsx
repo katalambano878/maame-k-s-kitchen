@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -57,7 +57,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
-            <Image src="/logo.png" alt="Maame Ks Kitchen" width={90} height={28} className="h-7 w-auto mx-auto object-contain" style={{ width: 'auto', height: 'auto' }} />
+            <Image src="/logo.png" alt="Mama K" width={90} height={28} className="h-7 w-auto mx-auto object-contain" style={{ width: 'auto', height: 'auto' }} />
           </Link>
           <h1 className="text-3xl font-bold text-gray-900 mt-6 mb-2">Admin Login</h1>
           <p className="text-gray-600">Sign in to access the admin dashboard</p>
@@ -145,3 +145,4 @@ export default function AdminLoginPage() {
     </div>
   );
 }
+

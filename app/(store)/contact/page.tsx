@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from 'react';
 import { useCMS } from '@/context/CMSContext';
@@ -18,9 +18,9 @@ const SUBJECTS = [
 ];
 
 const HOURS = [
-  { day: 'Monday – Friday', time: '10:00 AM – 9:00 PM' },
-  { day: 'Saturday',        time: '10:00 AM – 9:00 PM' },
-  { day: 'Sunday',          time: '10:00 AM – 9:00 PM' },
+  { day: 'Monday â€“ Friday', time: '10:00 AM â€“ 9:00 PM' },
+  { day: 'Saturday',        time: '10:00 AM â€“ 9:00 PM' },
+  { day: 'Sunday',          time: '10:00 AM â€“ 9:00 PM' },
 ];
 
 const FAQS = [
@@ -30,7 +30,7 @@ const FAQS = [
   },
   {
     q: 'What are your delivery times?',
-    a: 'Same-day delivery across Calgary for orders placed before 8 PM. Pickup is typically ready within 30–60 minutes.',
+    a: 'Same-day delivery across Calgary for orders placed before 8 PM. Pickup is typically ready within 30â€“60 minutes.',
   },
   {
     q: 'Do you cater events?',
@@ -53,12 +53,12 @@ export default function ContactPage() {
 
   const contactPhone   = getSetting('contact_phone')   || '(587) 582-2421';
   const contactAddress = getSetting('contact_address') || 'Cornerstone, NE Calgary, Alberta';
-  const siteName       = getSetting('site_name')       || 'Maame Ks Kitchen';
+  const siteName       = getSetting('site_name')       || 'Mama K';
   const tiktokMain     = getSetting('social_tiktok')   || '';
   const tiktokJoy      = getSetting('social_tiktok_secondary') || '';
   const instagram      = getSetting('social_instagram') || '';
 
-  const phoneLines = contactPhone.split(/·|\/|&|\||,/).map((s: string) => s.trim()).filter(Boolean);
+  const phoneLines = contactPhone.split(/Â·|\/|&|\||,/).map((s: string) => s.trim()).filter(Boolean);
   const DEFAULT_COUNTRY_CODE = process.env.NEXT_PUBLIC_DEFAULT_COUNTRY_CODE || '1';
   const toWhatsAppDigits = (raw: string) => {
     const d = raw.replace(/\D/g, '');
@@ -101,17 +101,17 @@ export default function ContactPage() {
     <div className="min-h-screen bg-white">
       <PageHero
         title="Get In Touch"
-        subtitle="Questions, catering enquiries, or special requests — we would love to hear from you."
+        subtitle="Questions, catering enquiries, or special requests â€” we would love to hear from you."
         backgroundImage="/home_hero_1.jpeg"
       />
 
-      {/* ── Quick contact strip ── */}
+      {/* â”€â”€ Quick contact strip â”€â”€ */}
       <div className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
           {[
             { icon: 'ri-phone-line',   label: phoneLines[0] || '(587) 582-2421', href: `tel:${(phoneLines[0] || '').replace(/\s/g, '')}` },
             { icon: 'ri-map-pin-line', label: 'Cornerstone, NE Calgary',          href: '#location' },
-            { icon: 'ri-time-line',    label: 'Open daily 10 AM – 9 PM MT',       href: '#hours' },
+            { icon: 'ri-time-line',    label: 'Open daily 10 AM â€“ 9 PM MT',       href: '#hours' },
           ].map(item => (
             <a key={item.label} href={item.href} className="flex items-center gap-2 text-[12.5px] text-gray-500 font-medium hover:text-[#C8952A] transition-colors">
               <i className={`${item.icon} text-[#C8952A] text-[15px]`} />
@@ -124,7 +124,7 @@ export default function ContactPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
         <div className="grid lg:grid-cols-12 gap-16 lg:gap-20">
 
-          {/* ── Left: Form ── */}
+          {/* â”€â”€ Left: Form â”€â”€ */}
           <div className="lg:col-span-7">
             <div className="mb-10">
               <span className="inline-block py-1.5 px-4 rounded-full bg-[#fdf9ec] text-[#C8952A] font-bold text-[10px] tracking-[0.28em] uppercase mb-5 border border-[#f5de8f]">Send a Message</span>
@@ -154,7 +154,7 @@ export default function ContactPage() {
                 <div className="space-y-2">
                   <label className="block text-[11px] font-bold uppercase tracking-[0.18em] text-gray-400">Topic <span className="text-[#C8952A]">*</span></label>
                   <select required value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className={field + ' cursor-pointer'}>
-                    <option value="" disabled>Select a topic…</option>
+                    <option value="" disabled>Select a topicâ€¦</option>
                     {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>
@@ -166,7 +166,7 @@ export default function ContactPage() {
                   <label className="block text-[11px] font-bold uppercase tracking-[0.18em] text-gray-400">Message <span className="text-[#C8952A]">*</span></label>
                   <span className="text-[11px] text-gray-400">{formData.message.length}/500</span>
                 </div>
-                <textarea required rows={5} maxLength={500} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className={field + ' resize-none'} placeholder="Tell us how we can help you…" />
+                <textarea required rows={5} maxLength={500} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className={field + ' resize-none'} placeholder="Tell us how we can help youâ€¦" />
               </div>
 
               {/* Catering note */}
@@ -201,14 +201,14 @@ export default function ContactPage() {
                 className="group inline-flex items-center gap-2.5 px-9 py-4 bg-[#111111] hover:bg-[#111111] text-white rounded-full font-bold text-[14px] transition-all duration-300 hover:shadow-[0_8px_25px_rgba(200,149,42,0.3)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting || verifying
-                  ? (verifying ? 'Verifying…' : 'Sending…')
+                  ? (verifying ? 'Verifyingâ€¦' : 'Sendingâ€¦')
                   : <><span>Send Message</span><i className="ri-send-plane-fill transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></>
                 }
               </button>
             </form>
           </div>
 
-          {/* ── Right: Info ── */}
+          {/* â”€â”€ Right: Info â”€â”€ */}
           <div className="lg:col-span-5 space-y-6">
 
             {/* Contact card */}

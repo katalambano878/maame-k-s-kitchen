@@ -1,12 +1,12 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with Maame Ks Kitchen. Visit us at Cornerstone, Calgary, Alberta or reach us by phone. We\'re here to help with orders and enquiries.',
+  description: 'Get in touch with Mama K. Visit us at Cornerstone, Calgary, Alberta or reach us by phone. We\'re here to help with orders and enquiries.',
   keywords: [
-    'contact Maame Ks Kitchen',
+    'contact Mama K',
     'Calgary Ghanaian restaurant contact',
     'Cornerstone Calgary food',
     'Calgary Ghanaian restaurant phone',
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     canonical: `${siteUrl}/contact`,
   },
   openGraph: {
-    title: 'Contact Us | Maame Ks Kitchen',
-    description: 'Get in touch with Maame Ks Kitchen. Visit us at Cornerstone, Calgary, Alberta or reach us by phone.',
+    title: 'Contact Us | Mama K',
+    description: 'Get in touch with Mama K. Visit us at Cornerstone, Calgary, Alberta or reach us by phone.',
     url: `${siteUrl}/contact`,
     type: 'website',
   },
@@ -26,3 +26,4 @@ export const metadata: Metadata = {
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
+

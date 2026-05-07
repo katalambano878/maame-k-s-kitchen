@@ -8,7 +8,7 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 export default function AboutPage() {
   usePageTitle('Our Story');
   const { getSetting } = useCMS();
-  const siteName = getSetting('site_name') || 'Maame Ks Kitchen';
+  const siteName = getSetting('site_name') || 'Mama K';
 
   const values = [
     {
@@ -95,7 +95,7 @@ export default function AboutPage() {
             </div>
             {/* Floating badge */}
             <div className="absolute -bottom-5 -right-4 sm:-right-6 bg-[#111111] text-white rounded-2xl px-5 py-4 shadow-xl">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e8d5a3] mb-0.5">Open Daily</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e8d5a3] mb-0.5">Mama K</p>
               <p className="text-sm font-black">10:00 AM â€“ 9:00 PM</p>
             </div>
             {/* Glow */}
@@ -254,4 +254,6 @@ export default function AboutPage() {
     </div>
   );
 }
+
+
 
