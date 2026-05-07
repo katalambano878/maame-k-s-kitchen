@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -71,11 +71,11 @@ function ShopContent() {
               .from('products')
               .select(`
                 *,
-                categories!inner(name, slug),
+                categories(name, slug),
                 product_images!product_id(url, position),
                 product_variants(id, name, price, quantity, option1, option2, image_url)
               `, { count: 'exact' })
-              .order('position', { foreignTable: 'product_images', ascending: true });
+              .eq('status', 'active').order('position', { foreignTable: 'product_images', ascending: true });
 
             if (search) query = query.ilike('name', `%${search}%`);
 
@@ -189,7 +189,7 @@ function ShopContent() {
     <main className="min-h-screen bg-white">
       <PageHero
         title="Our Menu"
-        subtitle="Authentic Ghanaian cuisine made fresh daily — banku, jollof, waakye, fufu, omotuo, soups, stews & traditional sides"
+        subtitle="Authentic Ghanaian cuisine made fresh daily â€” banku, jollof, waakye, fufu, omotuo, soups, stews & traditional sides"
         backgroundImage="/home_hero_1.jpeg"
       />
 
@@ -216,7 +216,7 @@ function ShopContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row gap-10">
 
-            {/* ── Sidebar ── */}
+            {/* â”€â”€ Sidebar â”€â”€ */}
             <aside className={`${isFilterOpen ? 'fixed inset-0 z-50 bg-white overflow-y-auto' : 'hidden'} lg:block lg:w-60 lg:flex-shrink-0`}>
               <div className="lg:sticky lg:top-24">
                 <div className="bg-white lg:bg-transparent p-6 lg:p-0 space-y-7">
@@ -331,7 +331,7 @@ function ShopContent() {
               </div>
             </aside>
 
-            {/* ── Main grid ── */}
+            {/* â”€â”€ Main grid â”€â”€ */}
             <div className="flex-1 min-w-0">
 
               {/* Toolbar */}
@@ -343,7 +343,7 @@ function ShopContent() {
                   {' '}dishes
                   {selectedDietary.length > 0 && (
                     <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#fdf9ec] text-[#C8952A] text-[11px] font-medium">
-                      {selectedDietary.join(' · ')}
+                      {selectedDietary.join(' Â· ')}
                     </span>
                   )}
                 </div>
