@@ -1,40 +1,39 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useState } from 'react';
 
 export default function ProductEditor({ productId }: { productId: string }) {
-  const [productName, setProductName] = useState('Premium Leather Crossbody Bag');
-  const [category, setCategory] = useState('Bags & Accessories');
-  const [price, setPrice] = useState('289.00');
-  const [comparePrice, setComparePrice] = useState('349.00');
+  const [productName, setProductName] = useState('Jollof Rice');
+  const [category, setCategory] = useState('Rice Dishes');
+  const [price, setPrice] = useState('18.00');
+  const [comparePrice, setComparePrice] = useState('22.00');
   const [sku, setSku] = useState('MKK-001');
-  const [stock, setStock] = useState('15');
-  const [lowStockThreshold, setLowStockThreshold] = useState('5');
-  const [description, setDescription] = useState('Crafted from premium full-grain leather, this sophisticated crossbody bag combines timeless elegance with modern functionality. Features adjustable strap, secure zip closure, and multiple interior pockets.');
+  const [stock, setStock] = useState('50');
+  const [lowStockThreshold, setLowStockThreshold] = useState('10');
+  const [description, setDescription] = useState('Our signature Ghanaian jollof rice cooked with tomatoes, onions, and a blend of aromatic spices. Served with your choice of protein.');
   const [status, setStatus] = useState('Active');
   const [featured, setFeatured] = useState(true);
   const [activeTab, setActiveTab] = useState('general');
 
-  const Portions = [
-    { id: 1, name: 'Regular, sku: 'MKK-REG-001', price: 289.00, stock: 15 },
-    { id: 2, name: 'Large, sku: 'MKK-LRG-002', price: 289.00, stock: 8 },
-    { id: 3, name: 'Family, sku: 'MKK-FAM-003', price: 299.00, stock: 12 }
+  const portions = [
+    { id: 1, name: 'Regular', sku: 'MKK-REG-001', price: 18.00, stock: 50 },
+    { id: 2, name: 'Large', sku: 'MKK-LRG-002', price: 24.00, stock: 30 },
+    { id: 3, name: 'Family', sku: 'MKK-FAM-003', price: 45.00, stock: 15 },
   ];
 
   const images = [
-    'https://readdy.ai/api/search-image?query=/home_hero_1.jpeg',
-    'https://readdy.ai/api/search-image?query=/home_hero_1.jpeg',
-    'https://readdy.ai/api/search-image?query=/home_hero_1.jpeg',
-    'https://readdy.ai/api/search-image?query=/home_hero_1.jpeg'
+    '/home_hero_1.jpeg',
+    '/home_hero_2.jpeg',
+    '/home_hero_3.jpeg',
   ];
 
   const tabs = [
     { id: 'general', label: 'General', icon: 'ri-information-line' },
     { id: 'pricing', label: 'Pricing & Inventory', icon: 'ri-price-tag-3-line' },
-    { id: 'Portions', label: 'Portions', icon: 'ri-layout-grid-line' },
+    { id: 'portions', label: 'Portions', icon: 'ri-bowl-line' },
     { id: 'images', label: 'Images', icon: 'ri-image-line' },
-    { id: 'seo', label: 'SEO', icon: 'ri-search-line' }
+    { id: 'seo', label: 'SEO', icon: 'ri-search-line' },
   ];
 
   return (
@@ -48,8 +47,8 @@ export default function ProductEditor({ productId }: { productId: string }) {
             <i className="ri-arrow-left-line text-xl text-gray-700"></i>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Edit Product</h1>
-            <p className="text-gray-600 mt-1">Update product information and settings</p>
+            <h1 className="text-3xl font-bold text-gray-900">Edit Dish</h1>
+            <p className="text-gray-600 mt-1">Update dish information and settings</p>
           </div>
         </div>
 
@@ -58,7 +57,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
             <i className="ri-eye-line mr-2"></i>
             Preview
           </button>
-          <button className="px-6 py-3 bg-[#111111] hover:bg-[#111111] text-white rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
+          <button className="px-6 py-3 bg-[#111111] hover:bg-[#333] text-white rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
             <i className="ri-save-line mr-2"></i>
             Save Changes
           </button>
@@ -90,14 +89,14 @@ export default function ProductEditor({ productId }: { productId: string }) {
             <div className="space-y-6 max-w-3xl">
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Product Name *
+                  Dish Name *
                 </label>
                 <input
                   type="text"
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                  placeholder="Enter product name"
+                  placeholder="Enter dish name"
                 />
               </div>
 
@@ -111,7 +110,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                   rows={6}
                   maxLength={500}
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] resize-none"
-                  placeholder="Describe your product..."
+                  placeholder="Describe this dish..."
                 />
                 <p className="text-sm text-gray-500 mt-2">{description.length}/500 characters</p>
               </div>
@@ -126,12 +125,12 @@ export default function ProductEditor({ productId }: { productId: string }) {
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] cursor-pointer"
                   >
-                    <option>Bags & Accessories</option>
-                    <option>Home Decor</option>
-                    <option>Textiles</option>
-                    <option>Lighting</option>
-                    <option>Wall Art</option>
-                    <option>Kitchen & Dining</option>
+                    <option>Rice Dishes</option>
+                    <option>Soups &amp; Stews</option>
+                    <option>Grills &amp; Proteins</option>
+                    <option>Sides &amp; Extras</option>
+                    <option>Drinks &amp; Beverages</option>
+                    <option>Desserts &amp; Snacks</option>
                   </select>
                 </div>
 
@@ -159,7 +158,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                   className="w-5 h-5 accent-emerald-600 border-gray-300 rounded focus:ring-[#C8952A] cursor-pointer"
                 />
                 <label className="text-gray-900 font-medium">
-                  Feature this product on homepage
+                  Feature this dish on homepage
                 </label>
               </div>
             </div>
@@ -170,7 +169,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Price ($) *
+                    Price (CA$) *
                   </label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">$</span>
@@ -186,7 +185,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Compare at Price ($)
+                    Compare at Price (CA$)
                   </label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">$</span>
@@ -205,7 +204,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
               <div className="p-4 bg-[#fdf9ec] border border-[#e8c87a] rounded-lg">
                 <p className="text-[#7a5418] font-semibold mb-1">Discount Calculation</p>
                 <p className="text-[#a07020]">
-                  Savings: $ {(parseFloat(comparePrice) - parseFloat(price)).toFixed(2)} 
+                  Savings: CA$ {(parseFloat(comparePrice) - parseFloat(price)).toFixed(2)}
                   <span className="ml-2">
                     ({(((parseFloat(comparePrice) - parseFloat(price)) / parseFloat(comparePrice)) * 100).toFixed(0)}% off)
                   </span>
@@ -214,7 +213,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
 
               <div className="pt-6 border-t border-gray-200">
                 <h3 className="text-lg font-bold text-gray-900 mb-4">Inventory</h3>
-                
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-900 mb-2">
@@ -225,13 +224,13 @@ export default function ProductEditor({ productId }: { productId: string }) {
                       value={sku}
                       onChange={(e) => setSku(e.target.value)}
                       className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] font-mono"
-                      placeholder="PROD-SKU-001"
+                      placeholder="MKK-001"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-900 mb-2">
-                      Stock Quantity *
+                      Daily Prep Quantity *
                     </label>
                     <input
                       type="number"
@@ -252,20 +251,20 @@ export default function ProductEditor({ productId }: { productId: string }) {
                     onChange={(e) => setLowStockThreshold(e.target.value)}
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
                   />
-                  <p className="text-sm text-gray-500 mt-2">Get notified when stock falls below this number</p>
+                  <p className="text-sm text-gray-500 mt-2">Get notified when daily prep quantity falls below this number</p>
                 </div>
               </div>
             </div>
           )}
 
-          {activeTab === 'Portions' && (
+          {activeTab === 'portions' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">Portions</h3>
-                  <p className="text-gray-600 mt-1">Manage different versions of this product</p>
+                  <p className="text-gray-600 mt-1">Manage different serving sizes for this dish</p>
                 </div>
-                <button className="px-4 py-2 bg-[#111111] hover:bg-[#111111] text-white rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
+                <button className="px-4 py-2 bg-[#111111] hover:bg-[#333] text-white rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
                   <i className="ri-add-line mr-2"></i>
                   Add Portion
                 </button>
@@ -275,34 +274,34 @@ export default function ProductEditor({ productId }: { productId: string }) {
                 <table className="w-full">
                   <thead className="bg-gray-50 border-b border-gray-200">
                     <tr>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Variant Name</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Portion Name</th>
                       <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">SKU</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Price</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Stock</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Price (CA$)</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Qty</th>
                       <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {Portions.map((variant) => (
-                      <tr key={variant.id} className="border-b border-gray-100">
+                    {portions.map((portion) => (
+                      <tr key={portion.id} className="border-b border-gray-100">
                         <td className="py-4 px-4">
                           <input
                             type="text"
-                            defaultValue={variant.name}
+                            defaultValue={portion.name}
                             className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-sm"
                           />
                         </td>
                         <td className="py-4 px-4">
                           <input
                             type="text"
-                            defaultValue={variant.sku}
+                            defaultValue={portion.sku}
                             className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-sm font-mono"
                           />
                         </td>
                         <td className="py-4 px-4">
                           <input
                             type="number"
-                            defaultValue={variant.price}
+                            defaultValue={portion.price}
                             className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-sm"
                             step="0.01"
                           />
@@ -310,7 +309,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                         <td className="py-4 px-4">
                           <input
                             type="number"
-                            defaultValue={variant.stock}
+                            defaultValue={portion.stock}
                             className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-sm"
                           />
                         </td>
@@ -330,7 +329,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
           {activeTab === 'images' && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Product Images</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Dish Images</h3>
                 <p className="text-gray-600">Add up to 10 images. First image will be the primary image.</p>
               </div>
 
@@ -338,7 +337,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                 {images.map((image, index) => (
                   <div key={index} className="relative group">
                     <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden border-2 border-gray-200">
-                      <img src={image} alt={`Product ${index + 1}`} className="w-full h-full object-cover" />
+                      <img src={image} alt={`Dish ${index + 1}`} className="w-full h-full object-cover" />
                     </div>
                     {index === 0 && (
                       <span className="absolute top-2 left-2 bg-[#111111] text-white px-2 py-1 rounded text-xs font-semibold whitespace-nowrap">
@@ -355,7 +354,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                     </div>
                   </div>
                 ))}
-                
+
                 <button className="aspect-square border-2 border-dashed border-gray-300 rounded-xl hover:border-[#C8952A] hover:bg-[#fdf9ec] transition-colors flex flex-col items-center justify-center space-y-2 text-gray-600 hover:text-[#C8952A] cursor-pointer">
                   <i className="ri-upload-2-line text-3xl"></i>
                   <span className="text-sm font-semibold">Upload Image</span>
@@ -364,7 +363,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
 
               <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
                 <p className="text-sm text-gray-700">
-                  <strong>Image Guidelines:</strong> Use high-quality images (min 1000x1000px), white or neutral backgrounds work best. 
+                  <strong>Image Guidelines:</strong> Use high-quality food photos (min 1000x1000px). Natural lighting works best.
                   Supported formats: JPG, PNG, WebP (max 5MB each).
                 </p>
               </div>
@@ -375,7 +374,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
             <div className="space-y-6 max-w-3xl">
               <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-1">Search Engine Optimization</h3>
-                <p className="text-gray-600">Optimize how this product appears in search results</p>
+                <p className="text-gray-600">Optimize how this dish appears in search results</p>
               </div>
 
               <div>
@@ -384,7 +383,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                 </label>
                 <input
                   type="text"
-                  defaultValue="Premium Leather Crossbody Bag - Elegant & Functional"
+                  defaultValue="Jollof Rice - Authentic Ghanaian Recipe | Maame K's Kitchen"
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
                 />
                 <p className="text-sm text-gray-500 mt-2">60 characters recommended</p>
@@ -397,7 +396,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                 <textarea
                   rows={3}
                   maxLength={500}
-                  defaultValue="Quality product sourced and inspected for durability and style. Available for retail and wholesale orders."
+                  defaultValue="Authentic Ghanaian jollof rice made fresh daily at Maame K's Kitchen in Calgary. Order online for pickup or delivery."
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] resize-none"
                 />
                 <p className="text-sm text-gray-500 mt-2">160 characters recommended</p>
@@ -408,12 +407,12 @@ export default function ProductEditor({ productId }: { productId: string }) {
                   URL Slug
                 </label>
                 <div className="flex items-center">
-                  <span className="text-gray-600 bg-gray-100 px-4 py-3 border-2 border-r-0 border-gray-300 rounded-l-lg">
-                    example.com/product/
+                  <span className="text-gray-600 bg-gray-100 px-4 py-3 border-2 border-r-0 border-gray-300 rounded-l-lg text-sm">
+                    maamekskitchen.ca/shop/
                   </span>
                   <input
                     type="text"
-                    defaultValue="premium-leather-crossbody-bag"
+                    defaultValue="jollof-rice"
                     className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
                   />
                 </div>
@@ -425,7 +424,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                 </label>
                 <input
                   type="text"
-                  defaultValue="store, products"
+                  defaultValue="jollof rice, ghanaian food, calgary african food, west african cuisine"
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
                 />
                 <p className="text-sm text-gray-500 mt-2">Separate keywords with commas</p>
