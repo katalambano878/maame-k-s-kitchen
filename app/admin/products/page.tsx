@@ -185,7 +185,7 @@ export default function ProductsPage() {
           className="px-6 py-3 bg-[#111111] hover:bg-[#111111] text-white rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center justify-center md:items-start"
         >
           <i className="ri-add-line mr-2"></i>
-          Add Product
+          Add Dish
         </Link>
       </div>
 
@@ -436,11 +436,12 @@ export default function ProductsPage() {
 
         <div className="p-6 border-t border-gray-200 flex items-center justify-between">
           <p className="text-sm text-gray-500">
-            {filteredProducts.length === 0 ? 'No dishes' : `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''}`}
+            {filteredProducts.length === 0 ? 'No dishes' : `Showing ${filteredProducts.length} dish${filteredProducts.length !== 1 ? 'es' : ''}`}
           </p>
         </div>
       </div>
     </div>
   );
 }
+
 
