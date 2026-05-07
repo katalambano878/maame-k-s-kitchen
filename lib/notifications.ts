@@ -1,12 +1,12 @@
-﻿import { Resend } from 'resend';
+import { Resend } from 'resend';
 import { supabase } from '@/lib/supabase';
 import { escapeHtml } from '@/lib/sanitize';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 'missing_api_key');
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@maamekskitchen.ca';
-const EMAIL_FROM = process.env.EMAIL_FROM || "Mama K <noreply@maamekskitchen.ca>";
+const EMAIL_FROM = process.env.EMAIL_FROM || "Maame Ks Kitchen <noreply@maamekskitchen.ca>";
 const BRAND = {
-    name: "Mama K",
+    name: "Maame Ks Kitchen",
     color: '#059669',
     colorLight: '#ecfdf5',
     colorDark: '#064e3b',
@@ -41,7 +41,7 @@ ${body}
 <tr><td style="background-color:#f9fafb;padding:24px 40px;border-top:1px solid #e5e7eb;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="text-align:center;">
-<p style="margin:0 0 12px;color:#6b7280;font-size:13px;"><a href="${BRAND.url}" style="color:${BRAND.color};text-decoration:none;">Visit our store</a> &nbsp;Â·&nbsp; <a href="${BRAND.url}/order-tracking" style="color:${BRAND.color};text-decoration:none;">Track order</a></p>
+<p style="margin:0 0 12px;color:#6b7280;font-size:13px;"><a href="${BRAND.url}" style="color:${BRAND.color};text-decoration:none;">Visit our store</a> &nbsp;·&nbsp; <a href="${BRAND.url}/order-tracking" style="color:${BRAND.color};text-decoration:none;">Track order</a></p>
 <p style="margin:0;color:#9ca3af;font-size:11px;">&copy; ${new Date().getFullYear()} ${BRAND.name}. All rights reserved.</p>
 </td></tr>
 </table>
@@ -475,7 +475,7 @@ export async function sendPaymentLink(order: any) {
 
 <p style="color:#374151;font-size:14px;line-height:1.6;margin:16px 0;">Click the button below to securely complete your payment. This link will remain active until your order is completed or cancelled.</p>
 
-${emailButton('Pay Now â€” $' + Number(total).toFixed(2), paymentUrl, '#047857')}
+${emailButton('Pay Now — $' + Number(total).toFixed(2), paymentUrl, '#047857')}
 
 <p style="color:#9ca3af;font-size:12px;text-align:center;margin:0;">Or copy this link: <a href="${paymentUrl}" style="color:${BRAND.color};">${paymentUrl}</a></p>
 `, `Complete payment for order #${order_number}`)
@@ -546,4 +546,3 @@ ${emailButton('Reply to ' + safeName, `mailto:${safeEmail}?subject=Re: ${encodeU
 `, `New contact from ${safeName}: ${safeSubject}`)
     });
 }
-

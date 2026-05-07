@@ -1,4 +1,4 @@
-﻿export default function TermsPage() {
+export default function TermsPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="bg-gradient-to-br from-emerald-50 via-white to-[#0d0d0d] py-16">
@@ -173,7 +173,7 @@
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">6. Returns & Refunds</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              For <strong>Mama K</strong>, exchanges are only possible if the <strong>wrong item was delivered</strong>. An exchange may be considered if you notify us within <strong>24 hours of delivery</strong> and the product and its <strong>labels are intact</strong> (unworn, unused, in original condition).
+              For <strong>Maame Ks Kitchen</strong>, exchanges are only possible if the <strong>wrong item was delivered</strong>. An exchange may be considered if you notify us within <strong>24 hours of delivery</strong> and the product and its <strong>labels are intact</strong> (unworn, unused, in original condition).
             </p>
             <p className="text-gray-600 leading-relaxed mb-4">
               <strong>Refunds</strong> are issued <strong>only when absolutely necessary</strong>, at our discretion. Where a refund is approved, timing and method may depend on your payment provider.
@@ -301,4 +301,3 @@
     </div>
   );
 }
-

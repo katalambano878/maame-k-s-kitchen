@@ -1,4 +1,4 @@
-﻿import { Metadata } from 'next';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { sanitizeHtml } from '@/lib/sanitize';
 
@@ -104,7 +104,7 @@ const posts: Record<string, {
     readTime: '6 min read',
     author: 'Staff Writer',
     content: `
-      <p>Transform your living space with these carefully selected must-have products. Whether you're refreshing your dÃ©cor or starting from scratch, these items will elevate your home's comfort and style.</p>
+      <p>Transform your living space with these carefully selected must-have products. Whether you're refreshing your décor or starting from scratch, these items will elevate your home's comfort and style.</p>
 
       <h2>1. Smart LED Lighting</h2>
       <p>Modern LED bulbs with adjustable brightness and colour temperature can dramatically change your home's ambience. Control them from your phone, set schedules, and reduce energy costs.</p>
@@ -134,7 +134,7 @@ const posts: Record<string, {
       <p>Luxury doesn't have to be expensive. A set of soft, absorbent towels in coordinating colours makes your bathroom feel like a spa.</p>
 
       <h2>10. Decorative Mirror</h2>
-      <p>Mirrors make spaces feel larger and brighter by reflecting light. Choose a statement piece that complements your dÃ©cor style.</p>
+      <p>Mirrors make spaces feel larger and brighter by reflecting light. Choose a statement piece that complements your décor style.</p>
 
       <h2>Shopping Smart</h2>
       <p>When purchasing home products, consider quality over quantity. It's better to invest in a few well-made items than many cheap ones that won't last. Read reviews, compare prices, and take advantage of seasonal sales.</p>
@@ -228,14 +228,14 @@ export async function generateMetadata({
   const { id } = await params;
   const post = posts[id] || posts['1'];
 
-  const description = `${post.title} â€” Read our latest article on Mama K blog. Ghanaian food stories and recipes from Calgary, Canada.`;
+  const description = `${post.title} — Read our latest article on Maame Ks Kitchen blog. Ghanaian food stories and recipes from Calgary, Canada.`;
 
   return {
     title: post.title,
     description,
     authors: [{ name: post.author }],
     openGraph: {
-      title: `${post.title} | Mama K`,
+      title: `${post.title} | Maame Ks Kitchen`,
       description,
       url: `${siteUrl}/blog/${id}`,
       type: 'article',
@@ -267,7 +267,7 @@ export default async function BlogPostPage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: post.title,
-    description: `${post.title} â€” Ghanaian food stories and recipes from Mama K.`,
+    description: `${post.title} — Ghanaian food stories and recipes from Maame Ks Kitchen.`,
     image: post.image,
     datePublished: post.dateISO,
     dateModified: post.dateISO,
@@ -277,7 +277,7 @@ export default async function BlogPostPage({
     },
     publisher: {
       '@type': 'Organization',
-      name: "Mama K",
+      name: "Maame Ks Kitchen",
       logo: {
         '@type': 'ImageObject',
         url: `${siteUrl}/logo.png`,
@@ -451,4 +451,3 @@ export default async function BlogPostPage({
     </div>
   );
 }
-

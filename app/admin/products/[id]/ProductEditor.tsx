@@ -383,7 +383,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                 </label>
                 <input
                   type="text"
-                  defaultValue="Jollof Rice - Authentic Ghanaian Recipe | Mama K"
+                  defaultValue="Jollof Rice - Authentic Ghanaian Recipe | Maame K's Kitchen"
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
                 />
                 <p className="text-sm text-gray-500 mt-2">60 characters recommended</p>
@@ -396,7 +396,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
                 <textarea
                   rows={3}
                   maxLength={500}
-                  defaultValue="Authentic Ghanaian jollof rice made fresh daily at Mama K in Calgary. Order online for pickup or delivery."
+                  defaultValue="Authentic Ghanaian jollof rice made fresh daily at Maame K's Kitchen in Calgary. Order online for pickup or delivery."
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] resize-none"
                 />
                 <p className="text-sm text-gray-500 mt-2">160 characters recommended</p>
@@ -436,4 +436,3 @@ export default function ProductEditor({ productId }: { productId: string }) {
     </div>
   );
 }
-

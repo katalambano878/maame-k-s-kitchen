@@ -8,7 +8,7 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 export default function AboutPage() {
   usePageTitle('Our Story');
   const { getSetting } = useCMS();
-  const siteName = getSetting('site_name') || 'Mama K';
+  const siteName = getSetting('site_name') || 'Maame Ks Kitchen';
 
   const values = [
     {
@@ -254,6 +254,7 @@ export default function AboutPage() {
     </div>
   );
 }
+
 
 
 

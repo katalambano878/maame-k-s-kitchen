@@ -1,10 +1,10 @@
-﻿import { Metadata } from 'next';
+import { Metadata } from 'next';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 
 export const metadata: Metadata = {
   title: 'Browse Menu',
-  description: 'Browse our menu at Mama K â€” banku, jollof, waakye, fufu, soups, stews and traditional sides. Authentic Ghanaian cuisine in Calgary, Alberta.',
+  description: 'Browse our menu at Maame Ks Kitchen — banku, jollof, waakye, fufu, soups, stews and traditional sides. Authentic Ghanaian cuisine in Calgary, Alberta.',
   keywords: [
     'Ghanaian food menu Calgary',
     'rice dishes Calgary',
@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     canonical: `${siteUrl}/categories`,
   },
   openGraph: {
-    title: 'Browse Menu | Mama K',
-    description: 'Browse our menu â€” banku, jollof, waakye, fufu, soups, stews and traditional sides in Calgary, Alberta.',
+    title: 'Browse Menu | Maame Ks Kitchen',
+    description: 'Browse our menu — banku, jollof, waakye, fufu, soups, stews and traditional sides in Calgary, Alberta.',
     url: `${siteUrl}/categories`,
     type: 'website',
   },
@@ -28,4 +28,3 @@ export const metadata: Metadata = {
 export default function CategoriesLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
-

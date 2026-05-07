@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 
@@ -30,7 +30,7 @@ export default function PWASplash() {
       <div className="pwa-splash-logo mb-6">
         <span className="text-5xl font-serif font-bold text-white">MK</span>
       </div>
-      <h1 className="text-white text-xl font-bold font-serif mb-2">Mama K</h1>
+      <h1 className="text-white text-xl font-bold font-serif mb-2">Maame Ks Kitchen</h1>
       <p className="text-[#e8d5a3] text-sm font-medium mb-8">Authentic Ghanaian Cuisine</p>
       <div className="pwa-splash-dots flex gap-1.5">
         <span className="w-2 h-2 bg-white rounded-full" />
@@ -40,4 +40,3 @@ export default function PWASplash() {
     </div>
   );
 }
-

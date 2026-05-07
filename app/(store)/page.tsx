@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -21,7 +21,7 @@ function getOpenStatus() {
 export default function Home() {
   usePageTitle('');
   const { getSetting } = useCMS();
-  const siteName = getSetting('site_name') || 'Mama K';
+  const siteName = getSetting('site_name') || 'Maame Ks Kitchen';
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,13 +64,13 @@ export default function Home() {
   return (
     <main className="flex-col items-center justify-between min-h-screen">
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+      {/* ═══════════════════════════════════════
+      {/* ═══════════════════════════════════════
           HERO
-      â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      ═══════════════════════════════════════ */}
       <section className="relative w-full h-[100svh] min-h-[600px] overflow-hidden bg-[#0a0a0a] flex flex-col">
 
-        {/* â”€â”€ Slide backgrounds â”€â”€ */}
+        {/* ── Slide backgrounds ── */}
         {['/home_hero_1.jpeg', '/home_hero_2.jpeg', '/home_hero_3.jpeg'].map((src, idx) => (
           <div
             key={src}
@@ -88,20 +88,20 @@ export default function Home() {
           </div>
         ))}
 
-        {/* â”€â”€ Overlays â€” dark gradient so text pops â”€â”€ */}
+        {/* ── Overlays — dark gradient so text pops ── */}
         <div className="absolute inset-0 bg-black/60 z-10" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 z-10" />
 
-        {/* â”€â”€ Top gold accent line â”€â”€ */}
+        {/* ── Top gold accent line ── */}
         <div className="absolute top-0 left-0 right-0 h-[2px] z-20 pointer-events-none"
           style={{ background: 'linear-gradient(90deg, transparent 0%, #C8952A 40%, #e8b428 60%, transparent 100%)' }} />
 
-        {/* â”€â”€ Slide content â€” unique text per slide â”€â”€ */}
+        {/* ── Slide content — unique text per slide ── */}
         {[
           {
-            eyebrow: 'Cornerstone, Calgary â€” Est. 2025',
+            eyebrow: 'Cornerstone, Calgary — Est. 2025',
             headline: ['Taste of ', 'Ghana,', '\nin Calgary'],
-            sub: 'Banku, jollof, waakye, fufu, omotuo and more â€” cooked fresh daily and delivered to your door.',
+            sub: 'Banku, jollof, waakye, fufu, omotuo and more — cooked fresh daily and delivered to your door.',
           },
           {
             eyebrow: 'Authentic Ghanaian Cuisine',
@@ -109,9 +109,9 @@ export default function Home() {
             sub: 'Every dish crafted with traditional recipes, the finest ingredients, and a whole lot of love.',
           },
           {
-            eyebrow: 'Catering Â· Delivery Â· Pickup',
-            headline: ['Feeding Calgary', 'â€™s Love for', '\nGhana'],
-            sub: 'From family dinners to large events â€” we bring the taste of home straight to your table.',
+            eyebrow: 'Catering · Delivery · Pickup',
+            headline: ['Feeding Calgary', '’s Love for', '\nGhana'],
+            sub: 'From family dinners to large events — we bring the taste of home straight to your table.',
           },
         ].map((slide, idx) => (
           <div
@@ -157,7 +157,7 @@ export default function Home() {
           </div>
         ))}
 
-        {/* â”€â”€ Slide indicators â”€â”€ */}
+        {/* ── Slide indicators ── */}
         <div className="relative z-20 mt-auto flex items-center justify-center gap-3 pb-6">
           {[0, 1, 2].map(i => (
             <button
@@ -175,14 +175,14 @@ export default function Home() {
           ))}
         </div>
 
-        {/* â”€â”€ Bottom info bar â”€â”€ */}
+        {/* ── Bottom info bar ── */}
         <div className="relative z-20 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 py-4 flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {[
               { icon: 'ri-e-bike-line',    text: 'Free delivery CA$50+' },
-              { icon: 'ri-time-line',      text: '45â€“60 min delivery' },
+              { icon: 'ri-time-line',      text: '45–60 min delivery' },
               { icon: 'ri-map-pin-2-line', text: 'Cornerstone, NE Calgary' },
-              { icon: 'ri-star-fill',      text: '5.0 Â· Loved by locals' },
+              { icon: 'ri-star-fill',      text: '5.0 · Loved by locals' },
             ].map(item => (
               <span key={item.text} className="flex items-center gap-2 text-[11.5px]"
                 style={{ color: 'rgba(255,255,255,0.35)' }}>
@@ -195,9 +195,9 @@ export default function Home() {
 
       </section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+      {/* ═══════════════════════════════════════
           CATEGORIES
-      â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      ═══════════════════════════════════════ */}
       <section className="py-20 md:py-32 bg-gray-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <AnimatedSection className="flex flex-col md:flex-row items-center md:items-end justify-between mb-16 gap-6 text-center md:text-left">
@@ -254,9 +254,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+      {/* ═══════════════════════════════════════
           FEATURED PRODUCTS
-      â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      ═══════════════════════════════════════ */}
       <section className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-16">
@@ -309,15 +309,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+      {/* ═══════════════════════════════════════
           TRUST PILLARS
-      â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      ═══════════════════════════════════════ */}
       <section className="py-14 md:py-20 border-y border-gray-100/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x divide-gray-100">
             {[
               { title: 'Authentic Recipes', desc: "Real Ghanaian flavours, the way they're meant to taste", icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L4 6v6c0 5.25 3.5 9 8 10 4.5-1 8-4.75 8-10V6L12 2z" /><path d="M9 12l2 2 4-4" /></svg> },
-              { title: 'Made Fresh Daily', desc: 'Cooked to order â€” never reheated, never frozen', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" /><circle cx="7" cy="7" r="1" fill="currentColor" stroke="none" /></svg> },
+              { title: 'Made Fresh Daily', desc: 'Cooked to order — never reheated, never frozen', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" /><circle cx="7" cy="7" r="1" fill="currentColor" stroke="none" /></svg> },
               { title: 'Customer First', desc: 'Your satisfaction is our priority, every single order', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" /></svg> },
               { title: 'Reliable Delivery', desc: 'Same-day delivery across Calgary and surrounding areas', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13" rx="1" /><path d="M16 8h4l3 3v5h-7V8z" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg> },
             ].map(item => (

@@ -1,14 +1,13 @@
-﻿'use client';
+'use client';
 
 import { useEffect } from 'react';
 
-const SITE_NAME = "Mama K";
+const SITE_NAME = "Maame Ks Kitchen";
 
 export function usePageTitle(title: string) {
   useEffect(() => {
     document.title = title
       ? `${title} | ${SITE_NAME}`
-      : `${SITE_NAME} | Mama K`;
+      : `${SITE_NAME} | Maame Ks Kitchen`;
   }, [title]);
 }
-

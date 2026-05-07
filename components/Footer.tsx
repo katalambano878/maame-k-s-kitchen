@@ -50,7 +50,7 @@ function NavColumn({ title, links }: {
 
 export default function Footer() {
   const { getSetting } = useCMS();
-  const siteName = getSetting('site_name') || "Mama K";
+  const siteName = getSetting('site_name') || "Maame Ks Kitchen";
   const siteLogo = getSetting('site_logo') || '/logo.png';
   const socialTiktok = getSetting('social_tiktok') || '';
   const socialTiktok2 = getSetting('social_tiktok_secondary') || '';
@@ -176,5 +176,4 @@ export default function Footer() {
     </footer>
   );
 }
-
 

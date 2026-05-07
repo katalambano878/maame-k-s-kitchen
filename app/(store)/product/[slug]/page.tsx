@@ -1,4 +1,4 @@
-﻿import { Metadata } from 'next';
+import { Metadata } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import ProductDetailClient from './ProductDetailClient';
 
@@ -41,7 +41,7 @@ export async function generateMetadata({
   const rawDescription = product.description || '';
   const description = rawDescription
     ? rawDescription.replace(/<[^>]*>/g, '').slice(0, 155)
-    : `Shop ${title} at Mama K â€” authentic Ghanaian cuisine from Cornerstone, Calgary, Alberta, Canada, Canada.`;
+    : `Shop ${title} at Maame Ks Kitchen — authentic Ghanaian cuisine from Cornerstone, Calgary, Alberta, Canada, Canada.`;
 
   const images = product.product_images as { url: string }[] | null;
   const firstImage = images?.[0]?.url;
@@ -50,7 +50,7 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
-      title: `${title} | Mama K`,
+      title: `${title} | Maame Ks Kitchen`,
       description,
       url: `${siteUrl}/product/${slug}`,
       type: 'website',
@@ -60,7 +60,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | Mama K`,
+      title: `${title} | Maame Ks Kitchen`,
       description,
       images: firstImage ? [firstImage] : undefined,
     },
@@ -78,4 +78,3 @@ export default async function ProductDetailPage({
   const { slug } = await params;
   return <ProductDetailClient slug={slug} />;
 }
-

@@ -1,8 +1,8 @@
-﻿# Mama K
+# Maame Ks Kitchen
 
-> Authentic Ghanaian cuisine in Calgary â€” order banku, jollof, waakye, fufu, and more for delivery or pickup.
+> Authentic Ghanaian cuisine in Calgary — order banku, jollof, waakye, fufu, and more for delivery or pickup.
 
-The online ordering site and admin dashboard for Mama K, a Ghanaian restaurant in Cornerstone, Calgary, Alberta.
+The online ordering site and admin dashboard for Maame Ks Kitchen, a Ghanaian restaurant in Cornerstone, Calgary, Alberta.
 
 ## Tech Stack
 
@@ -10,7 +10,7 @@ The online ordering site and admin dashboard for Mama K, a Ghanaian restaurant i
 - **UI:** React 19 + TypeScript
 - **Styling:** Tailwind CSS
 - **Database:** Supabase (PostgreSQL)
-- **Payments:** Moolre _(swap for Stripe before going live in Canada â€” see [`CUSTOMIZE.md`](./CUSTOMIZE.md) Â§9)_
+- **Payments:** Moolre _(swap for Stripe before going live in Canada — see [`CUSTOMIZE.md`](./CUSTOMIZE.md) §9)_
 - **Email:** Resend
 
 ## Getting Started
@@ -57,7 +57,7 @@ npm run supabase:push    # push migrations
 
 ## Deployment
 
-Deploy via Vercel â€” connect this repo, set the env vars from .env.example, and configure your custom domain.
+Deploy via Vercel — connect this repo, set the env vars from .env.example, and configure your custom domain.
 
 ## Customization
 
@@ -65,5 +65,4 @@ After cloning, see [`CUSTOMIZE.md`](./CUSTOMIZE.md) for the full handoff checkli
 
 ## License
 
-Proprietary - All Rights Reserved â€” see [`LICENSE`](./LICENSE).
-
+Proprietary - All Rights Reserved — see [`LICENSE`](./LICENSE).
