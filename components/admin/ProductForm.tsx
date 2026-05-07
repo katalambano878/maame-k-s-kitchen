@@ -77,7 +77,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
     if (!price) { alert('Price is required'); setActiveTab('pricing'); return; }
     setLoading(true);
     try {
-      const productData: any = { name: dishName.trim(), description, category_id: categoryId || null, price: parseFloat(price), compare_at_price: comparePrice ? parseFloat(comparePrice) : null, sku: sku || generateSku(), quantity: parseInt(stock) || 0, status: status.toLowerCase(), featured, slug: slug || dishName.toLowerCase().replace(/[^a-z0-9]+/g, '-'), currency: 'CAD', is_halal: isHalal, is_vegetarian: isVegetarian, is_vegan: isVegan, is_gluten_free: isGlutenFree, spice_level: spiceLevel, prep_time: prepTime ? parseInt(prepTime) : null, calories: calories ? parseInt(calories) : null, is_available_today: isAvailableToday, allergens, ingredients, metadata: { low_stock_threshold: parseInt(lowStockThreshold) || 10, seo_title: seoTitle, seo_description: seoDesc, keywords } };
+      const productData: any = { name: dishName.trim(), description, category_id: categoryId || null, price: parseFloat(price), compare_at_price: comparePrice ? parseFloat(comparePrice) : null, sku: sku || generateSku(), quantity: parseInt(stock) || 0, status: status.toLowerCase(), featured, slug: slug || dishName.toLowerCase().replace(/[^a-z0-9]+/g, '-'), is_halal: isHalal, is_vegetarian: isVegetarian, is_vegan: isVegan, is_gluten_free: isGlutenFree, spice_level: spiceLevel, prep_time: prepTime ? parseInt(prepTime) : null, calories: calories ? parseInt(calories) : null, is_available_today: isAvailableToday, allergens, ingredients, metadata: { low_stock_threshold: parseInt(lowStockThreshold) || 10, seo_title: seoTitle, seo_description: seoDesc, keywords } };
       let productId = initialData?.id;
       if (isEditMode && productId) { const { error } = await supabase.from('products').update(productData).eq('id', productId); if (error) throw error; }
       else { const { data, error } = await supabase.from('products').insert(productData).select('id').single(); if (error) throw error; productId = data.id; }
@@ -384,3 +384,4 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
     </div>
   );
 }
+
