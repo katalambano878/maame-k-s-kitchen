@@ -96,7 +96,7 @@ export default function AboutPage() {
             {/* Floating badge */}
             <div className="absolute -bottom-5 -right-4 sm:-right-6 bg-[#111111] text-white rounded-2xl px-5 py-4 shadow-xl">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e8d5a3] mb-0.5">Mama K</p>
-              <p className="text-sm font-black">10:00 AM â€“ 9:00 PM</p>
+              <p className="text-sm font-black">10:00 AM – 9:00 PM</p>
             </div>
             {/* Glow */}
             <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#fdf9ec]/50 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
