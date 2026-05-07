@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -6,1085 +6,381 @@ import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 
 interface ProductFormProps {
-    initialData?: any;
-    isEditMode?: boolean;
+  initialData?: any;
+  isEditMode?: boolean;
 }
 
+const ALLERGENS = ['Nuts', 'Dairy', 'Eggs', 'Gluten', 'Shellfish', 'Soy', 'Fish', 'Sesame'];
+
 export default function ProductForm({ initialData, isEditMode = false }: ProductFormProps) {
-    const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    const [categories, setCategories] = useState<any[]>([]);
-
-    const [productName, setProductName] = useState(initialData?.name || '');
-    const [categoryId, setCategoryId] = useState(initialData?.category_id || '');
-    const [price, setPrice] = useState(initialData?.price || '');
-    const [comparePrice, setComparePrice] = useState(initialData?.compare_at_price || '');
-    const [sku, setSku] = useState(initialData?.sku || '');
-    const [stock, setStock] = useState(initialData?.quantity || '');
-    const [moq, setMoq] = useState(initialData?.moq || '1');
-    const [lowStockThreshold, setLowStockThreshold] = useState(initialData?.metadata?.low_stock_threshold || '5');
-    const [description, setDescription] = useState(initialData?.description || '');
-    const [status, setStatus] = useState(initialData?.status || 'Active');
-    const [featured, setFeatured] = useState(initialData?.featured || false);
-    const [preorderShipping, setPreorderShipping] = useState(initialData?.metadata?.preorder_shipping || '');
-    const [activeTab, setActiveTab] = useState('general');
-
-    // Auto-generate SKU function
-    const generateSku = () => {
-        const prefix = 'ST'; // Store identifier prefix
-        const timestamp = Date.now().toString(36).toUpperCase().slice(-4);
-        const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-        return `${prefix}-${timestamp}-${random}`;
-    };
-
-    // --- Variant System ---
-    // Preset color palette
-    const colorPresets = [
-        { name: 'Black', hex: '#000000' },
-        { name: 'White', hex: '#FFFFFF' },
-        { name: 'Red', hex: '#059669' },
-        { name: 'Blue', hex: '#3B82F6' },
-        { name: 'Navy', hex: '#1E3A5F' },
-        { name: 'Green', hex: '#22C55E' },
-        { name: 'Yellow', hex: '#EAB308' },
-        { name: 'Pink', hex: '#EC4899' },
-        { name: 'Purple', hex: '#A855F7' },
-        { name: 'Orange', hex: '#F97316' },
-        { name: 'Gray', hex: '#6B7280' },
-        { name: 'Brown', hex: '#92400E' },
-        { name: 'Beige', hex: '#D2B48C' },
-        { name: 'Maroon', hex: '#800000' },
-        { name: 'Teal', hex: '#14B8A6' },
-        { name: 'Cream', hex: '#FFFDD0' },
-        { name: 'Gold', hex: '#D4AF37' },
-        { name: 'Silver', hex: '#C0C0C0' },
-    ];
-    const sizePresets = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
-
-    // Parse existing variants to extract unique colors and sizes
-    const existingVariants = (initialData?.product_variants || []).map((v: any) => ({
-        ...v,
-        stock: v.stock ?? v.quantity ?? 0,
-        color: v.color ?? v.option2 ?? '',
-        size: v.name || ''
-    }));
-
-    const [selectedColors, setSelectedColors] = useState<{ name: string; hex: string }[]>(() => {
-        const colors = new Map<string, string>();
-        existingVariants.forEach((v: any) => {
-            if (v.color) {
-                const preset = colorPresets.find(c => c.name.toLowerCase() === v.color.toLowerCase());
-                colors.set(v.color, preset?.hex || '#888888');
-            }
-        });
-        return Array.from(colors.entries()).map(([name, hex]) => ({ name, hex }));
-    });
-
-    const [selectedSizes, setSelectedSizes] = useState<string[]>(() => {
-        const sizes = new Set<string>();
-        existingVariants.forEach((v: any) => {
-            if (v.size) sizes.add(v.size);
-        });
-        return Array.from(sizes);
-    });
-
-    const [customColorName, setCustomColorName] = useState('');
-    const [customColorHex, setCustomColorHex] = useState('#888888');
-    const [customSize, setCustomSize] = useState('');
-
-    // Build variants from colors × sizes (or just sizes, or just colors)
-    const buildVariantKey = (color: string, size: string) => `${color}|||${size}`;
-
-    // Store variant data (price, stock) in a map keyed by "color|||size"
-    const [variantData, setVariantData] = useState<Record<string, { price: string; stock: string; sku: string }>>(() => {
-        const data: Record<string, { price: string; stock: string; sku: string }> = {};
-        existingVariants.forEach((v: any) => {
-            const key = buildVariantKey(v.color || '', v.size || '');
-            data[key] = {
-                price: v.price?.toString() || '',
-                stock: v.stock?.toString() || '0',
-                sku: v.sku || ''
-            };
-        });
-        return data;
-    });
-
-    // Computed: all variant combinations
-    const variantCombinations = (() => {
-        const combos: { color: string; colorHex: string; size: string; key: string }[] = [];
-        const colors = selectedColors.length > 0 ? selectedColors : [{ name: '', hex: '' }];
-        const sizes = selectedSizes.length > 0 ? selectedSizes : [''];
-
-        for (const color of colors) {
-            for (const size of sizes) {
-                if (!color.name && !size) continue; // skip if both empty
-                const key = buildVariantKey(color.name, size);
-                combos.push({ color: color.name, colorHex: color.hex, size, key });
-            }
-        }
-        return combos;
-    })();
-
-    // Build the flat variants array for saving (used by handleSubmit)
-    const variants = variantCombinations.map(combo => {
-        const d = variantData[combo.key] || { price: price, stock: '0', sku: '' };
-        return {
-            name: combo.size,
-            color: combo.color,
-            sku: d.sku,
-            price: d.price || price,
-            stock: d.stock || '0'
-        };
-    });
-
-    const updateVariantField = (key: string, field: string, value: string) => {
-        setVariantData(prev => ({
-            ...prev,
-            [key]: { ...prev[key] || { price: price, stock: '0', sku: '' }, [field]: value }
-        }));
-    };
-
-    // Bulk set price/stock for all variants
-    const bulkSetField = (field: 'price' | 'stock', value: string) => {
-        setVariantData(prev => {
-            const updated = { ...prev };
-            variantCombinations.forEach(combo => {
-                updated[combo.key] = { ...updated[combo.key] || { price: price, stock: '0', sku: '' }, [field]: value };
-            });
-            return updated;
-        });
-    };
-
-    const toggleColor = (color: { name: string; hex: string }) => {
-        setSelectedColors(prev => {
-            const exists = prev.find(c => c.name === color.name);
-            if (exists) return prev.filter(c => c.name !== color.name);
-            return [...prev, color];
-        });
-    };
-
-    const toggleSize = (size: string) => {
-        setSelectedSizes(prev => {
-            if (prev.includes(size)) return prev.filter(s => s !== size);
-            return [...prev, size];
-        });
-    };
-
-    const addCustomColor = () => {
-        if (!customColorName.trim()) return;
-        const exists = selectedColors.find(c => c.name.toLowerCase() === customColorName.trim().toLowerCase());
-        if (!exists) {
-            setSelectedColors(prev => [...prev, { name: customColorName.trim(), hex: customColorHex }]);
-        }
-        setCustomColorName('');
-        setCustomColorHex('#888888');
-    };
-
-    const addCustomSize = () => {
-        if (!customSize.trim()) return;
-        if (!selectedSizes.includes(customSize.trim())) {
-            setSelectedSizes(prev => [...prev, customSize.trim()]);
-        }
-        setCustomSize('');
-    };
-
-    // Images
-    const [images, setImages] = useState<any[]>(initialData?.product_images || []);
-    const [uploading, setUploading] = useState(false);
-
-    // SEO
-    const [seoTitle, setSeoTitle] = useState(initialData?.seo_title || '');
-    const [metaDescription, setMetaDescription] = useState(initialData?.seo_description || '');
-    const [urlSlug, setUrlSlug] = useState(initialData?.slug || '');
-    const [keywords, setKeywords] = useState(initialData?.tags?.join(', ') || '');
-
-    const tabs = [
-        { id: 'general', label: 'General', icon: 'ri-information-line' },
-        { id: 'pricing', label: 'Pricing & Inventory', icon: 'ri-price-tag-3-line' },
-        { id: 'variants', label: 'Variants', icon: 'ri-layout-grid-line' },
-        { id: 'images', label: 'Images', icon: 'ri-image-line' },
-        { id: 'seo', label: 'SEO', icon: 'ri-search-line' }
-    ];
-
-    // Fetch categories on mount
-    useEffect(() => {
-        async function fetchCategories() {
-            const { data } = await supabase.from('categories').select('id, name').eq('status', 'active');
-            if (data) {
-                setCategories(data);
-                if (data.length > 0 && !categoryId) {
-                    setCategoryId(data[0].id);
-                }
-            }
-        }
-        fetchCategories();
-    }, [categoryId]);
-
-    // Auto-generate slug from name if not manually edited
-    useEffect(() => {
-        if (!isEditMode && productName && !urlSlug) {
-            setUrlSlug(productName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''));
-        }
-    }, [productName, isEditMode, urlSlug]);
-
-    // Auto-generate SKU for new products
-    useEffect(() => {
-        if (!isEditMode && !sku) {
-            setSku(generateSku());
-        }
-    }, [isEditMode]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        try {
-            if (!e.target.files || e.target.files.length === 0) return;
-
-            setUploading(true);
-            const file = e.target.files[0];
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
-            const filePath = `${fileName}`;
-
-            const { error: uploadError } = await supabase.storage
-                .from('products')
-                .upload(filePath, file);
-
-            if (uploadError) throw uploadError;
-
-            const { data: { publicUrl } } = supabase.storage
-                .from('products')
-                .getPublicUrl(filePath);
-
-            setImages([...images, { url: publicUrl, position: images.length }]);
-
-        } catch (error: any) {
-            alert('Error uploading image: ' + error.message);
-        } finally {
-            setUploading(false);
-        }
-    };
-
-    const handleRemoveImage = (indexToRemove: number) => {
-        setImages(images.filter((_, idx) => idx !== indexToRemove));
-    };
-
-    // Variant helpers removed — variants are now auto-generated from selectedColors × selectedSizes
-
-    const handleSubmit = async () => {
-        try {
-            setLoading(true);
-
-            // If product has variants, auto-sync main stock = sum of variant stocks
-            const hasVariants = variants.length > 0;
-            const variantStockTotal = hasVariants
-                ? variants.reduce((sum, v) => sum + (parseInt(v.stock) || 0), 0)
-                : parseInt(stock) || 0;
-
-            const productData = {
-                name: productName,
-                slug: urlSlug || productName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
-                description,
-                category_id: categoryId || null,
-                price: parseFloat(price) || 0,
-                compare_at_price: comparePrice ? parseFloat(comparePrice) : null,
-                sku: sku || generateSku(), // Auto-generate if empty
-                quantity: hasVariants ? variantStockTotal : (parseInt(stock) || 0),
-                moq: parseInt(moq) || 1,
-                status: status.toLowerCase(),
-                featured,
-                seo_title: seoTitle,
-                seo_description: metaDescription,
-                tags: (keywords as string).split(',').map((k: string) => k.trim()).filter(Boolean),
-                metadata: {
-                    low_stock_threshold: parseInt(lowStockThreshold) || 5,
-                    preorder_shipping: preorderShipping.trim() || null
-                }
-            };
-
-            let productId = initialData?.id;
-            let error;
-
-            if (isEditMode && productId) {
-                // Update existing
-                const { error: updateError } = await supabase
-                    .from('products')
-                    .update(productData)
-                    .eq('id', productId);
-                error = updateError;
-            } else {
-                // Create new
-                const { data: newProduct, error: insertError } = await supabase
-                    .from('products')
-                    .insert([productData])
-                    .select()
-                    .single();
-
-                if (newProduct) productId = newProduct.id;
-                error = insertError;
-            }
-
-            if (error) throw error;
-
-            // Update Images
-            if (productId) {
-                // Strategy: We will just delete all old images/variants and recreate them for simplicity in this MVP.
-                // In a clearer implementation, we would diff them.
-
-                // 1. Images
-                if (isEditMode) {
-                    await supabase.from('product_images').delete().eq('product_id', productId);
-                }
-                if (images.length > 0) {
-                    const imageInserts = images.map((img, idx) => ({
-                        product_id: productId,
-                        url: img.url,
-                        position: idx,
-                        alt_text: productName
-                    }));
-                    await supabase.from('product_images').insert(imageInserts);
-                }
-
-                // 2. Variants
-                if (isEditMode) {
-                    // Be careful not to delete ALL variants if we want to preserve IDs etc, 
-                    // but for now, full replacement is safer to ensure sync.
-                    // Note: This might break order-item references if they rely on variant_id hard constraints without cascading.
-                    // Our Schema migration has ON DELETE SET NULL for order_items -> variant_id, so this is safe for now (but distinct from "archiving").
-                    await supabase.from('product_variants').delete().eq('product_id', productId);
-                }
-
-                if (variants.length > 0) {
-                    const variantInserts = variants.map(v => {
-                        const colorHex = selectedColors.find(c => c.name === v.color)?.hex || null;
-                        return {
-                            product_id: productId,
-                            name: v.name || v.color || 'Default',
-                            sku: v.sku || null,
-                            price: parseFloat(v.price) || 0,
-                            quantity: parseInt(v.stock) || 0,
-                            option1: v.name || null,
-                            option2: v.color?.trim() || null,
-                            metadata: colorHex ? { color_hex: colorHex } : {}
-                        };
-                    });
-                    const { error: varError } = await supabase.from('product_variants').insert(variantInserts);
-                    if (varError) throw varError;
-                }
-            }
-
-            alert(isEditMode ? 'Product updated successfully!' : 'Product created successfully!');
-            router.push('/admin/products');
-
-        } catch (err: any) {
-            console.error('Error saving product:', err);
-            alert(`Error: ${err.message}`);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                    <Link
-                        href="/admin/products"
-                        className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-lg hover:border-gray-400 transition-colors"
-                    >
-                        <i className="ri-arrow-left-line text-xl text-gray-700"></i>
-                    </Link>
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900">
-                            {isEditMode ? 'Edit Product' : 'Add New Product'}
-                        </h1>
-                        <p className="text-gray-600 mt-1">
-                            {isEditMode ? 'Update product information and settings' : 'Create a new product for your catalog'}
-                        </p>
-                    </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                    {isEditMode && (
-                        <Link
-                            href={`/product/${initialData?.id}`}
-                            target="_blank"
-                            className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:border-gray-400 transition-colors font-semibold whitespace-nowrap cursor-pointer flex items-center"
-                        >
-                            <i className="ri-eye-line mr-2"></i>
-                            Preview
-                        </Link>
-                    )}
-                    <button
-                        onClick={handleSubmit}
-                        disabled={loading}
-                        className={`px-6 py-3 bg-[#111111] hover:bg-[#111111] text-white rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-                    >
-                        {loading ? (
-                            <>
-                                <i className="ri-loader-4-line animate-spin mr-2"></i>
-                                Saving...
-                            </>
-                        ) : (
-                            <>
-                                <i className="ri-save-line mr-2"></i>
-                                {isEditMode ? 'Save Changes' : 'Create Product'}
-                            </>
-                        )}
-                    </button>
-                </div>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="border-b border-gray-200 overflow-x-auto">
-                    <div className="flex">
-                        {tabs.map((tab) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center space-x-2 px-6 py-4 font-semibold whitespace-nowrap transition-colors border-b-2 cursor-pointer ${activeTab === tab.id
-                                    ? 'border-[#C8952A] text-[#C8952A] bg-[#fdf9ec]'
-                                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                                    }`}
-                            >
-                                <i className={`${tab.icon} text-xl`}></i>
-                                <span>{tab.label}</span>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="p-8">
-                    {activeTab === 'general' && (
-                        <div className="space-y-6 max-w-3xl">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    Product Name *
-                                </label>
-                                <input
-                                    type="text"
-                                    value={productName}
-                                    onChange={(e) => setProductName(e.target.value)}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                    placeholder="Enter product name"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    Description
-                                </label>
-                                <textarea
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    rows={6}
-                                    maxLength={500}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] resize-none"
-                                    placeholder="Describe your product..."
-                                />
-                                <p className="text-sm text-gray-500 mt-2">{description.length}/500 characters</p>
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                        Category *
-                                    </label>
-                                    <select
-                                        value={categoryId}
-                                        onChange={(e) => setCategoryId(e.target.value)}
-                                        className="w-full px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] cursor-pointer"
-                                    >
-                                        {categories.length === 0 && <option value="">Loading categories...</option>}
-                                        {categories.length > 0 && <option value="">Select a category</option>}
-                                        {categories.map(cat => (
-                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                        Status
-                                    </label>
-                                    <select
-                                        value={status}
-                                        onChange={(e) => setStatus(e.target.value)}
-                                        className="w-full px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] cursor-pointer"
-                                    >
-                                        <option>Active</option>
-                                        <option>Draft</option>
-                                        <option>Archived</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center space-x-3">
-                                <input
-                                    type="checkbox"
-                                    checked={featured}
-                                    onChange={(e) => setFeatured(e.target.checked)}
-                                    className="w-5 h-5 text-[#C8952A] border-gray-300 rounded focus:ring-[#C8952A] cursor-pointer"
-                                />
-                                <label className="text-gray-900 font-medium">
-                                    Feature this product on homepage
-                                </label>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    Pre-order / Estimated Shipping
-                                </label>
-                                <input
-                                    type="text"
-                                    value={preorderShipping}
-                                    onChange={(e) => setPreorderShipping(e.target.value)}
-                                    placeholder="e.g., Ships in 14 days, Available March 15"
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C8952A] focus:border-transparent transition-all"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Leave empty if product ships immediately. Otherwise, enter estimated shipping time.</p>
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'pricing' && (
-                        <div className="space-y-6 max-w-3xl">
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                        Price ($) *
-                                    </label>
-                                    <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">$</span>
-                                        <input
-                                            type="number"
-                                            value={price}
-                                            onChange={(e) => setPrice(e.target.value)}
-                                            className="w-full pl-16 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                            step="0.01"
-                                            placeholder="0.00"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                        Compare at Price ($)
-                                    </label>
-                                    <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">$</span>
-                                        <input
-                                            type="number"
-                                            value={comparePrice}
-                                            onChange={(e) => setComparePrice(e.target.value)}
-                                            className="w-full pl-16 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                            step="0.01"
-                                            placeholder="0.00"
-                                        />
-                                    </div>
-                                    <p className="text-sm text-gray-500 mt-2">Show original price for comparison</p>
-                                </div>
-                            </div>
-
-                            <div className="p-4 bg-[#fdf9ec] border border-[#e8c87a] rounded-lg">
-                                <p className="text-[#7a5418] font-semibold mb-1">Discount Calculation</p>
-                                {price && comparePrice && parseFloat(comparePrice) > parseFloat(price) ? (
-                                    <p className="text-[#a07020]">
-                                        Savings: $ {(parseFloat(comparePrice) - parseFloat(price)).toFixed(2)}
-                                        <span className="ml-2">
-                                            ({(((parseFloat(comparePrice) - parseFloat(price)) / parseFloat(comparePrice)) * 100).toFixed(0)}% off)
-                                        </span>
-                                    </p>
-                                ) : (
-                                    <p className="text-[#a07020] text-sm">Enter a valid compare price higher than the price to see discount.</p>
-                                )}
-                            </div>
-
-                            <div className="pt-6 border-t border-gray-200">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4">Inventory</h3>
-
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                            SKU (Auto-generated)
-                                        </label>
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="text"
-                                                value={sku}
-                                                onChange={(e) => setSku(e.target.value)}
-                                                className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] font-mono bg-gray-50"
-                                                placeholder="Auto-generated"
-                                                readOnly
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setSku(generateSku())}
-                                                className="px-4 py-3 border-2 border-gray-300 rounded-lg hover:border-[#C8952A] hover:bg-[#fdf9ec] transition-colors cursor-pointer"
-                                                title="Generate new SKU"
-                                            >
-                                                <i className="ri-refresh-line text-lg"></i>
-                                            </button>
-                                        </div>
-                                        <p className="text-sm text-gray-500 mt-1">SKU is auto-generated. Click refresh to generate a new one.</p>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                            Stock Quantity *
-                                        </label>
-                                        {variants.length > 0 ? (
-                                            <div>
-                                                <input
-                                                    type="number"
-                                                    value={variants.reduce((sum: number, v: any) => sum + (parseInt(v.stock) || 0), 0)}
-                                                    readOnly
-                                                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
-                                                />
-                                                <p className="text-sm text-[#C8952A] mt-1 flex items-center">
-                                                    <i className="ri-information-line mr-1"></i>
-                                                    Stock is managed per variant. Edit stock in the Variants tab.
-                                                </p>
-                                            </div>
-                                        ) : (
-                                            <input
-                                                type="number"
-                                                value={stock}
-                                                onChange={(e) => setStock(e.target.value)}
-                                                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                                placeholder="0"
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="grid md:grid-cols-2 gap-6 mt-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                            Minimum Order Quantity (MOQ)
-                                        </label>
-                                        <input
-                                            type="number"
-                                            value={moq}
-                                            onChange={(e) => setMoq(e.target.value)}
-                                            min="1"
-                                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                            placeholder="1"
-                                        />
-                                        <p className="text-sm text-gray-500 mt-1">Minimum quantity customers must order</p>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                            Low Stock Threshold
-                                        </label>
-                                        <input
-                                            type="number"
-                                            value={lowStockThreshold}
-                                            onChange={(e) => setLowStockThreshold(e.target.value)}
-                                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                        />
-                                        <p className="text-sm text-gray-500 mt-1">Get notified when stock falls below this number</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'variants' && (
-                        <div className="space-y-8">
-                            <div>
-                                <h3 className="text-lg font-bold text-gray-900">Product Variants</h3>
-                                <p className="text-gray-600 mt-1">Select colors and sizes below — variants are generated automatically</p>
-                            </div>
-
-                            {/* STEP 1: Colors */}
-                            <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                                <h4 className="text-sm font-bold text-gray-900 mb-1 flex items-center">
-                                    <i className="ri-palette-line mr-2 text-lg text-[#C8952A]"></i>
-                                    Step 1: Select Colors
-                                    {selectedColors.length > 0 && (
-                                        <span className="ml-2 bg-[#fdf9ec] text-[#a07020] text-xs font-semibold px-2 py-0.5 rounded-full">
-                                            {selectedColors.length} selected
-                                        </span>
-                                    )}
-                                </h4>
-                                <p className="text-xs text-gray-500 mb-4">Click colors to add/remove. Skip if product has no color options.</p>
-
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {colorPresets.map(color => {
-                                        const isSelected = selectedColors.some(c => c.name === color.name);
-                                        return (
-                                            <button
-                                                key={color.name}
-                                                onClick={() => toggleColor(color)}
-                                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg border-2 transition-all text-sm font-medium ${isSelected
-                                                        ? 'border-[#C8952A] bg-[#fdf9ec] ring-1 ring-[#C8952A]'
-                                                        : 'border-gray-200 hover:border-gray-300 bg-white'
-                                                    }`}
-                                                title={color.name}
-                                            >
-                                                <span
-                                                    className="w-5 h-5 rounded-full border border-gray-300 flex-shrink-0"
-                                                    style={{ backgroundColor: color.hex }}
-                                                ></span>
-                                                <span className={isSelected ? 'text-[#a07020]' : 'text-gray-700'}>{color.name}</span>
-                                                {isSelected && <i className="ri-check-line text-[#C8952A]"></i>}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-
-                                {/* Custom color */}
-                                <div className="flex items-center gap-2 pt-3 border-t border-gray-200">
-                                    <input
-                                        type="color"
-                                        value={customColorHex}
-                                        onChange={(e) => setCustomColorHex(e.target.value)}
-                                        className="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer p-0.5"
-                                        title="Pick a custom color"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={customColorName}
-                                        onChange={(e) => setCustomColorName(e.target.value)}
-                                        placeholder="Custom color name"
-                                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                        onKeyDown={(e) => e.key === 'Enter' && addCustomColor()}
-                                    />
-                                    <button
-                                        onClick={addCustomColor}
-                                        disabled={!customColorName.trim()}
-                                        className="px-4 py-2 bg-[#111111] text-white rounded-lg text-sm font-medium hover:bg-[#111111] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                                    >
-                                        Add Color
-                                    </button>
-                                </div>
-
-                                {/* Selected colors summary */}
-                                {selectedColors.length > 0 && (
-                                    <div className="mt-4 flex flex-wrap gap-2">
-                                        {selectedColors.map(color => (
-                                            <span key={color.name} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm shadow-sm">
-                                                <span className="w-3.5 h-3.5 rounded-full border border-gray-300" style={{ backgroundColor: color.hex }}></span>
-                                                {color.name}
-                                                <button onClick={() => toggleColor(color)} className="text-gray-400 hover:text-[#C8952A] ml-1">
-                                                    <i className="ri-close-line text-sm"></i>
-                                                </button>
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* STEP 2: Sizes */}
-                            <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                                <h4 className="text-sm font-bold text-gray-900 mb-1 flex items-center">
-                                    <i className="ri-ruler-line mr-2 text-lg text-[#C8952A]"></i>
-                                    Step 2: Select Sizes
-                                    {selectedSizes.length > 0 && (
-                                        <span className="ml-2 bg-[#fdf9ec] text-[#a07020] text-xs font-semibold px-2 py-0.5 rounded-full">
-                                            {selectedSizes.length} selected
-                                        </span>
-                                    )}
-                                </h4>
-                                <p className="text-xs text-gray-500 mb-4">Click sizes to add/remove. Use custom for volumes (100ml), weights, etc.</p>
-
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {sizePresets.map(size => {
-                                        const isSelected = selectedSizes.includes(size);
-                                        return (
-                                            <button
-                                                key={size}
-                                                onClick={() => toggleSize(size)}
-                                                className={`px-5 py-2.5 rounded-lg border-2 font-semibold text-sm transition-all ${isSelected
-                                                        ? 'border-[#C8952A] bg-[#fdf9ec] text-[#a07020] ring-1 ring-[#C8952A]'
-                                                        : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
-                                                    }`}
-                                            >
-                                                {size}
-                                                {isSelected && <i className="ri-check-line ml-1.5 text-[#C8952A]"></i>}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-
-                                {/* Custom size */}
-                                <div className="flex items-center gap-2 pt-3 border-t border-gray-200">
-                                    <input
-                                        type="text"
-                                        value={customSize}
-                                        onChange={(e) => setCustomSize(e.target.value)}
-                                        placeholder="Custom size (e.g. 100ml, One Size, 42)"
-                                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                        onKeyDown={(e) => e.key === 'Enter' && addCustomSize()}
-                                    />
-                                    <button
-                                        onClick={addCustomSize}
-                                        disabled={!customSize.trim()}
-                                        className="px-4 py-2 bg-[#111111] text-white rounded-lg text-sm font-medium hover:bg-[#111111] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                                    >
-                                        Add Size
-                                    </button>
-                                </div>
-
-                                {/* Selected sizes summary */}
-                                {selectedSizes.length > 0 && (
-                                    <div className="mt-4 flex flex-wrap gap-2">
-                                        {selectedSizes.map(size => (
-                                            <span key={size} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm shadow-sm font-medium">
-                                                {size}
-                                                <button onClick={() => toggleSize(size)} className="text-gray-400 hover:text-[#C8952A] ml-1">
-                                                    <i className="ri-close-line text-sm"></i>
-                                                </button>
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* STEP 3: Variant Grid */}
-                            {variantCombinations.length > 0 && (
-                                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                                    <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-                                        <div>
-                                            <h4 className="text-sm font-bold text-gray-900 flex items-center">
-                                                <i className="ri-grid-line mr-2 text-lg text-[#C8952A]"></i>
-                                                Step 3: Set Price & Stock ({variantCombinations.length} variant{variantCombinations.length > 1 ? 's' : ''})
-                                            </h4>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                onClick={() => {
-                                                    const val = prompt('Set price for ALL variants:', price?.toString() || '0');
-                                                    if (val !== null) bulkSetField('price', val);
-                                                }}
-                                                className="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors"
-                                            >
-                                                Bulk Set Price
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    const val = prompt('Set stock for ALL variants:', '0');
-                                                    if (val !== null) bulkSetField('stock', val);
-                                                }}
-                                                className="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors"
-                                            >
-                                                Bulk Set Stock
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full">
-                                            <thead className="bg-gray-50 border-b border-gray-200">
-                                                <tr>
-                                                    {selectedColors.length > 0 && (
-                                                        <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Color</th>
-                                                    )}
-                                                    {selectedSizes.length > 0 && (
-                                                        <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Size</th>
-                                                    )}
-                                                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Price ($)</th>
-                                                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Stock</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {variantCombinations.map((combo) => {
-                                                    const d = variantData[combo.key] || { price: price, stock: '0', sku: '' };
-                                                    return (
-                                                        <tr key={combo.key} className="border-b border-gray-100 hover:bg-gray-50">
-                                                            {selectedColors.length > 0 && (
-                                                                <td className="py-3 px-4">
-                                                                    <div className="flex items-center gap-2">
-                                                                        <span
-                                                                            className="w-5 h-5 rounded-full border border-gray-300 flex-shrink-0"
-                                                                            style={{ backgroundColor: combo.colorHex }}
-                                                                        ></span>
-                                                                        <span className="text-sm font-medium text-gray-900">{combo.color}</span>
-                                                                    </div>
-                                                                </td>
-                                                            )}
-                                                            {selectedSizes.length > 0 && (
-                                                                <td className="py-3 px-4">
-                                                                    <span className="text-sm font-semibold text-gray-900 bg-gray-100 px-2.5 py-1 rounded">
-                                                                        {combo.size}
-                                                                    </span>
-                                                                </td>
-                                                            )}
-                                                            <td className="py-3 px-4">
-                                                                <input
-                                                                    type="number"
-                                                                    value={d.price}
-                                                                    onChange={(e) => updateVariantField(combo.key, 'price', e.target.value)}
-                                                                    className="w-28 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                                                    step="0.01"
-                                                                    placeholder={price?.toString() || '0'}
-                                                                />
-                                                            </td>
-                                                            <td className="py-3 px-4">
-                                                                <input
-                                                                    type="number"
-                                                                    value={d.stock}
-                                                                    onChange={(e) => updateVariantField(combo.key, 'stock', e.target.value)}
-                                                                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                                                    placeholder="0"
-                                                                />
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div className="p-3 bg-[#fdf9ec] border-t border-[#f5de8f]">
-                                        <p className="text-xs text-[#a07020] flex items-center">
-                                            <i className="ri-information-line mr-1.5"></i>
-                                            Total stock across all variants: <strong className="ml-1">{variants.reduce((sum, v) => sum + (parseInt(v.stock) || 0), 0)}</strong>
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {variantCombinations.length === 0 && (
-                                <div className="p-8 text-center text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                                    <i className="ri-palette-line text-4xl text-gray-300 mb-2 block"></i>
-                                    <p className="font-medium">No variants configured</p>
-                                    <p className="text-sm mt-1">Select colors and/or sizes above to create variant combinations.</p>
-                                    <p className="text-xs mt-2 text-gray-400">You can add just colors, just sizes, or both for a full grid.</p>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {activeTab === 'images' && (
-                        <div className="space-y-6">
-                            <div>
-                                <h3 className="text-lg font-bold text-gray-900 mb-1">Product Images</h3>
-                                <p className="text-gray-600">Add up to 10 images. First image will be the primary image.</p>
-                            </div>
-
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {images.map((img: any, index: number) => (
-                                    <div key={index} className="relative group">
-                                        <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden border-2 border-gray-200">
-                                            <img src={img.url} alt={`Product ${index + 1}`} className="w-full h-full object-cover" />
-                                        </div>
-                                        {index === 0 && (
-                                            <span className="absolute top-2 left-2 bg-[#111111] text-white px-2 py-1 rounded text-xs font-semibold whitespace-nowrap">
-                                                Primary
-                                            </span>
-                                        )}
-                                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2 rounded-xl">
-                                            <a href={img.url} target="_blank" rel="noreferrer" className="w-9 h-9 flex items-center justify-center bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                                                <i className="ri-eye-line"></i>
-                                            </a>
-                                            <button
-                                                onClick={() => handleRemoveImage(index)}
-                                                className="w-9 h-9 flex items-center justify-center bg-white text-[#C8952A] rounded-lg hover:bg-[#fdf9ec] transition-colors cursor-pointer"
-                                            >
-                                                <i className="ri-delete-bin-line"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-
-                                <label className={`aspect-square border-2 border-dashed border-gray-300 rounded-xl hover:border-[#C8952A] hover:bg-[#fdf9ec] transition-colors flex flex-col items-center justify-center space-y-2 text-gray-600 hover:text-[#C8952A] cursor-pointer ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                                    {uploading ? (
-                                        <i className="ri-loader-4-line animate-spin text-3xl"></i>
-                                    ) : (
-                                        <i className="ri-upload-2-line text-3xl"></i>
-                                    )}
-                                    <span className="text-sm font-semibold">{uploading ? 'Uploading...' : 'Upload Image'}</span>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                        onChange={handleImageUpload}
-                                        disabled={uploading}
-                                    />
-                                </label>
-                            </div>
-
-                            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                                <p className="text-sm text-gray-700">
-                                    <strong>Image Guidelines:</strong> Use high-quality images (min 1000x1000px), white or neutral backgrounds work best.
-                                    Supported formats: JPG, PNG, WebP (max 5MB each).
-                                </p>
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'seo' && (
-                        <div className="space-y-6 max-w-3xl">
-                            <div>
-                                <h3 className="text-lg font-bold text-gray-900 mb-1">Search Engine Optimization</h3>
-                                <p className="text-gray-600">Optimize how this product appears in search results</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    Page Title
-                                </label>
-                                <input
-                                    type="text"
-                                    value={seoTitle}
-                                    onChange={(e) => setSeoTitle(e.target.value)}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                    placeholder="Seo friendly title"
-                                />
-                                <p className="text-sm text-gray-500 mt-2">60 characters recommended</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    Meta Description
-                                </label>
-                                <textarea
-                                    rows={3}
-                                    maxLength={500}
-                                    value={metaDescription}
-                                    onChange={(e) => setMetaDescription(e.target.value)}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] resize-none"
-                                    placeholder="Seo friendly description"
-                                />
-                                <p className="text-sm text-gray-500 mt-2">160 characters recommended</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    URL Slug
-                                </label>
-                                <div className="flex items-center">
-                                    <span className="text-gray-600 bg-gray-100 px-4 py-3 border-2 border-r-0 border-gray-300 rounded-l-lg">
-                                        store.com/product/
-                                    </span>
-                                    <input
-                                        type="text"
-                                        value={urlSlug}
-                                        onChange={(e) => setUrlSlug(e.target.value)}
-                                        className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                        placeholder="product-slug"
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    Keywords
-                                </label>
-                                <input
-                                    type="text"
-                                    value={keywords}
-                                    onChange={(e) => setKeywords(e.target.value)}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]"
-                                    placeholder="keyword1, keyword2"
-                                />
-                                <p className="text-sm text-gray-500 mt-2">Separate keywords with commas</p>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState('general');
+  const [dishName, setDishName] = useState(initialData?.name || '');
+  const [description, setDescription] = useState(initialData?.description || '');
+  const [categoryId, setCategoryId] = useState(initialData?.category_id || '');
+  const [status, setStatus] = useState(initialData?.status || 'active');
+  const [featured, setFeatured] = useState(initialData?.featured || false);
+  const [price, setPrice] = useState(initialData?.price?.toString() || '');
+  const [comparePrice, setComparePrice] = useState(initialData?.compare_at_price?.toString() || '');
+  const [sku, setSku] = useState(initialData?.sku || '');
+  const [stock, setStock] = useState(initialData?.quantity?.toString() || '');
+  const [lowStockThreshold, setLowStockThreshold] = useState(initialData?.metadata?.low_stock_threshold?.toString() || '10');
+  const [isHalal, setIsHalal] = useState(initialData?.is_halal ?? true);
+  const [isVegetarian, setIsVegetarian] = useState(initialData?.is_vegetarian ?? false);
+  const [isVegan, setIsVegan] = useState(initialData?.is_vegan ?? false);
+  const [isGlutenFree, setIsGlutenFree] = useState(initialData?.is_gluten_free ?? false);
+  const [spiceLevel, setSpiceLevel] = useState<number>(initialData?.spice_level ?? 0);
+  const [prepTime, setPrepTime] = useState(initialData?.prep_time?.toString() || '');
+  const [calories, setCalories] = useState(initialData?.calories?.toString() || '');
+  const [isAvailableToday, setIsAvailableToday] = useState(initialData?.is_available_today ?? true);
+  const [allergens, setAllergens] = useState<string[]>(initialData?.allergens || []);
+  const [ingredients, setIngredients] = useState(initialData?.ingredients || '');
+  const [portions, setPortions] = useState<{ id?: string; name: string; price: string; stock: string; sku: string }[]>(
+    initialData?.product_variants?.length
+      ? initialData.product_variants.map((v: any) => ({ id: v.id, name: v.option1 || v.name || '', price: v.price?.toString() || '', stock: (v.stock ?? v.quantity ?? 0).toString(), sku: v.sku || '' }))
+      : [{ name: 'Regular', price: '', stock: '', sku: '' }]
+  );
+  const [imageUrls, setImageUrls] = useState<string[]>(initialData?.product_images?.sort((a: any, b: any) => a.position - b.position).map((i: any) => i.url) || []);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [seoTitle, setSeoTitle] = useState(initialData?.metadata?.seo_title || '');
+  const [seoDesc, setSeoDesc] = useState(initialData?.metadata?.seo_description || '');
+  const [slug, setSlug] = useState(initialData?.slug || '');
+  const [keywords, setKeywords] = useState(initialData?.metadata?.keywords || '');
+
+  useEffect(() => { supabase.from('categories').select('id, name').then(({ data }) => { if (data) setCategories(data); }); }, []);
+  useEffect(() => { if (!isEditMode && dishName) setSlug(dishName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')); }, [dishName, isEditMode]);
+
+  const generateSku = () => `MKK-${Date.now().toString(36).toUpperCase().slice(-4)}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
+  const toggleAllergen = (a: string) => setAllergens(prev => prev.includes(a) ? prev.filter(x => x !== a) : [...prev, a]);
+  const addPortion = () => setPortions(prev => [...prev, { name: '', price: '', stock: '', sku: '' }]);
+  const removePortion = (i: number) => setPortions(prev => prev.filter((_, idx) => idx !== i));
+  const updatePortion = (i: number, field: string, value: string) => setPortions(prev => prev.map((p, idx) => idx === i ? { ...p, [field]: value } : p));
+  const applyPortionPresets = () => { const base = parseFloat(price) || 0; setPortions([{ name: 'Regular', price: base.toFixed(2), stock: stock || '50', sku: generateSku() }, { name: 'Large', price: (base * 1.35).toFixed(2), stock: '30', sku: generateSku() }, { name: 'Family', price: (base * 2.5).toFixed(2), stock: '15', sku: generateSku() }]); };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setUploadingImage(true);
+    for (const file of files) {
+      const ext = file.name.split('.').pop();
+      const path = `dishes/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { data, error } = await supabase.storage.from('product-images').upload(path, file);
+      if (!error && data) { const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(path); setImageUrls(prev => [...prev, publicUrl]); }
+    }
+    setUploadingImage(false);
+  };
+
+  const handleSubmit = async () => {
+    if (!dishName.trim()) { alert('Dish name is required'); setActiveTab('general'); return; }
+    if (!price) { alert('Price is required'); setActiveTab('pricing'); return; }
+    setLoading(true);
+    try {
+      const productData: any = { name: dishName.trim(), description, category_id: categoryId || null, price: parseFloat(price), compare_at_price: comparePrice ? parseFloat(comparePrice) : null, sku: sku || generateSku(), quantity: parseInt(stock) || 0, status: status.toLowerCase(), featured, slug: slug || dishName.toLowerCase().replace(/[^a-z0-9]+/g, '-'), currency: 'CAD', is_halal: isHalal, is_vegetarian: isVegetarian, is_vegan: isVegan, is_gluten_free: isGlutenFree, spice_level: spiceLevel, prep_time: prepTime ? parseInt(prepTime) : null, calories: calories ? parseInt(calories) : null, is_available_today: isAvailableToday, allergens, ingredients, metadata: { low_stock_threshold: parseInt(lowStockThreshold) || 10, seo_title: seoTitle, seo_description: seoDesc, keywords } };
+      let productId = initialData?.id;
+      if (isEditMode && productId) { const { error } = await supabase.from('products').update(productData).eq('id', productId); if (error) throw error; }
+      else { const { data, error } = await supabase.from('products').insert(productData).select('id').single(); if (error) throw error; productId = data.id; }
+      if (isEditMode) await supabase.from('product_variants').delete().eq('product_id', productId);
+      const validPortions = portions.filter(p => p.name.trim());
+      if (validPortions.length > 0) await supabase.from('product_variants').insert(validPortions.map((p, i) => ({ product_id: productId, option1: p.name, name: p.name, price: parseFloat(p.price) || parseFloat(price), quantity: parseInt(p.stock) || 0, sku: p.sku || generateSku(), position: i })));
+      if (imageUrls.length > 0) { if (isEditMode) await supabase.from('product_images').delete().eq('product_id', productId); await supabase.from('product_images').insert(imageUrls.map((url, i) => ({ product_id: productId, url, position: i, alt_text: dishName }))); }
+      alert(isEditMode ? 'Dish updated!' : 'Dish added to menu!');
+      router.push('/admin/products');
+    } catch (err: any) { alert('Error saving dish: ' + (err?.message || 'Please try again.')); }
+    finally { setLoading(false); }
+  };
+
+  const spiceLabels = ['None', 'Mild', 'Medium', 'Hot'];
+  const tabs = [{ id: 'general', label: 'General', icon: 'ri-information-line' }, { id: 'pricing', label: 'Pricing & Inventory', icon: 'ri-price-tag-3-line' }, { id: 'portions', label: 'Portions', icon: 'ri-bowl-line' }, { id: 'images', label: 'Images', icon: 'ri-image-line' }, { id: 'seo', label: 'SEO', icon: 'ri-search-line' }];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center space-x-4">
+          <Link href="/admin/products" className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+            <i className="ri-arrow-left-line text-xl text-gray-700"></i>
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">{isEditMode ? 'Edit Dish' : 'Add New Dish'}</h1>
+            <p className="text-gray-600 mt-1">{isEditMode ? 'Update dish details and availability' : 'Add a new dish to your menu'}</p>
+          </div>
         </div>
-    );
+        <button onClick={handleSubmit} disabled={loading} className="px-6 py-3 bg-[#111111] hover:bg-[#333] text-white rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 disabled:opacity-60">
+          <i className={loading ? 'ri-loader-4-line animate-spin text-xl' : 'ri-save-line text-xl'}></i>
+          {loading ? 'Saving...' : isEditMode ? 'Save Changes' : 'Add to Menu'}
+        </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="border-b border-gray-200 overflow-x-auto">
+          <div className="flex">
+            {tabs.map(tab => (
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center space-x-2 px-6 py-4 font-semibold whitespace-nowrap transition-colors border-b-2 cursor-pointer ${activeTab === tab.id ? 'border-[#C8952A] text-[#C8952A] bg-[#fdf9ec]' : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`}>
+                <i className={`${tab.icon} text-xl`}></i><span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="p-8">
+          {activeTab === 'general' && (
+            <div className="space-y-6 max-w-3xl">
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Dish Name *</label>
+                <input type="text" value={dishName} onChange={e => setDishName(e.target.value)} placeholder="e.g. Jollof Rice, Banku & Tilapia" className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Description</label>
+                <textarea value={description} onChange={e => setDescription(e.target.value)} rows={5} placeholder="Describe the dish — ingredients, how it's served, what makes it special..." className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] resize-none" />
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Category</label>
+                  <select value={categoryId} onChange={e => setCategoryId(e.target.value)} className="w-full px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] cursor-pointer">
+                    <option value="">Select category...</option>
+                    {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Status</label>
+                  <select value={status} onChange={e => setStatus(e.target.value)} className="w-full px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] cursor-pointer">
+                    <option value="active">Active</option><option value="draft">Draft</option><option value="archived">Archived</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="p-5 border-2 border-gray-200 rounded-xl space-y-5">
+                <h3 className="font-bold text-gray-900">Dish Details</h3>
+                <div className="grid md:grid-cols-3 gap-5">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Prep Time (mins)</label>
+                    <input type="number" value={prepTime} onChange={e => setPrepTime(e.target.value)} placeholder="e.g. 20" min="0" className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Calories (kcal)</label>
+                    <input type="number" value={calories} onChange={e => setCalories(e.target.value)} placeholder="e.g. 450" min="0" className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Available Today</label>
+                    <button type="button" onClick={() => setIsAvailableToday(!isAvailableToday)} className={`w-full py-3 rounded-lg font-semibold border-2 transition-colors cursor-pointer ${isAvailableToday ? 'bg-green-50 border-green-400 text-green-700' : 'bg-gray-50 border-gray-300 text-gray-600'}`}>
+                      <i className={`${isAvailableToday ? 'ri-checkbox-circle-line' : 'ri-close-circle-line'} mr-2`}></i>{isAvailableToday ? 'Available' : 'Unavailable'}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-3">Spice Level</label>
+                  <div className="flex gap-3">
+                    {spiceLabels.map((label, i) => (
+                      <button key={i} type="button" onClick={() => setSpiceLevel(i)} className={`flex-1 py-2 rounded-lg text-sm font-semibold border-2 transition-colors cursor-pointer ${spiceLevel === i ? (i === 0 ? 'bg-gray-100 border-gray-400 text-gray-800' : i === 1 ? 'bg-yellow-50 border-yellow-400 text-yellow-700' : i === 2 ? 'bg-orange-50 border-orange-400 text-orange-700' : 'bg-red-50 border-red-400 text-red-700') : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                        {i > 0 && '🌶'.repeat(i) + ' '}{label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-5 border-2 border-gray-200 rounded-xl">
+                <h3 className="font-bold text-gray-900 mb-4">Dietary Info</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {([{ label: 'Halal', icon: 'ri-check-double-line', value: isHalal, set: setIsHalal }, { label: 'Vegetarian', icon: 'ri-leaf-line', value: isVegetarian, set: setIsVegetarian }, { label: 'Vegan', icon: 'ri-plant-line', value: isVegan, set: setIsVegan }, { label: 'Gluten-Free', icon: 'ri-shield-check-line', value: isGlutenFree, set: setIsGlutenFree }] as { label: string; icon: string; value: boolean; set: (v: boolean) => void }[]).map(({ label, icon, value, set }) => (
+                    <button key={label} type="button" onClick={() => set(!value)} className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-colors cursor-pointer ${value ? 'bg-[#fdf9ec] border-[#C8952A] text-[#C8952A]' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                      <i className={`${icon} text-xl`}></i><span className="text-xs font-semibold">{label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-3">Allergens</label>
+                <div className="flex flex-wrap gap-2">
+                  {ALLERGENS.map(a => (
+                    <button key={a} type="button" onClick={() => toggleAllergen(a)} className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-colors cursor-pointer ${allergens.includes(a) ? 'bg-red-50 border-red-400 text-red-700' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}>
+                      {allergens.includes(a) && <i className="ri-alert-line mr-1"></i>}{a}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Ingredients</label>
+                <textarea value={ingredients} onChange={e => setIngredients(e.target.value)} rows={3} placeholder="e.g. Rice, tomatoes, onions, scotch bonnet pepper, chicken stock..." className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] resize-none" />
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <input type="checkbox" checked={featured} onChange={e => setFeatured(e.target.checked)} id="featured" className="w-5 h-5 accent-[#C8952A] cursor-pointer" />
+                <label htmlFor="featured" className="text-gray-900 font-medium cursor-pointer">Feature this dish on the homepage</label>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'pricing' && (
+            <div className="space-y-6 max-w-3xl">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Price (CA$) *</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">$</span>
+                    <input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="0.00" step="0.01" min="0" className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Compare at Price (CA$)</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">$</span>
+                    <input type="number" value={comparePrice} onChange={e => setComparePrice(e.target.value)} placeholder="0.00" step="0.01" min="0" className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Show original price with strikethrough</p>
+                </div>
+              </div>
+              {comparePrice && price && parseFloat(comparePrice) > parseFloat(price) && (
+                <div className="p-4 bg-[#fdf9ec] border border-[#e8c87a] rounded-lg">
+                  <p className="text-[#7a5418] font-semibold">Discount: CA${(parseFloat(comparePrice) - parseFloat(price)).toFixed(2)} off ({(((parseFloat(comparePrice) - parseFloat(price)) / parseFloat(comparePrice)) * 100).toFixed(0)}%)</p>
+                </div>
+              )}
+              <div className="pt-4 border-t border-gray-200 space-y-6">
+                <h3 className="text-lg font-bold text-gray-900">Inventory</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">SKU</label>
+                    <div className="flex gap-2">
+                      <input type="text" value={sku} onChange={e => setSku(e.target.value)} placeholder="MKK-001" className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] font-mono text-sm" />
+                      <button type="button" onClick={() => setSku(generateSku())} className="px-3 py-2 border-2 border-gray-300 rounded-lg hover:border-[#C8952A] text-gray-600 hover:text-[#C8952A] transition-colors cursor-pointer text-sm">Auto</button>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Daily Prep Quantity</label>
+                    <input type="number" value={stock} onChange={e => setStock(e.target.value)} placeholder="e.g. 50" min="0" className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Low Stock Alert Threshold</label>
+                  <input type="number" value={lowStockThreshold} onChange={e => setLowStockThreshold(e.target.value)} min="0" className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                  <p className="text-xs text-gray-500 mt-1">Alert when daily quantity drops below this number</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'portions' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">Portions / Serving Sizes</h3>
+                  <p className="text-gray-600 mt-1">Define different sizes customers can order</p>
+                </div>
+                <div className="flex gap-2">
+                  <button type="button" onClick={applyPortionPresets} className="px-4 py-2 border-2 border-[#C8952A]/50 text-[#C8952A] rounded-lg hover:border-[#C8952A] hover:bg-[#fdf9ec] font-semibold transition-colors cursor-pointer text-sm">
+                    <i className="ri-magic-line mr-1"></i>Presets
+                  </button>
+                  <button type="button" onClick={addPortion} className="px-4 py-2 bg-[#111111] hover:bg-[#333] text-white rounded-lg font-semibold transition-colors cursor-pointer text-sm">
+                    <i className="ri-add-line mr-1"></i>Add Portion
+                  </button>
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Portion Name</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">SKU</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Price (CA$)</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Daily Qty</th>
+                      <th className="py-3 px-4"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {portions.map((portion, i) => (
+                      <tr key={i} className="border-b border-gray-100">
+                        <td className="py-3 px-4"><input type="text" value={portion.name} onChange={e => updatePortion(i, 'name', e.target.value)} placeholder="e.g. Regular" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" /></td>
+                        <td className="py-3 px-4">
+                          <div className="flex gap-1">
+                            <input type="text" value={portion.sku} onChange={e => updatePortion(i, 'sku', e.target.value)} placeholder="MKK-REG" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                            <button type="button" onClick={() => updatePortion(i, 'sku', generateSku())} className="px-2 border-2 border-gray-300 rounded-lg text-xs text-gray-500 hover:border-[#C8952A] hover:text-[#C8952A] cursor-pointer">Auto</button>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+                            <input type="number" value={portion.price} onChange={e => updatePortion(i, 'price', e.target.value)} placeholder="0.00" step="0.01" min="0" className="w-full pl-7 pr-3 py-2 border-2 border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                          </div>
+                        </td>
+                        <td className="py-3 px-4"><input type="number" value={portion.stock} onChange={e => updatePortion(i, 'stock', e.target.value)} placeholder="0" min="0" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" /></td>
+                        <td className="py-3 px-4"><button type="button" onClick={() => removePortion(i)} className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"><i className="ri-delete-bin-line"></i></button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="p-4 bg-[#fdf9ec] border border-[#e8c87a] rounded-lg text-sm text-[#7a5418]">
+                <i className="ri-information-line mr-2"></i>
+                If you only have one size, leave just &quot;Regular&quot;. Click <strong>Presets</strong> to auto-fill Regular / Large / Family from the base price.
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'images' && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Dish Images</h3>
+                <p className="text-gray-600">Add up to 10 photos. The first image will be the primary display photo.</p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {imageUrls.map((url, i) => (
+                  <div key={i} className="relative group">
+                    <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden border-2 border-gray-200">
+                      <img src={url} alt={`Dish ${i + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                    {i === 0 && <span className="absolute top-2 left-2 bg-[#111111] text-white px-2 py-1 rounded text-xs font-semibold">Primary</span>}
+                    <button type="button" onClick={() => setImageUrls(prev => prev.filter((_, idx) => idx !== i))} className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center text-red-500 opacity-0 group-hover:opacity-100 transition-opacity shadow cursor-pointer"><i className="ri-close-line"></i></button>
+                  </div>
+                ))}
+                {imageUrls.length < 10 && (
+                  <label className="aspect-square border-2 border-dashed border-gray-300 rounded-xl hover:border-[#C8952A] hover:bg-[#fdf9ec] transition-colors flex flex-col items-center justify-center space-y-2 text-gray-500 hover:text-[#C8952A] cursor-pointer">
+                    <i className={uploadingImage ? 'ri-loader-4-line animate-spin text-3xl' : 'ri-upload-2-line text-3xl'}></i>
+                    <span className="text-sm font-semibold">{uploadingImage ? 'Uploading...' : 'Upload Photo'}</span>
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
+                  </label>
+                )}
+              </div>
+              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700">
+                <strong>Tips:</strong> Use well-lit, high-quality food photos (min 800x800px). Supported: JPG, PNG, WebP (max 5MB each).
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'seo' && (
+            <div className="space-y-6 max-w-3xl">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Search Engine Optimization</h3>
+                <p className="text-gray-600">Help customers find this dish online</p>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Page Title</label>
+                <input type="text" value={seoTitle} onChange={e => setSeoTitle(e.target.value)} placeholder={`${dishName || 'Dish Name'} | Maame K's Kitchen Calgary`} className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                <p className="text-xs text-gray-500 mt-1">{seoTitle.length}/60 characters recommended</p>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Meta Description</label>
+                <textarea rows={3} value={seoDesc} onChange={e => setSeoDesc(e.target.value)} placeholder="A short description of the dish for search results..." className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] resize-none" />
+                <p className="text-xs text-gray-500 mt-1">{seoDesc.length}/160 characters recommended</p>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">URL Slug</label>
+                <div className="flex items-center">
+                  <span className="text-gray-600 bg-gray-100 px-4 py-3 border-2 border-r-0 border-gray-300 rounded-l-lg text-sm whitespace-nowrap">maamekskitchen.ca/shop/</span>
+                  <input type="text" value={slug} onChange={e => setSlug(e.target.value)} className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Keywords</label>
+                <input type="text" value={keywords} onChange={e => setKeywords(e.target.value)} placeholder="jollof rice, ghanaian food, calgary african food" className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
+                <p className="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
