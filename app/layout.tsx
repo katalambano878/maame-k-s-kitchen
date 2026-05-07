@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-page-custom-font */
+﻿/* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { CartProvider } from "@/context/CartContext";
@@ -9,7 +9,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#059669',
+  themeColor: '#C8952A',
 };
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
@@ -17,10 +17,10 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
+    default: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
     template: "%s | Maame Ks Kitchen"
   },
-  description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
+  description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
   keywords: [
     "Maame Ks Kitchen",
     "Ghanaian food Calgary",
@@ -78,15 +78,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_CA",
     url: siteUrl,
-    title: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    title: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
+    description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
     siteName: "Maame Ks Kitchen",
     images: [{ url: "/og-image.jpg", width: 500, height: 500, alt: "Maame Ks Kitchen" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    title: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
+    description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
     site: "@maamekskitchenyyc",
   },
   alternates: {
@@ -168,12 +168,12 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* PWA Meta Tags */}
-        <meta name="theme-color" content="#059669" />
+        <meta name="theme-color" content="#C8952A" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Maame Ks Kitchen" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-TileColor" content="#059669" />
+        <meta name="msapplication-TileColor" content="#111111" />
         <meta name="msapplication-tap-highlight" content="no" />
 
         {/* Favicon */}
@@ -192,13 +192,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-        {/* Structured Data — Organization + LocalBusiness */}
+        {/* Structured Data â€” Organization + LocalBusiness */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
 
-        {/* Structured Data — WebSite with SearchAction */}
+        {/* Structured Data â€” WebSite with SearchAction */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
@@ -251,3 +251,4 @@ export default function RootLayout({
     </html>
   );
 }
+

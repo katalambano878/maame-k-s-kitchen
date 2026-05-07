@@ -1,27 +1,37 @@
-{
-  "name": "Maame Ks Kitchen",
-  "short_name": "Maame Ks Kitchen’s",
+﻿{
+  "name": "Maame K's Kitchen",
+  "short_name": "Maame K's",
   "description": "Authentic Ghanaian food in Calgary, Alberta. Order online for delivery or pickup.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#022c22",
-  "theme_color": "#059669",
+  "background_color": "#111111",
+  "theme_color": "#C8952A",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en-CA",
-  "categories": ["food", "lifestyle", "shopping"],
+  "categories": ["food", "lifestyle"],
   "icons": [
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "any",
+      "type": "image/png"
     }
   ],
   "shortcuts": [
