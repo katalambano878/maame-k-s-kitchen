@@ -1,4 +1,4 @@
-﻿/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -72,10 +72,10 @@ function ShopContent() {
               .select(`
                 *,
                 categories(name, slug),
-                product_images!product_id(url, position),
+                product_images(url, position),
                 product_variants(id, name, price, quantity, option1, option2, image_url)
               `, { count: 'exact' })
-              .neq('status', 'archived').order('position', { foreignTable: 'product_images', ascending: true });
+              .neq('status', 'archived');
 
             if (search) query = query.ilike('name', `%${search}%`);
 
@@ -123,7 +123,7 @@ function ShopContent() {
               name:          p.name,
               price:         p.price,
               originalPrice: p.compare_at_price,
-              image:         p.product_images?.[0]?.url || '/placeholder-dish.jpg',
+              image:         p.product_images?.sort((a: any, b: any) => a.position - b.position)?.[0]?.url || '/placeholder-dish.jpg',
               rating:        p.rating_avg || 0,
               reviewCount:   0,
               badge:         p.compare_at_price > p.price ? 'Special' : undefined,
