@@ -14,22 +14,22 @@ export default function AboutPage() {
     {
       icon: 'ri-verified-badge-line',
       title: 'Authentic Recipes',
-      description: 'Every dish follows traditional Ghanaian methods and ingredients â€” the way your grandmother would make it.',
+      description: 'Every dish follows traditional Ghanaian methods and ingredients Ã¢â‚¬â€ the way your grandmother would make it.',
     },
     {
       icon: 'ri-restaurant-line',
       title: 'Made Fresh Daily',
-      description: 'We cook to order. Nothing pre-packaged, nothing reheated â€” just real food made with care every single day.',
+      description: 'We cook to order. Nothing pre-packaged, nothing reheated Ã¢â‚¬â€ just real food made with care every single day.',
     },
     {
       icon: 'ri-heart-line',
       title: 'A Taste of Home',
-      description: 'For Ghanaians missing home and for anyone curious about West African cuisine â€” our kitchen is for everyone.',
+      description: 'For Ghanaians missing home and for anyone curious about West African cuisine Ã¢â‚¬â€ our kitchen is for everyone.',
     },
     {
       icon: 'ri-e-bike-line',
       title: 'Same-Day Delivery',
-      description: 'Hot, fresh meals delivered across Calgary â€” from our kitchen to your door the same day you order.',
+      description: 'Hot, fresh meals delivered across Calgary Ã¢â‚¬â€ from our kitchen to your door the same day you order.',
     },
   ];
 
@@ -43,29 +43,39 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* â•â• Hero / Intro â•â• */}
+      {/* Ã¢â€¢ÂÃ¢â€¢Â Hero / Intro Ã¢â€¢ÂÃ¢â€¢Â */}
       <section className="relative bg-[#0d0d0d] overflow-hidden">
         {/* Glows */}
+        {/* Hero background photo */}
+        <Image
+          src="/home_hero_1.jpeg"
+          alt="Maame K kitchen"
+          fill
+          sizes="100vw"
+          className="object-cover object-center opacity-35"
+          priority
+          unoptimized
+        />
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#111111]/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#111111]/30 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0d0d0d]/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d]/40 to-[#0d0d0d]/75 pointer-events-none" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 sm:px-10 lg:px-8 py-24 sm:py-32 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-[#e8b428] text-[10px] font-bold tracking-[0.3em] uppercase mb-8">
             <span className="w-1.5 h-1.5 rounded-full animate-pulse bg-[#C8952A]" />
-            Cornerstone, Calgary Â· Est. 2026
+            Cornerstone, Calgary Ã‚Â· Est. 2026
           </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
             Real Ghanaian Food,<br />
             <em className="not-italic text-[#e8b428]">Made With Love</em>
           </h1>
           <p className="text-lg sm:text-xl text-white/55 font-light max-w-2xl mx-auto leading-relaxed">
-            {siteName} brings the flavours of Ghana â€” banku, jollof, waakye, fufu, omotuo, soups and stews â€” to the heart of Calgary, made fresh every day.
+            {siteName} brings the flavours of Ghana Ã¢â‚¬â€ banku, jollof, waakye, fufu, omotuo, soups and stews Ã¢â‚¬â€ to the heart of Calgary, made fresh every day.
           </p>
         </div>
       </section>
 
-      {/* â•â• Stats strip â•â• */}
+      {/* Ã¢â€¢ÂÃ¢â€¢Â Stats strip Ã¢â€¢ÂÃ¢â€¢Â */}
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-6 sm:px-10 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 md:divide-x divide-gray-100 text-center">
           {stats.map(s => (
@@ -77,7 +87,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* â•â• Our Story â•â• */}
+      {/* Ã¢â€¢ÂÃ¢â€¢Â Our Story Ã¢â€¢ÂÃ¢â€¢Â */}
       <section className="py-20 sm:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-8 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
@@ -96,7 +106,7 @@ export default function AboutPage() {
             {/* Floating badge */}
             <div className="absolute -bottom-5 -right-4 sm:-right-6 bg-[#111111] text-white rounded-2xl px-5 py-4 shadow-xl">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e8d5a3] mb-0.5">Mama K</p>
-              <p className="text-sm font-black">10:00 AM – 9:00 PM</p>
+              <p className="text-sm font-black">10:00 AM â€“ 9:00 PM</p>
             </div>
             {/* Glow */}
             <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#fdf9ec]/50 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
@@ -112,13 +122,13 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-5 text-[17px] text-gray-500 leading-relaxed font-light">
               <p>
-                <strong className="font-semibold text-gray-900">{siteName}</strong> was founded with one simple goal â€” to bring real, authentic Ghanaian food to Calgary. The kind of cooking that reminds you of home.
+                <strong className="font-semibold text-gray-900">{siteName}</strong> was founded with one simple goal Ã¢â‚¬â€ to bring real, authentic Ghanaian food to Calgary. The kind of cooking that reminds you of home.
               </p>
               <p>
-                From banku and tilapia to jollof rice, waakye, fufu, omotuo, groundnut soup, and palm nut stew â€” every dish is prepared from scratch using traditional methods and the freshest ingredients we can find.
+                From banku and tilapia to jollof rice, waakye, fufu, omotuo, groundnut soup, and palm nut stew Ã¢â‚¬â€ every dish is prepared from scratch using traditional methods and the freshest ingredients we can find.
               </p>
               <p>
-                Whether you grew up on these flavours or you&apos;re tasting Ghanaian food for the very first time â€” you&apos;re welcome at our table.
+                Whether you grew up on these flavours or you&apos;re tasting Ghanaian food for the very first time Ã¢â‚¬â€ you&apos;re welcome at our table.
               </p>
             </div>
 
@@ -141,7 +151,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* â•â• Our Mission â•â• */}
+      {/* Ã¢â€¢ÂÃ¢â€¢Â Our Mission Ã¢â€¢ÂÃ¢â€¢Â */}
       <section className="py-10 bg-gray-50/60 border-y border-gray-100">
         <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-8 grid md:grid-cols-2 gap-5">
 
@@ -156,7 +166,7 @@ export default function AboutPage() {
                 Real Ghanaian Flavours
               </h3>
               <p className="text-gray-500 text-[13px] leading-relaxed font-light">
-                We cook the way Ghanaian mothers and grandmothers cook â€” patiently, with the right ingredients, and the right techniques. No shortcuts, no compromises on flavour.
+                We cook the way Ghanaian mothers and grandmothers cook Ã¢â‚¬â€ patiently, with the right ingredients, and the right techniques. No shortcuts, no compromises on flavour.
               </p>
             </div>
             <div className="mt-5 w-8 h-0.5 bg-[#f5de8f] rounded-full group-hover:bg-[#111111] group-hover:w-full transition-all duration-700 ease-out" />
@@ -173,7 +183,7 @@ export default function AboutPage() {
                 A Taste of Home in Calgary
               </h3>
               <p className="text-gray-500 text-[13px] leading-relaxed font-light">
-                Whether you grew up in Ghana, West Africa, or anywhere else in the world â€” our food is here to remind you of home. And if you&apos;re new to Ghanaian cuisine, welcome. You&apos;re going to love it.
+                Whether you grew up in Ghana, West Africa, or anywhere else in the world Ã¢â‚¬â€ our food is here to remind you of home. And if you&apos;re new to Ghanaian cuisine, welcome. You&apos;re going to love it.
               </p>
             </div>
             <div className="mt-5 w-8 h-0.5 bg-[#f5de8f] rounded-full group-hover:bg-[#111111] group-hover:w-full transition-all duration-700 ease-out" />
@@ -181,7 +191,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* â•â• Values â•â• */}
+      {/* Ã¢â€¢ÂÃ¢â€¢Â Values Ã¢â€¢ÂÃ¢â€¢Â */}
       <section className="relative py-12 lg:py-16 overflow-hidden bg-white border-b border-gray-100">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#fdf9ec]/50 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
         <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-8 relative z-10">
@@ -216,7 +226,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* â•â• CTA â•â• */}
+      {/* Ã¢â€¢ÂÃ¢â€¢Â CTA Ã¢â€¢ÂÃ¢â€¢Â */}
       <section className="bg-white py-10 lg:py-14 px-4 sm:px-6 lg:px-8 flex justify-center">
         <div className="relative w-full max-w-5xl rounded-3xl overflow-hidden bg-[#111111] shadow-[0_20px_60px_-15px_rgba(200,149,42,0.3)] group">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-white/[0.05] rounded-full blur-[60px] pointer-events-none" />
@@ -230,7 +240,7 @@ export default function AboutPage() {
               Hungry for <em className="not-italic text-[#e8d5a3]">more?</em>
             </h2>
             <p className="text-[13px] text-white/55 mb-8 max-w-lg mx-auto font-light leading-relaxed">
-              Browse our full menu of authentic Ghanaian dishes â€” banku, jollof, waakye, fufu, soups and stews. Delivered hot to your door across Calgary.
+              Browse our full menu of authentic Ghanaian dishes Ã¢â‚¬â€ banku, jollof, waakye, fufu, soups and stews. Delivered hot to your door across Calgary.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
