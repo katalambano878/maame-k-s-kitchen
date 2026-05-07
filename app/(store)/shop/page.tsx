@@ -186,7 +186,7 @@ function ShopContent() {
     <main className="min-h-screen bg-white">
       <PageHero
         title="Our Menu"
-        subtitle="Authentic Ghanaian cuisine made fresh daily â€” banku, jollof, waakye, fufu, omotuo, soups, stews & traditional sides"
+        subtitle="Authentic Ghanaian cuisine made fresh daily — banku, jollof, waakye, fufu, omotuo, soups, stews & traditional sides"
         backgroundImage="/home_hero_1.jpeg"
       />
 
@@ -340,7 +340,7 @@ function ShopContent() {
                   {' '}dishes
                   {selectedDietary.length > 0 && (
                     <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#fdf9ec] text-[#C8952A] text-[11px] font-medium">
-                      {selectedDietary.join(' Â· ')}
+                      {selectedDietary.join(' · ')}
                     </span>
                   )}
                 </div>

@@ -99,7 +99,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
           setQuantity(transformedProduct.moq);
         }
 
-        // If variants exist, do NOT pre-select â€” force user to choose
+        // If variants exist, do NOT pre-select — force user to choose
         // Reset variant and color selection
         setSelectedVariant(null);
         setSelectedVariant(null);
@@ -345,7 +345,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   const visibleVariants = product.variants;
                   const showNameSelector = visibleVariants.length > 0;
                   if (false) {
-                    // Single variant with no colors â€” show standard picker
+                    // Single variant with no colors — show standard picker
                     return (
                       <div className="mb-8">
                         <label className="block text-sm font-medium text-gray-900 mb-3 tracking-wide">
@@ -527,7 +527,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                 <div className="border-t border-black/[0.04] pt-8 space-y-4">
                   <div className="flex items-center text-gray-500 text-[14px] font-light">
                     <i className="ri-store-2-line text-lg text-gray-400 mr-3.5"></i>
-                    <span>Pickup available Â· Cornerstone, NE Calgary</span>
+                    <span>Pickup available · Cornerstone, NE Calgary</span>
                   </div>
                   <div className="flex items-center text-gray-500 text-[14px] font-light">
                     <i className="ri-arrow-left-right-line text-lg text-gray-400 mr-3.5"></i>

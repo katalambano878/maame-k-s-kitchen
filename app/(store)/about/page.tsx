@@ -43,7 +43,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* Ã¢â€¢ÂÃ¢â€¢Â Hero / Intro Ã¢â€¢ÂÃ¢â€¢Â */}
+      {/* Ã¢•ÂÃ¢•Â Hero / Intro Ã¢•ÂÃ¢•Â */}
       <section className="relative bg-[#0d0d0d] overflow-hidden">
         {/* Glows */}
         {/* Hero background photo */}
@@ -63,7 +63,7 @@ export default function AboutPage() {
         <div className="relative z-10 max-w-5xl mx-auto px-6 sm:px-10 lg:px-8 py-24 sm:py-32 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-[#e8b428] text-[10px] font-bold tracking-[0.3em] uppercase mb-8">
             <span className="w-1.5 h-1.5 rounded-full animate-pulse bg-[#C8952A]" />
-            Cornerstone, Calgary Ã‚Â· Est. 2026
+            Cornerstone, Calgary Ã‚· Est. 2026
           </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
             Real Ghanaian Food,<br />
@@ -75,7 +75,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Ã¢â€¢ÂÃ¢â€¢Â Stats strip Ã¢â€¢ÂÃ¢â€¢Â */}
+      {/* Ã¢•ÂÃ¢•Â Stats strip Ã¢•ÂÃ¢•Â */}
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-6 sm:px-10 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 md:divide-x divide-gray-100 text-center">
           {stats.map(s => (
@@ -87,7 +87,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Ã¢â€¢ÂÃ¢â€¢Â Our Story Ã¢â€¢ÂÃ¢â€¢Â */}
+      {/* Ã¢•ÂÃ¢•Â Our Story Ã¢•ÂÃ¢•Â */}
       <section className="py-20 sm:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-8 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
@@ -106,7 +106,7 @@ export default function AboutPage() {
             {/* Floating badge */}
             <div className="absolute -bottom-5 -right-4 sm:-right-6 bg-[#111111] text-white rounded-2xl px-5 py-4 shadow-xl">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e8d5a3] mb-0.5">Mama K</p>
-              <p className="text-sm font-black">10:00 AM â€“ 9:00 PM</p>
+              <p className="text-sm font-black">10:00 AM – 9:00 PM</p>
             </div>
             {/* Glow */}
             <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#fdf9ec]/50 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
@@ -151,7 +151,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Ã¢â€¢ÂÃ¢â€¢Â Our Mission Ã¢â€¢ÂÃ¢â€¢Â */}
+      {/* Ã¢•ÂÃ¢•Â Our Mission Ã¢•ÂÃ¢•Â */}
       <section className="py-10 bg-gray-50/60 border-y border-gray-100">
         <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-8 grid md:grid-cols-2 gap-5">
 
@@ -191,7 +191,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Ã¢â€¢ÂÃ¢â€¢Â Values Ã¢â€¢ÂÃ¢â€¢Â */}
+      {/* Ã¢•ÂÃ¢•Â Values Ã¢•ÂÃ¢•Â */}
       <section className="relative py-12 lg:py-16 overflow-hidden bg-white border-b border-gray-100">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#fdf9ec]/50 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
         <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-8 relative z-10">
@@ -226,7 +226,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Ã¢â€¢ÂÃ¢â€¢Â CTA Ã¢â€¢ÂÃ¢â€¢Â */}
+      {/* Ã¢•ÂÃ¢•Â CTA Ã¢•ÂÃ¢•Â */}
       <section className="bg-white py-10 lg:py-14 px-4 sm:px-6 lg:px-8 flex justify-center">
         <div className="relative w-full max-w-5xl rounded-3xl overflow-hidden bg-[#111111] shadow-[0_20px_60px_-15px_rgba(200,149,42,0.3)] group">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-white/[0.05] rounded-full blur-[60px] pointer-events-none" />

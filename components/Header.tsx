@@ -93,7 +93,7 @@ export default function Header() {
           : 'bg-white/90 backdrop-blur-xl'
       }`}>
 
-        {/* Info strip â€” collapses on scroll */}
+        {/* Info strip — collapses on scroll */}
         <div className={`overflow-hidden transition-all duration-500 ease-out ${
           isScrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100'
         } ${biz.isOpen
@@ -111,7 +111,7 @@ export default function Header() {
                 style={{ backgroundColor: biz.isOpen ? '#C8952A' : '#f87171' }} />
               {biz.isOpen
                 ? biz.closingIn <= 1
-                  ? `Closing soon â€” order in the next ${Math.round(biz.closingIn * 60)} min!`
+                  ? `Closing soon — order in the next ${Math.round(biz.closingIn * 60)} min!`
                   : 'Open · Mon – Sun  10:00 AM – 9:00 PM MT'
                 : `Closed · Opens today at ${biz.opensAt} MT`
               }
@@ -391,7 +391,7 @@ export default function Header() {
                 style={biz.isOpen ? { backgroundColor: '#C8952A' } : undefined} />
               {biz.isOpen
                 ? biz.closingIn <= 1
-                  ? `Closing soon â€” ${Math.round(biz.closingIn * 60)} min left`
+                  ? `Closing soon — ${Math.round(biz.closingIn * 60)} min left`
                   : 'Open · 10:00 AM – 9:00 PM'
                 : `Closed · Opens at ${biz.opensAt}`
               }
@@ -456,7 +456,7 @@ export default function Header() {
                 <span className="text-[10px] text-gray-400">Cornerstone, NE Calgary · Free delivery CA$50+</span>
               </div>
               <p className="text-[9px] tracking-[0.2em] uppercase text-gray-300 text-center font-medium">
-                Â© {new Date().getFullYear()} {siteName}
+                © {new Date().getFullYear()} {siteName}
               </p>
             </div>
           </div>

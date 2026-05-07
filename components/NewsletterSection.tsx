@@ -9,7 +9,7 @@ const PERKS = [
 ];
 
 const PREVIEW_ITEMS = [
-  { icon: 'ri-restaurant-line', label: 'New dish drops â€” jollof, waakye, kelewele & more' },
+  { icon: 'ri-restaurant-line', label: 'New dish drops — jollof, waakye, kelewele & more' },
   { icon: 'ri-gift-line',       label: 'Seasonal specials & weekend-only offers' },
   { icon: 'ri-team-line',       label: 'Catering deals for events & gatherings' },
 ];
@@ -47,7 +47,7 @@ export default function NewsletterSection() {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-7 md:p-10">
 
-            {/* Left â€” copy */}
+            {/* Left — copy */}
             <div>
               <div className="inline-flex items-center gap-2 mb-5">
                 <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
@@ -83,7 +83,7 @@ export default function NewsletterSection() {
               </ul>
             </div>
 
-            {/* Right â€” form */}
+            {/* Right — form */}
             <div className="flex items-center">
               <div className="w-full">
                 {status === 'success' ? (

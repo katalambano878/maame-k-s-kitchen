@@ -17,10 +17,10 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
+    default: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
     template: "%s | Maame Ks Kitchen"
   },
-  description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
+  description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
   keywords: [
     "Maame Ks Kitchen",
     "Ghanaian food Calgary",
@@ -78,15 +78,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_CA",
     url: siteUrl,
-    title: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    title: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
+    description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
     siteName: "Maame Ks Kitchen",
     images: [{ url: "/og-image.jpg", width: 500, height: 500, alt: "Maame Ks Kitchen" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Maame Ks Kitchen â€” Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame Ks Kitchen â€” banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    title: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
+    description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
     site: "@maamekskitchenyyc",
   },
   alternates: {
@@ -192,13 +192,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-        {/* Structured Data â€” Organization + LocalBusiness */}
+        {/* Structured Data — Organization + LocalBusiness */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
 
-        {/* Structured Data â€” WebSite with SearchAction */}
+        {/* Structured Data — WebSite with SearchAction */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
