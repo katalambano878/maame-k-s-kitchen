@@ -112,8 +112,8 @@ export default function Header() {
               {biz.isOpen
                 ? biz.closingIn <= 1
                   ? `Closing soon â€” order in the next ${Math.round(biz.closingIn * 60)} min!`
-                  : 'Open Â· Mon â€“ Sun  10:00 AM â€“ 9:00 PM MT'
-                : `Closed Â· Opens today at ${biz.opensAt} MT`
+                  : 'Open · Mon – Sun  10:00 AM – 9:00 PM MT'
+                : `Closed · Opens today at ${biz.opensAt} MT`
               }
             </span>
             <span className="hidden lg:flex items-center gap-1.5 text-[10.5px] font-medium text-white/60 tracking-wide">
@@ -392,8 +392,8 @@ export default function Header() {
               {biz.isOpen
                 ? biz.closingIn <= 1
                   ? `Closing soon â€” ${Math.round(biz.closingIn * 60)} min left`
-                  : 'Open Â· 10:00 AM â€“ 9:00 PM'
-                : `Closed Â· Opens at ${biz.opensAt}`
+                  : 'Open · 10:00 AM – 9:00 PM'
+                : `Closed · Opens at ${biz.opensAt}`
               }
             </div>
 
@@ -453,7 +453,7 @@ export default function Header() {
             <div className="px-5 py-4 border-t border-gray-100 space-y-1">
               <div className="flex items-center gap-1.5 justify-center">
                 <i className="ri-map-pin-line text-[11px] text-gray-400" />
-                <span className="text-[10px] text-gray-400">Cornerstone, NE Calgary Â· Free delivery CA$50+</span>
+                <span className="text-[10px] text-gray-400">Cornerstone, NE Calgary · Free delivery CA$50+</span>
               </div>
               <p className="text-[9px] tracking-[0.2em] uppercase text-gray-300 text-center font-medium">
                 Â© {new Date().getFullYear()} {siteName}
