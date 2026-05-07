@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -163,8 +163,8 @@ export default function AdminLayout({
       path: '/admin/pos'
     },
     {
-      title: 'Products',
-      icon: 'ri-box-3-line',
+      title: 'Menu',
+      icon: 'ri-restaurant-line',
       path: '/admin/products'
     },
     {
@@ -361,3 +361,4 @@ export default function AdminLayout({
     </div>
   );
 }
+

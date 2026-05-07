@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import Link from 'next/link';
@@ -111,11 +111,11 @@ export default function ProductsPage() {
   };
 
   const handleDeleteProduct = async (productId: string) => {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+    if (!confirm('Are you sure you want to delete this dish?')) return;
     try {
       // Unlink from order_items so we can delete (order history keeps product_name/sku/price)
       await supabase.from('order_items').update({ product_id: null, variant_id: null }).eq('product_id', productId);
-      // Delete in dependency order: review_images → reviews → cart_items → wishlist_items → product_images → product_variants → products
+      // Delete in dependency order: review_images â†’ reviews â†’ cart_items â†’ wishlist_items â†’ product_images â†’ product_variants â†’ products
       const { data: reviewIds } = await supabase.from('reviews').select('id').eq('product_id', productId);
       if (reviewIds?.length) {
         const ids = reviewIds.map((r) => r.id);
@@ -129,9 +129,9 @@ export default function ProductsPage() {
       const { error } = await supabase.from('products').delete().eq('id', productId);
       if (error) throw error;
       setProducts(products.filter((p) => p.id !== productId));
-      alert('Product deleted successfully');
+      alert('Dish deleted successfully');
     } catch (err: any) {
-      alert('Error deleting product: ' + (err?.message || 'Please try again.'));
+      alert('Error deleting dish: ' + (err?.message || 'Please try again.'));
     }
   };
 
@@ -162,7 +162,7 @@ export default function ProductsPage() {
     if (failed.length) {
       alert(`Deleted ${selectedProducts.length - failed.length}. Failed: ${failed.join(', ')}`);
     } else {
-      alert('Products deleted successfully');
+      alert('Dishes deleted successfully');
     }
   };
 
@@ -177,8 +177,8 @@ export default function ProductsPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Products</h1>
-          <p className="text-gray-600 mt-1">Manage your product catalog and inventory</p>
+          <h1 className="text-3xl font-bold text-gray-900">Menu</h1>
+          <p className="text-gray-600 mt-1">Manage your menu items and availability</p>
         </div>
         <Link
           href="/admin/products/new"
@@ -191,7 +191,7 @@ export default function ProductsPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl border-2 border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Total Products</p>
+          <p className="text-sm text-gray-600 mb-1">Total Dishes</p>
           <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
         </div>
         <div className="bg-white rounded-xl border-2 border-gray-200 p-4">
@@ -218,7 +218,7 @@ export default function ProductsPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products by name, SKU, or category..."
+                  placeholder="Search dishes by name, SKU, or category..."
                   className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] text-sm"
                 />
               </div>
@@ -281,7 +281,7 @@ export default function ProductsPage() {
         {selectedProducts.length > 0 && (
           <div className="p-4 bg-[#fdf9ec] border-b border-[#e8c87a] flex items-center justify-between">
             <p className="text-[#a07020] font-semibold">
-              {selectedProducts.length} product{selectedProducts.length > 1 ? 's' : ''} selected
+              {selectedProducts.length} dish{selectedProducts.length > 1 ? 'es' : ''} selected
             </p>
             <div className="flex items-center space-x-2">
               <button
@@ -297,12 +297,12 @@ export default function ProductsPage() {
         {loading ? (
           <div className="p-12 text-center text-gray-500">
             <i className="ri-loader-4-line animate-spin text-3xl mb-2 inline-block"></i>
-            <p>Loading products...</p>
+            <p>Loading menu...</p>
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="p-12 text-center text-gray-500">
             <i className="ri-inbox-line text-4xl mb-4 text-gray-300 inline-block"></i>
-            <p className="text-lg">No products found</p>
+            <p className="text-lg">No dishes found</p>
             <p className="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
           </div>
         ) : viewMode === 'list' ? (
@@ -318,7 +318,7 @@ export default function ProductsPage() {
                       className="w-4 h-4 accent-emerald-600 border-gray-300 rounded focus:ring-[#C8952A] cursor-pointer"
                     />
                   </th>
-                  <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Product</th>
+                  <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Dish</th>
                   <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">SKU</th>
                   <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Category</th>
                   <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Price</th>
@@ -436,10 +436,11 @@ export default function ProductsPage() {
 
         <div className="p-6 border-t border-gray-200 flex items-center justify-between">
           <p className="text-sm text-gray-500">
-            {filteredProducts.length === 0 ? 'No products' : `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''}`}
+            {filteredProducts.length === 0 ? 'No dishes' : `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''}`}
           </p>
         </div>
       </div>
     </div>
   );
 }
+

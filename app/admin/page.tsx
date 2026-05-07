@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -239,7 +239,7 @@ export default function AdminDashboard() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600 mt-1">Welcome back! Here's what's happening with your store.</p>
+            <p className="text-gray-600 mt-1">Welcome back! Here's what's happening in your kitchen today.</p>
           </div>
         </div>
 
@@ -369,7 +369,7 @@ export default function AdminDashboard() {
                         <td className="py-4 px-4 font-semibold text-gray-900 whitespace-nowrap">$ {order.total.toFixed(2)}</td>
                         <td className="py-4 px-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${statusColors[order.status] || 'bg-gray-100'}`}>
-                            {order.status === 'shipped' ? 'Packaged' : order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            {order.status === 'out_for_delivery' ? 'Out for Delivery' : order.status === 'ready_for_pickup' ? 'Ready for Pickup' : order.status === 'preparing' ? 'Preparing' : order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                           </span>
                         </td>
                       </tr>
@@ -384,14 +384,14 @@ export default function AdminDashboard() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Low Stock Alert</h2>
               {lowStockProducts.length === 0 ? (
-                <p className="text-gray-500">Inventory looks good!</p>
+                <p className="text-gray-500">All dishes are well stocked!</p>
               ) : (
                 <div className="space-y-3">
                   {lowStockProducts.map((product, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex-1">
                         <p className="font-medium text-gray-900 text-sm truncate pr-2">{product.name}</p>
-                        <p className="text-xs text-gray-600 mt-1">Stock: {product.stock} units</p>
+                        <p className="text-xs text-gray-600 mt-1">Qty: {product.stock} servings</p>
                       </div>
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${product.status === 'critical' ? 'bg-[#fdf9ec] text-[#C8952A]' : 'bg-[#fdf9ec] text-[#C8952A]'
                         }`}>
@@ -410,7 +410,7 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 overflow-hidden">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Products</h2>
+            <h2 className="text-xl font-bold text-gray-900">Menu Items</h2>
             <Link href="/admin/products" className="text-[#C8952A] hover:text-[#a07020] font-medium text-sm whitespace-nowrap cursor-pointer">
               View All <i className="ri-arrow-right-line ml-1"></i>
             </Link>
@@ -437,3 +437,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
