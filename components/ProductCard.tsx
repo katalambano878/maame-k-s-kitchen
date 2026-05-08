@@ -34,7 +34,6 @@ interface ProductCardProps {
   reviewCount?: number;
   badge?: string;
   inStock?: boolean;
-  maxStock?: number;
   moq?: number;
   hasVariants?: boolean;
   minVariantPrice?: number;
@@ -50,7 +49,7 @@ interface ProductCardProps {
 export default function ProductCard({
   id, slug, name, price, originalPrice, image,
   rating = 5, reviewCount = 0, badge,
-  inStock = true, maxStock = 50, moq = 1,
+  inStock = true, moq = 1,
   hasVariants = false, minVariantPrice,
   prepTime, spiceLevel = 0, dietaryFlags = [], portionNote,
 }: ProductCardProps) {
@@ -60,13 +59,12 @@ export default function ProductCard({
   const displayPrice = hasVariants && minVariantPrice ? minVariantPrice : price;
   const discount = originalPrice && originalPrice > displayPrice
     ? Math.round((1 - displayPrice / originalPrice) * 100) : 0;
-  const isLowStock = inStock && maxStock > 0 && maxStock <= 5;
   const fmt = (v: number) => `CA$${v.toFixed(2)}`;
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!inStock || added) return;
-    addToCart({ id, name, price, image, quantity: moq, slug, maxStock, moq });
+    addToCart({ id, name, price, image, quantity: moq, slug, moq, maxStock: 20 });
     setAdded(true);
     setTimeout(() => setAdded(false), 1600);
   };
@@ -175,18 +173,7 @@ export default function ProductCard({
           </div>
         )}
 
-        {/* Low stock ticker */}
-        {isLowStock && (
-          <div className="absolute bottom-3.5 left-3.5 z-10 flex items-center gap-1.5 group-hover:opacity-0 transition-opacity duration-500">
-            <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8952A] opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#C8952A]" />
-            </span>
-            <span className="text-[9.5px] font-semibold text-white/90 drop-shadow tracking-wide">
-              {maxStock} left today
-            </span>
-          </div>
-        )}
+
       </div>
 
       {/* ── Info Strip ── */}

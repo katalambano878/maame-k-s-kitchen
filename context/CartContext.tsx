@@ -10,7 +10,7 @@ export type CartItem = {
     quantity: number;
     variant?: string;
     slug: string;
-    maxStock: number;
+    maxStock?: number;
     moq?: number; // Minimum Order Quantity
 };
 
@@ -89,7 +89,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 // Ensure we don't exceed max stock
                 const newQuantity = Math.min(
                     existingItem.quantity + newItem.quantity,
-                    existingItem.maxStock
+                    existingItem.maxStock ?? 20
                 );
                 newCart[existingItemIndex] = { ...existingItem, quantity: newQuantity };
                 return newCart;
@@ -120,7 +120,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             }
 
             // Clamp quantity between MOQ and maxStock
-            const clampedQty = Math.min(Math.max(quantity, minQty), item.maxStock);
+            const clampedQty = Math.min(Math.max(quantity, minQty), item.maxStock ?? 20);
 
             return prevCart.map((i) =>
                 i.id === itemId && i.variant === variant

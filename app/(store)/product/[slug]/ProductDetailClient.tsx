@@ -75,7 +75,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
           category: productData.categories?.name || 'Shop',
           rating: productData.rating_avg || 0,
           reviewCount: 0,
-          stockCount: productData.quantity,
+          stockCount: 99,
           moq: productData.moq || 1,
   
   
@@ -122,8 +122,6 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
               const variants = p.product_variants || [];
               const hasVariants = variants.length > 0;
               const minVariantPrice = hasVariants ? Math.min(...variants.map((v: any) => v.price || p.price)) : undefined;
-              const totalVariantStock = hasVariants ? variants.reduce((sum: number, v: any) => sum + (v.quantity || 0), 0) : 0;
-              const effectiveStock = hasVariants ? totalVariantStock : p.quantity;
               return {
                 id: p.id,
                 slug: p.slug,
@@ -132,8 +130,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                 image: p.product_images?.[0]?.url || '/logo.png',
                 rating: p.rating_avg || 0,
                 reviewCount: 0,
-                inStock: effectiveStock > 0,
-                maxStock: effectiveStock || 50,
+                inStock: p.status === 'active',
                 moq: p.moq || 1,
                 hasVariants,
                 minVariantPrice
@@ -161,7 +158,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
   // Determine the active price: variant price if selected, otherwise base price
   const activePrice = selectedVariant?.price ?? product?.price ?? 0;
-  const activeStock = selectedVariant ? (selectedVariant.stock ?? selectedVariant.quantity ?? product?.stockCount ?? 0) : (product?.stockCount ?? 0);
+  const isAvailable = product?.inStock !== false;
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -177,7 +174,6 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
       quantity: quantity,
       variant: variantLabel,
       slug: product.slug,
-      maxStock: activeStock,
       moq: product.moq || 1
     });
   };
@@ -221,7 +217,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
     sku: product.sku,
     rating: product.rating,
     reviewCount: product.reviewCount,
-    availability: product.quantity > 0 ? 'in_stock' : 'out_of_stock',
+    availability: product.inStock ? 'in_stock' : 'out_of_stock',
     category: product.category
   });
 
@@ -359,7 +355,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                           {product.variants.map((variant: any) => {
                             const isSelected = selectedVariant?.id === variant.id || selectedVariant?.name === variant.name;
                             const variantStock = variant.stock ?? variant.quantity ?? 0;
-                            const isOutOfStock = variantStock === 0 && product.stockCount === 0;
+                            const isUnavailable = !isAvailable;
                             return (
                               <button
                                 key={variant.id || variant.name}
@@ -367,10 +363,10 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                   setSelectedVariant(variant);
                 
                                 }}
-                                disabled={isOutOfStock}
+                                disabled={isUnavailable}
                                 className={`px-5 py-2.5 rounded-xl border font-medium transition-all whitespace-nowrap cursor-pointer flex flex-col items-center min-w-[5rem] ${isSelected
                                   ? 'border-gray-900 ring-1 ring-gray-900/10 bg-white text-gray-900 shadow-sm'
-                                  : isOutOfStock
+                                  : isUnavailable
                                     ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50/50'
                                     : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50/50'
                                   }`}
@@ -401,7 +397,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                           {visibleVariants.map((variant: any) => {
                             const isSelected = selectedVariant?.id === variant.id;
                             const variantStock = variant.stock ?? variant.quantity ?? 0;
-                            const isOutOfStock = variantStock === 0 && product.stockCount === 0;
+                            const isUnavailable = !isAvailable;
                             return (
                               <button
                                 key={variant.id || variant.name}
@@ -409,10 +405,10 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                   setSelectedVariant(variant);
                 
                                 }}
-                                disabled={isOutOfStock}
+                                disabled={isUnavailable}
                                 className={`px-5 py-2.5 rounded-xl border font-medium transition-all whitespace-nowrap cursor-pointer flex flex-col items-center min-w-[4.5rem] ${isSelected
                                   ? 'border-gray-900 ring-1 ring-gray-900/10 bg-white text-gray-900 shadow-sm'
-                                  : isOutOfStock
+                                  : isUnavailable
                                     ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50/50'
                                     : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50/50'
                                   }`}
@@ -439,23 +435,23 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                       <button
                         onClick={() => setQuantity(Math.max(product.moq || 1, quantity - 1))}
                         className="w-12 h-12 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-white transition-all rounded-l-xl cursor-pointer"
-                        disabled={activeStock === 0 || quantity <= (product.moq || 1)}
+                        disabled={!isAvailable || quantity <= (product.moq || 1)}
                       >
                         <i className="ri-subtract-line text-lg"></i>
                       </button>
                       <input
                         type="number"
                         value={quantity}
-                        onChange={(e) => setQuantity(Math.max(product.moq || 1, Math.min(activeStock, parseInt(e.target.value) || (product.moq || 1))))}
+                        onChange={(e) => setQuantity(Math.max(product.moq || 1, parseInt(e.target.value) || (product.moq || 1)))}
                         className="w-14 h-12 text-center bg-transparent border-none focus:ring-0 text-[15px] font-medium text-gray-900"
                         min={product.moq || 1}
-                        max={activeStock}
-                        disabled={activeStock === 0}
+                        max={20}
+                        disabled={!isAvailable}
                       />
                       <button
-                        onClick={() => setQuantity(Math.min(activeStock, quantity + 1))}
+                        onClick={() => setQuantity(quantity + 1)}
                         className="w-12 h-12 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-white transition-all rounded-r-xl cursor-pointer"
-                        disabled={activeStock === 0}
+                        disabled={!isAvailable}
                       >
                         <i className="ri-add-line text-lg"></i>
                       </button>
@@ -467,19 +463,17 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                           Min. order: {product.moq} units
                         </span>
                       )}
-                      {activeStock > 10 && (
+                      {false && (
                         <span className="text-gray-500 font-medium text-xs flex items-center tracking-wide">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#C8952A] mr-2 shadow-[0_0_8px_rgba(52,211,153,0.5)] animate-pulse"></span>
-                          {activeStock} in stock
                         </span>
                       )}
-                      {activeStock > 0 && activeStock <= 10 && (
+                      {isAvailable && false && (
                         <span className="text-[#C8952A] font-medium text-xs flex items-center tracking-wide">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#C8952A] mr-2 shadow-[0_0_8px_rgba(251,191,36,0.5)] pulse-fast"></span>
-                          Only {activeStock} left
                         </span>
                       )}
-                      {activeStock === 0 && (
+                      {!isAvailable && (
                         <span className="text-gray-400 font-medium text-xs flex items-center tracking-wide">
                           <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mr-2"></span>
                           Out of Stock
@@ -506,15 +500,15 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3.5 mb-10">
                   <button
-                    disabled={activeStock === 0 || needsVariantSelection}
-                    className={`flex-1 group relative overflow-hidden bg-[#111111] text-white py-4 px-6 rounded-xl font-medium transition-all duration-500 flex items-center justify-center space-x-2.5 text-[15px] shadow-[0_4px_14px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 whitespace-nowrap cursor-pointer ${(activeStock === 0 || needsVariantSelection) ? 'opacity-50 cursor-not-allowed hover:-translate-y-0' : ''}`}
+                    disabled={!isAvailable || needsVariantSelection}
+                    className={`flex-1 group relative overflow-hidden bg-[#111111] text-white py-4 px-6 rounded-xl font-medium transition-all duration-500 flex items-center justify-center space-x-2.5 text-[15px] shadow-[0_4px_14px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 whitespace-nowrap cursor-pointer ${(!isAvailable || needsVariantSelection) ? 'opacity-50 cursor-not-allowed hover:-translate-y-0' : ''}`}
                     onClick={handleAddToCart}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
                     <i className="ri-shopping-cart-2-line text-lg relative z-10"></i>
-                    <span className="relative z-10 tracking-wide">{activeStock === 0 ? 'Unavailable' : needsVariantSelection ? 'Select a Portion' : 'Add to Order'}</span>
+                    <span className="relative z-10 tracking-wide">{!isAvailable ? 'Unavailable' : needsVariantSelection ? 'Select a Portion' : 'Add to Order'}</span>
                   </button>
-                  {activeStock > 0 && !needsVariantSelection  && (
+                  {isAvailable && !needsVariantSelection  && (
                     <button
                       onClick={handleBuyNow}
                       className="sm:w-[160px] bg-white border border-black/[0.06] hover:border-black/[0.12] hover:bg-gray-50 text-gray-900 py-4 rounded-xl font-medium transition-all duration-300 whitespace-nowrap cursor-pointer shadow-sm tracking-wide"

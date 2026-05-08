@@ -284,8 +284,6 @@ export default function Home() {
                 const variants = product.product_variants || [];
                 const hasVariants = variants.length > 0;
                 const minVariantPrice = hasVariants ? Math.min(...variants.map((v: any) => v.price || product.price)) : undefined;
-                const totalVariantStock = hasVariants ? variants.reduce((sum: number, v: any) => sum + (v.quantity || 0), 0) : 0;
-                const effectiveStock = hasVariants ? totalVariantStock : product.quantity;
                 return (
                   <ProductCard
                     key={product.id}
@@ -298,8 +296,7 @@ export default function Home() {
                     rating={product.rating_avg || 5}
                     reviewCount={product.review_count || 0}
                     badge={product.featured ? 'Featured' : undefined}
-                    inStock={effectiveStock > 0}
-                    maxStock={effectiveStock || 50}
+                    inStock={product.status === 'active'}
                     moq={product.moq || 1}
                     hasVariants={hasVariants}
                     minVariantPrice={minVariantPrice}

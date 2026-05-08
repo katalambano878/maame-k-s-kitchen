@@ -114,16 +114,14 @@ export default function MiniCart({ isOpen, onClose }: MiniCartProps) {
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1, item.variant)}
                             className="w-9 h-full flex items-center justify-center hover:bg-gray-50 transition-colors cursor-pointer text-[#4b5563]"
-                            disabled={item.quantity >= item.maxStock}
+                            disabled={item.quantity >= (item.maxStock ?? 20)}
                           >
                             <i className="ri-add-line"></i>
                           </button>
                         </div>
                       </div>
 
-                      {item.quantity >= item.maxStock && (
-                        <p className="text-xs text-[#C8952A] mt-1">Max stock reached</p>
-                      )}
+                      
                     </div>
                   </div>
                 ))}
