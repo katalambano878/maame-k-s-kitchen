@@ -51,9 +51,9 @@ export default function MobileBottomNav() {
     },
     {
       href: '/menu',
-      label: 'Shop',
-      iconActive: 'ri-store-3-fill',
-      iconInactive: 'ri-store-3-line',
+      label: 'Menu',
+      iconActive: 'ri-restaurant-2-fill',
+      iconInactive: 'ri-restaurant-2-line',
     },
     {
       href: '/cart',

@@ -73,7 +73,7 @@ function ShopContent() {
                 *,
                 categories(name, slug),
                 product_images(url, position),
-                product_variants(id, name, price, quantity, option1, option2, image_url)
+                product_variants(id, name, price, quantity, option1, image_url)
               `, { count: 'exact' })
               .neq('status', 'archived');
 
