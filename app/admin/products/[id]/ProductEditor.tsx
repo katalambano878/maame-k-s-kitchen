@@ -30,7 +30,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
 
   const tabs = [
     { id: 'general', label: 'General', icon: 'ri-information-line' },
-    { id: 'pricing', label: 'Pricing & Inventory', icon: 'ri-price-tag-3-line' },
+    { id: 'pricing', label: 'Pricing', icon: 'ri-price-tag-3-line' },
     { id: 'portions', label: 'Portions', icon: 'ri-bowl-line' },
     { id: 'images', label: 'Images', icon: 'ri-image-line' },
     { id: 'seo', label: 'SEO', icon: 'ri-search-line' },
@@ -212,7 +212,7 @@ export default function ProductEditor({ productId }: { productId: string }) {
               </div>
 
               <div className="pt-6 border-t border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Inventory</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Availability</h3>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>

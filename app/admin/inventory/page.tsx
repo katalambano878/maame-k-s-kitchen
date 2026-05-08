@@ -54,7 +54,7 @@ export default function InventoryManagementPage() {
             price: p.price || 0,
             cost: 0, // Not in DB
             status,
-            supplier: 'Standard Supplier' // Default
+            supplier: ''
           };
         });
         setProducts(mapped);
@@ -128,8 +128,8 @@ export default function InventoryManagementPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Inventory Management</h1>
-            <p className="text-gray-600 mt-1 md:mt-2 text-sm md:text-base">Track stock levels, manage reorders, and forecast demand</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Menu Availability</h1>
+            <p className="text-gray-600 mt-1 md:mt-2 text-sm md:text-base">Manage dish availability and track your menu items</p>
           </div>
           <Link
             href="/admin"
@@ -179,7 +179,7 @@ export default function InventoryManagementPage() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 mb-1">Total Retail Value</p>
+                <p className="text-sm text-gray-600 mb-1">Menu Value</p>
                 <p className="text-3xl font-bold text-[#C8952A]">${totalValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
               </div>
               <div className="w-12 h-12 flex items-center justify-center bg-[#fdf9ec] rounded-lg">
@@ -196,7 +196,7 @@ export default function InventoryManagementPage() {
                 <i className="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl flex items-center justify-center"></i>
                 <input
                   type="text"
-                  placeholder="Search by product name or SKU..."
+                  placeholder="Search by dish name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] text-sm"
@@ -251,7 +251,7 @@ export default function InventoryManagementPage() {
                   onClick={handleBulkRestock}
                   className="bg-[#111111] hover:bg-[#111111] text-white px-4 py-2 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  Bulk Restock
+                  Bulk Update
                 </button>
                 <button
                   onClick={() => setSelectedProducts([])}

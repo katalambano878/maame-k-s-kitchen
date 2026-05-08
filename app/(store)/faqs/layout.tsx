@@ -32,7 +32,7 @@ const faqSchema = {
       name: 'How do I place an order?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Browse our products, add items to your cart, proceed to checkout, provide your delivery address, select payment method, and confirm your order. You'll receive an email confirmation with your order details and tracking number.",
+        text: "Browse our menu, add dishes to your order, proceed to checkout, provide your delivery address, select payment method, and confirm. You'll receive an email confirmation with your order details.",
       },
     },
     {

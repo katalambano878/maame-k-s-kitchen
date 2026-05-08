@@ -183,7 +183,7 @@ export default function SignupPage() {
             </div>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 mb-3 tracking-tight">Create Account</h1>
-          <p className="text-gray-500 font-light text-[15px] tracking-wide">Join us and start shopping today</p>
+          <p className="text-gray-500 font-light text-[15px] tracking-wide">Join us and order online today</p>
         </div>
 
         <div className="bg-white/80 backdrop-blur-2xl rounded-[2rem] shadow-[0_8px_40px_-12px_rgba(0,0,0,0.08)] border border-white p-8 sm:p-10 relative overflow-hidden">

@@ -19,7 +19,7 @@ export default function FlashSaleBanner() {
     title: 'Flash Sale',
     discount: 30,
     endTime: new Date(Date.now() + 6 * 60 * 60 * 1000),
-    ctaText: 'Shop Now',
+    ctaText: 'Order Now',
     ctaLink: '/menu'
   };
 

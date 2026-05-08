@@ -71,10 +71,10 @@ export default function CartPage() {
               <div className="w-24 h-24 flex items-center justify-center mx-auto mb-6 bg-gray-200 rounded-full">
                 <i className="ri-shopping-cart-line text-5xl text-gray-400"></i>
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Your order is empty</h2>
               <p className="text-gray-600 mb-8 text-lg">Looks like you haven't added any dishes yet</p>
               <Link href="/menu" className="inline-block bg-[#111111] hover:bg-[#111111] text-white px-8 py-4 rounded-lg font-semibold transition-colors whitespace-nowrap">
-                Continue Shopping
+                Browse Menu
               </Link>
             </div>
           </section>
@@ -242,7 +242,7 @@ export default function CartPage() {
                       href="/menu"
                       className="block w-full text-center text-[#0A0F1D] hover:text-black font-semibold py-2 whitespace-nowrap"
                     >
-                      Continue Shopping
+                      Browse Menu
                     </Link>
 
                     <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">

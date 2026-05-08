@@ -92,7 +92,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
   };
 
   const spiceLabels = ['None', 'Mild', 'Medium', 'Hot'];
-  const tabs = [{ id: 'general', label: 'General', icon: 'ri-information-line' }, { id: 'pricing', label: 'Pricing & Inventory', icon: 'ri-price-tag-3-line' }, { id: 'portions', label: 'Portions', icon: 'ri-bowl-line' }, { id: 'images', label: 'Images', icon: 'ri-image-line' }, { id: 'seo', label: 'SEO', icon: 'ri-search-line' }];
+  const tabs = [{ id: 'general', label: 'General', icon: 'ri-information-line' }, { id: 'pricing', label: 'Pricing', icon: 'ri-price-tag-3-line' }, { id: 'portions', label: 'Portions', icon: 'ri-bowl-line' }, { id: 'images', label: 'Images', icon: 'ri-image-line' }, { id: 'seo', label: 'SEO', icon: 'ri-search-line' }];
 
   return (
     <div className="space-y-6">
@@ -239,7 +239,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                 </div>
               )}
               <div className="pt-4 border-t border-gray-200 space-y-6">
-                <h3 className="text-lg font-bold text-gray-900">Inventory</h3>
+                <h3 className="text-lg font-bold text-gray-900">Availability</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-900 mb-2">SKU</label>

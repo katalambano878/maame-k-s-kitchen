@@ -36,7 +36,7 @@ export default function MiniCart({ isOpen, onClose }: MiniCartProps) {
       <div className="fixed top-0 right-0 h-[100dvh] w-[500px] max-w-full bg-white shadow-2xl z-50 flex flex-col slide-in-right">
         <div className="flex items-center justify-between p-6 border-b border-gray-100 flex-shrink-0">
           <h2 className="text-[22px] font-bold text-[#111827]">
-            Shopping Cart ({cart.reduce((sum, i) => sum + i.quantity, 0)})
+            Your Order ({cart.reduce((sum, i) => sum + i.quantity, 0)})
           </h2>
           <button
             onClick={onClose}
@@ -51,7 +51,7 @@ export default function MiniCart({ isOpen, onClose }: MiniCartProps) {
             <div className="w-[130px] h-[130px] flex items-center justify-center bg-[#f3f4f6] rounded-full mb-6">
               <i className="ri-shopping-cart-2-line text-[#9ca3af] text-[64px]"></i>
             </div>
-            <h3 className="text-2xl font-bold text-[#111827] mb-2">Your cart is empty</h3>
+            <h3 className="text-2xl font-bold text-[#111827] mb-2">Your order is empty</h3>
             <p className="text-[#6b7280] mb-8 text-[15px] max-w-[200px] leading-relaxed">
               Add items to get started
             </p>
@@ -60,7 +60,7 @@ export default function MiniCart({ isOpen, onClose }: MiniCartProps) {
               onClick={onClose}
               className="w-[240px] py-3.5 bg-[#4B4542] hover:bg-[#3D3836] text-white rounded-lg font-bold transition-colors text-center cursor-pointer shadow-sm text-[15px]"
             >
-              Continue Shopping
+              Browse Menu
             </Link>
           </div>
         ) : (

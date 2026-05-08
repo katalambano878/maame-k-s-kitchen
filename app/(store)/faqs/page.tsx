@@ -20,7 +20,7 @@ export default function FAQsPage() {
     {
       category: 'orders',
       question: 'How do I place an order?',
-      answer: 'Browse our products, add items to your cart, proceed to checkout, provide your delivery address, select payment method, and confirm your order. You\'ll receive an email confirmation with your order details and tracking number.'
+      answer: 'Browse our menu, add dishes to your order, proceed to checkout, provide your delivery address, select payment method, and confirm. You\'ll receive an email confirmation with your order details.'
     },
     {
       category: 'orders',

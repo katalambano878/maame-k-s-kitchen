@@ -192,20 +192,20 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     <input
                       type="number"
                       value={quantity}
-                      onChange={(e) => setQuantity(Math.max(1, Math.min(product.stockCount, parseInt(e.target.value) || 1)))}
+                      onChange={(e) => setQuantity(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
                       className="w-12 h-12 text-center border-x-2 border-gray-300 focus:outline-none font-semibold"
                       min="1"
-                      max={product.stockCount}
+                      max={20}
                     />
                     <button
-                      onClick={() => setQuantity(Math.min(product.stockCount, quantity + 1))}
+                      onClick={() => setQuantity(Math.min(20, quantity + 1))}
                       className="w-10 h-12 flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       <i className="ri-add-line"></i>
                     </button>
                   </div>
                   <p className="text-sm text-gray-600 mt-2">
-                    {product.inStock ? `${product.stockCount} in stock` : 'Out of stock'}
+                    {product.inStock ? 'Available' : 'Currently unavailable'}
                   </p>
                 </div>
 
@@ -224,12 +224,12 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     {addedToCart ? (
                       <span className="flex items-center justify-center">
                         <i className="ri-check-line mr-2"></i>
-                        Added to Cart
+                        Added to Order
                       </span>
                     ) : (
                       <span className="flex items-center justify-center">
                         <i className="ri-shopping-cart-line mr-2"></i>
-                        Add to Cart
+                        Add to Order
                       </span>
                     )}
                   </button>

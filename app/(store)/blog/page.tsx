@@ -3,10 +3,10 @@ import Link from 'next/link';
 export default function BlogPage() {
   const featuredPost = {
     id: '1',
-    title: 'The Ultimate Guide to Online Shopping in Canada',
-    excerpt: 'Everything you need to know about safe, convenient online shopping in Canada. From payment methods to delivery options, we cover it all.',
+    title: 'The Story Behind Maame K's Kitchen',
+    excerpt: 'How a love for authentic Ghanaian food and a dream of sharing it with Calgary led to the opening of Maame K's Kitchen in Cornerstone, NE Calgary.',
     image: 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=1200&height=600&seq=blog1&orientation=landscape',
-    category: 'Shopping Tips',
+    category: 'Our Story',
     date: 'December 15, 2024',
     readTime: '8 min read',
     author: 'Staff Writer'
@@ -15,30 +15,30 @@ export default function BlogPage() {
   const posts = [
     {
       id: '2',
-      title: '10 Must-Have Products for Your Home This Season',
-      excerpt: 'Discover the trending products that will elevate your living space and make your home more comfortable and stylish.',
+      title: '5 Ghanaian Dishes You Need to Try This Season',
+      excerpt: 'From rich groundnut soup to smoky jollof rice, we break down the dishes that keep our customers coming back every week.',
       image: 'https://readdy.ai/api/search-image?query=Beautiful%20modern%20African%20home%20interior%20with%20stylish%20furniture%20decor%20items%20plants%20bright%20natural%20lighting%20contemporary%20design%20magazine%20quality%20photography&width=800&height=500&seq=blog2&orientation=landscape',
-      category: 'Home & Living',
+      category: 'Food Guide',
       date: 'December 12, 2024',
       readTime: '6 min read',
       author: 'Staff Writer'
     },
     {
       id: '3',
-      title: 'How to Choose Quality Products: A Buyer\'s Guide',
-      excerpt: 'Learn the key indicators of quality products and how to make informed purchasing decisions that offer the best value for your money.',
+      title: 'What Makes Authentic Ghanaian Food Different',
+      excerpt: 'The spices, the slow-cooking techniques, and the traditions passed down through generations — here's what sets Ghanaian cuisine apart.',
       image: 'https://readdy.ai/api/search-image?query=Person%20examining%20product%20quality%20checking%20labels%20and%20details%20in%20bright%20retail%20setting%20closeup%20hands%20inspecting%20merchandise%20professional%20photography%20clean%20background&width=800&height=500&seq=blog3&orientation=landscape',
-      category: 'Buying Guide',
+      category: 'Culture',
       date: 'December 10, 2024',
       readTime: '7 min read',
       author: 'Staff Writer'
     },
     {
       id: '1',
-      title: 'The Ultimate Guide to Online Shopping in Canada',
-      excerpt: 'Everything you need to know about safe, convenient online shopping in Canada. From payment methods to delivery options.',
+      title: 'The Story Behind Maame K's Kitchen',
+      excerpt: 'Your first time ordering? Here's everything you need to know about our menu, delivery zones, pickup options, and special requests.',
       image: 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=800&height=500&seq=blog1b&orientation=landscape',
-      category: 'Shopping Tips',
+      category: 'Our Story',
       date: 'December 15, 2024',
       readTime: '8 min read',
       author: 'Staff Writer'
@@ -47,10 +47,10 @@ export default function BlogPage() {
 
   const categories = [
     { name: 'All Posts', count: 12, icon: 'ri-article-line' },
-    { name: 'Shopping Tips', count: 5, icon: 'ri-shopping-bag-line' },
-    { name: 'Product Reviews', count: 4, icon: 'ri-star-line' },
-    { name: 'Home & Living', count: 3, icon: 'ri-home-line' },
-    { name: 'Buying Guide', count: 6, icon: 'ri-guide-line' },
+    { name: 'Food Guide', count: 5, icon: 'ri-restaurant-line' },
+    { name: 'Recipes', count: 4, icon: 'ri-bowl-line' },
+    { name: 'Our Story', count: 3, icon: 'ri-heart-line' },
+    { name: 'Culture', count: 6, icon: 'ri-global-line' },
     { name: 'News', count: 2, icon: 'ri-newspaper-line' }
   ];
 
@@ -61,7 +61,7 @@ export default function BlogPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-5xl font-bold text-gray-900 mb-6">Our Blog</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Shopping tips, product guides, and the latest trends to help you make smarter purchasing decisions.
+              Recipes, food stories, and a taste of Ghanaian culture — straight from our kitchen to your screen.
             </p>
           </div>
         </div>
@@ -200,7 +200,7 @@ export default function BlogPage() {
               <div className="mt-8 pt-8 border-t border-gray-200">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">Newsletter</h3>
                 <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                  Get the latest articles and shopping tips delivered to your inbox weekly.
+                  Get recipes, food stories, and updates from our kitchen delivered to your inbox.
                 </p>
                 <form className="space-y-3">
                   <input
@@ -220,7 +220,7 @@ export default function BlogPage() {
               <div className="mt-8 pt-8 border-t border-gray-200">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">Popular Tags</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Shopping', 'Quality', 'Reviews', 'Lifestyle', 'Delivery', 'Tips', 'Home', 'Style'].map((tag, index) => (
+                  {['Ghanaian', 'Jollof', 'Banku', 'Halal', 'Delivery', 'Calgary', 'Recipe', 'Fresh'].map((tag, index) => (
                     <button
                       key={index}
                       className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-[#C8952A] hover:text-[#C8952A] transition-colors cursor-pointer whitespace-nowrap"
@@ -237,15 +237,15 @@ export default function BlogPage() {
 
       <div className="bg-gradient-to-br from-[#111111] to-[#0d0d0d] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">Ready to Start Shopping?</h2>
+          <h2 className="text-4xl font-bold text-white mb-4">Ready to Order?</h2>
           <p className="text-xl text-emerald-100 mb-8 leading-relaxed">
-            Maame Ks Kitchen — shop Maame Ks Kitchen from Cornerstone, Calgary, Alberta, Canada
+            Authentic Ghanaian cuisine, freshly made in Cornerstone, NE Calgary.
           </p>
           <Link
             href="/menu"
             className="inline-flex items-center gap-2 bg-white text-[#C8952A] px-8 py-4 rounded-full font-medium hover:bg-[#fdf9ec] transition-colors whitespace-nowrap"
           >
-            Explore Products
+            Explore Menu
             <i className="ri-arrow-right-line"></i>
           </Link>
         </div>

@@ -72,7 +72,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
         const transformedProduct = {
           ...productData,
           images: productData.product_images?.sort((a: any, b: any) => a.position - b.position).map((img: any) => img.url) || [],
-          category: productData.categories?.name || 'Shop',
+          category: productData.categories?.name || 'Menu',
           rating: productData.rating_avg || 0,
           reviewCount: 0,
           stockCount: 99,
@@ -240,7 +240,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
             <nav className="flex items-center space-x-2 text-sm flex-wrap gap-y-2">
               <Link href="/" className="text-gray-600 hover:text-[#C8952A] transition-colors">Home</Link>
               <i className="ri-arrow-right-s-line text-gray-400"></i>
-              <Link href="/menu" className="text-gray-600 hover:text-[#C8952A] transition-colors">Shop</Link>
+              <Link href="/menu" className="text-gray-600 hover:text-[#C8952A] transition-colors">Menu</Link>
               <i className="ri-arrow-right-s-line text-gray-400"></i>
               <Link href="#" className="text-gray-600 hover:text-[#C8952A] transition-colors">{product.category}</Link>
               <i className="ri-arrow-right-s-line text-gray-400"></i>
@@ -531,12 +531,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     <i className="ri-shield-check-line text-lg text-gray-400 mr-3.5"></i>
                     <span>Secure payment & buyer protection</span>
                   </div>
-                  {product.sku && (
-                    <div className="flex items-center text-gray-500 text-[14px] font-light">
-                      <i className="ri-barcode-line text-lg text-gray-400 mr-3.5"></i>
-                      <span>SKU <span className="text-gray-400 ml-1.5">{product.sku}</span></span>
-                    </div>
-                  )}
+
                 </div>
               </div>
             </div>
@@ -602,7 +597,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div className="text-center mb-12">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">You May Also Like</h2>
-                <p className="text-lg text-gray-600">Curated recommendations based on this product</p>
+                <p className="text-lg text-gray-600">More dishes from our kitchen</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
