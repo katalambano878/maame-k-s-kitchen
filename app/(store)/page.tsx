@@ -275,11 +275,11 @@ export default function Home() {
           </AnimatedSection>
 
           {loading ? (
-            <div className="grid grid-cols-2 gap-4 md:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
               {[...Array(4)].map((_, i) => <ProductCardSkeleton key={i} />)}
             </div>
           ) : (
-            <AnimatedGrid className="grid grid-cols-2 gap-4 md:gap-8">
+            <AnimatedGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
               {featuredProducts.map((product) => {
                 const variants = product.product_variants || [];
                 const hasVariants = variants.length > 0;
