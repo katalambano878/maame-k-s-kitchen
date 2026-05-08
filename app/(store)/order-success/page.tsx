@@ -116,7 +116,7 @@ function OrderSuccessContent() {
           <i className="ri-error-warning-line text-4xl text-[#C8952A] mb-4 block"></i>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Not Found</h1>
           <p className="text-gray-600 mb-6">We couldn't locate the order details.</p>
-          <Link href="/shop" className="text-[#C8952A] font-semibold hover:underline">
+          <Link href="/menu" className="text-[#C8952A] font-semibold hover:underline">
             Return to Shop
           </Link>
         </div>
@@ -187,7 +187,7 @@ function OrderSuccessContent() {
                 View Order
               </Link>
               <Link
-                href="/shop"
+                href="/menu"
                 className="border-2 border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center justify-center whitespace-nowrap"
               >
                 <i className="ri-shopping-bag-line mr-2"></i>

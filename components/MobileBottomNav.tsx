@@ -50,7 +50,7 @@ export default function MobileBottomNav() {
       iconInactive: 'ri-home-5-line',
     },
     {
-      href: '/shop',
+      href: '/menu',
       label: 'Shop',
       iconActive: 'ri-store-3-fill',
       iconInactive: 'ri-store-3-line',

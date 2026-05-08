@@ -131,10 +131,10 @@ export default function Footer() {
               <NavColumn
                 title="Menu"
                 links={[
-                  { href: '/shop', label: 'Full Menu' },
+                  { href: '/menu', label: 'Full Menu' },
                   { href: '/categories', label: 'Categories' },
-                  { href: '/shop?sort=new', label: 'New on the Menu' },
-                  { href: '/shop?sort=popular', label: 'Most Loved' },
+                  { href: '/menu?sort=new', label: 'New on the Menu' },
+                  { href: '/menu?sort=popular', label: 'Most Loved' },
                 ]}
               />
               <NavColumn

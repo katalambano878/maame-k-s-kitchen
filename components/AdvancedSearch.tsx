@@ -61,7 +61,7 @@ export default function AdvancedSearch() {
       const updated = [searchQuery, ...recentSearches.filter(s => s !== searchQuery)].slice(0, 5);
       setRecentSearches(updated);
       localStorage.setItem('recentSearches', JSON.stringify(updated));
-      window.location.href = `/shop?search=${encodeURIComponent(searchQuery)}`;
+      window.location.href = `/menu?search=${encodeURIComponent(searchQuery)}`;
     }
   };
 

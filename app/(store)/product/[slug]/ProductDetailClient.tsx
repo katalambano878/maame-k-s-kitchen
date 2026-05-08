@@ -203,7 +203,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
       <div className="min-h-screen bg-white py-20 flex justify-center items-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Dish Not Found</h2>
-          <Link href="/shop" className="text-[#C8952A] hover:underline">View Menu</Link>
+          <Link href="/menu" className="text-[#C8952A] hover:underline">View Menu</Link>
         </div>
       </div>
     );
@@ -244,7 +244,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
             <nav className="flex items-center space-x-2 text-sm flex-wrap gap-y-2">
               <Link href="/" className="text-gray-600 hover:text-[#C8952A] transition-colors">Home</Link>
               <i className="ri-arrow-right-s-line text-gray-400"></i>
-              <Link href="/shop" className="text-gray-600 hover:text-[#C8952A] transition-colors">Shop</Link>
+              <Link href="/menu" className="text-gray-600 hover:text-[#C8952A] transition-colors">Shop</Link>
               <i className="ri-arrow-right-s-line text-gray-400"></i>
               <Link href="#" className="text-gray-600 hover:text-[#C8952A] transition-colors">{product.category}</Link>
               <i className="ri-arrow-right-s-line text-gray-400"></i>

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -310,7 +310,7 @@ export default function CheckoutPage() {
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h1>
           <p className="text-gray-600 mb-8">Add some items to start the checkout process.</p>
-          <Link href="/shop" className="inline-block bg-[#111111] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#111111] transition-colors">
+          <Link href="/menu" className="inline-block bg-[#111111] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#111111] transition-colors">
             Return to Shop
           </Link>
         </div>

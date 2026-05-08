@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -56,7 +56,7 @@ export default function MiniCart({ isOpen, onClose }: MiniCartProps) {
               Add items to get started
             </p>
             <Link
-              href="/shop"
+              href="/menu"
               onClick={onClose}
               className="w-[240px] py-3.5 bg-[#4B4542] hover:bg-[#3D3836] text-white rounded-lg font-bold transition-colors text-center cursor-pointer shadow-sm text-[15px]"
             >

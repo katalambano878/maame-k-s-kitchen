@@ -146,7 +146,7 @@ export default function Home() {
 
             <div className="flex items-center justify-center gap-5 flex-wrap">
               <Link
-                href="/shop"
+                href="/menu"
                 className="group inline-flex items-center gap-2.5 text-white font-bold text-[12px] uppercase tracking-[0.18em] px-8 py-4 rounded-full transition-all duration-300 active:scale-95 hover:scale-[1.02]"
                 style={{ backgroundColor: '#C8952A', boxShadow: '0 8px 36px rgba(200,149,42,0.45)' }}
                 onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#b8841f')}
@@ -224,7 +224,7 @@ export default function Home() {
 
           <AnimatedGrid className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-10">
             {categories.map((category) => (
-              <Link href={`/shop?category=${category.slug}`} key={category.id} className="group cursor-pointer block relative outline-none">
+              <Link href={`/menu?category=${category.slug}`} key={category.id} className="group cursor-pointer block relative outline-none">
                 <div className="aspect-[4/3] rounded-[24px] overflow-hidden relative bg-gray-100 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.18)] transition-all duration-700 transform group-hover:-translate-y-1.5">
                   <div className="absolute inset-0 bg-gray-200" />
                   <Image
@@ -310,7 +310,7 @@ export default function Home() {
           )}
 
           <div className="text-center mt-16">
-            <Link href="/shop" className="inline-flex items-center gap-3 justify-center bg-[#111111] text-white px-10 py-4 rounded-full font-semibold text-[13px] uppercase tracking-[0.15em] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] group">
+            <Link href="/menu" className="inline-flex items-center gap-3 justify-center bg-[#111111] text-white px-10 py-4 rounded-full font-semibold text-[13px] uppercase tracking-[0.15em] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] group">
               See Full Menu
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1"><path d="M2 6.5h9M7.5 2.5l4 4-4 4" /></svg>
             </Link>

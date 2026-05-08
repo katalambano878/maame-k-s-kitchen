@@ -31,6 +31,22 @@ const nextConfig: NextConfig = {
     // TypeScript checks enabled - type errors will fail build
     ignoreBuildErrors: false,
   },
+  // Redirect old /shop URL to /menu
+  async redirects() {
+    return [
+      {
+        source: '/shop',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/shop/:path*',
+        destination: '/menu/:path*',
+        permanent: true,
+      },
+    ];
+  },
+
   // Security + Caching headers
   async headers() {
     return [

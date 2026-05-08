@@ -134,7 +134,7 @@ export default function AboutPage() {
 
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
-                href="/shop"
+                href="/menu"
                 className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#111111] hover:bg-[#111111] text-white rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_4px_20px_rgba(200,149,42,0.3)] hover:scale-[1.02]"
               >
                 <i className="ri-restaurant-line" />
@@ -244,7 +244,7 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/shop"
+                href="/menu"
                 className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-white text-[#C8952A] font-bold text-sm transition-all duration-500 hover:bg-[#fdf9ec] hover:scale-105 shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
               >
                 <i className="ri-restaurant-line" />

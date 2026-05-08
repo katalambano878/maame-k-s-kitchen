@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase';
 import { useCMS } from '@/context/CMSContext';
 
 const NAV_LINKS = [
-  { label: 'Menu',       href: '/shop',       icon: 'ri-restaurant-2-line' },
+  { label: 'Menu',       href: '/menu',       icon: 'ri-restaurant-2-line' },
   { label: 'Categories', href: '/categories', icon: 'ri-grid-line' },
   { label: 'About',      href: '/about',      icon: 'ri-information-line' },
   { label: 'Contact',    href: '/contact',    icon: 'ri-phone-line' },
@@ -80,7 +80,7 @@ export default function Header() {
     e.preventDefault();
     if (searchQuery.trim()) {
       setIsSearchOpen(false); setSearchQuery(''); setSearchResults([]);
-      window.location.href = `/shop?search=${encodeURIComponent(searchQuery)}`;
+      window.location.href = `/menu?search=${encodeURIComponent(searchQuery)}`;
     }
   };
 
@@ -238,7 +238,7 @@ export default function Header() {
 
               {/* Order Now CTA */}
               <Link
-                href="/shop"
+                href="/menu"
                 className="hidden lg:flex items-center gap-2 ml-1.5 px-4 py-2.5 text-white rounded-full text-[11px] font-bold uppercase tracking-[0.14em] transition-all duration-300 hover:scale-[1.02] active:scale-95 whitespace-nowrap"
                 style={{
                   backgroundColor: '#111111',
@@ -400,7 +400,7 @@ export default function Header() {
             {/* Order Now CTA */}
             <div className="px-4 pt-3">
               <Link
-                href="/shop"
+                href="/menu"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center justify-center gap-2 w-full py-3.5 text-white rounded-2xl font-bold text-[13px] tracking-wide transition-colors"
                 style={{ backgroundColor: '#111111', boxShadow: '0 4px 16px rgba(200,149,42,0.3)' }}

@@ -50,7 +50,7 @@ export default function ReturnConfirmationPage() {
                 Track Return Status
               </Link>
               <Link
-                href="/shop"
+                href="/menu"
                 className="block w-full border-2 border-gray-300 hover:border-gray-400 text-gray-700 py-4 rounded-lg font-semibold transition-colors whitespace-nowrap"
               >
                 Continue Shopping

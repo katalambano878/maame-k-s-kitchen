@@ -110,7 +110,7 @@ export default function OrderHistory() {
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-1">No orders yet</h3>
         <p className="text-gray-500 mb-6">Start shopping to see your orders here.</p>
-        <Link href="/shop" className="inline-block bg-[#111111] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#111111] transition-colors">
+        <Link href="/menu" className="inline-block bg-[#111111] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#111111] transition-colors">
           Go to Shop
         </Link>
       </div>

@@ -242,7 +242,7 @@ export default function BlogPage() {
             Maame Ks Kitchen — shop Maame Ks Kitchen from Cornerstone, Calgary, Alberta, Canada
           </p>
           <Link
-            href="/shop"
+            href="/menu"
             className="inline-flex items-center gap-2 bg-white text-[#C8952A] px-8 py-4 rounded-full font-medium hover:bg-[#fdf9ec] transition-colors whitespace-nowrap"
           >
             Explore Products

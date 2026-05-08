@@ -67,7 +67,7 @@ export default async function CategoriesPage() {
             {categories.map((cat, idx) => (
               <Link
                 key={cat.id}
-                href={`/shop?category=${cat.slug}`}
+                href={`/menu?category=${cat.slug}`}
                 className={`group relative flex flex-col rounded-3xl overflow-hidden bg-white border border-gray-100 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.08)] hover:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.14)] transition-all duration-700 hover:-translate-y-1.5 cursor-pointer ${
                   cat.featured ? 'md:col-span-2 lg:col-span-2' : ''
                 }`}
@@ -176,7 +176,7 @@ export default async function CategoriesPage() {
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
-                href="/shop"
+                href="/menu"
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-white text-gray-900 font-bold text-sm transition-all duration-500 hover:scale-105 shadow-lg"
               >
                 <i className="ri-search-line text-[#C8952A]" />

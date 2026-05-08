@@ -73,7 +73,7 @@ export default function CartPage() {
               </div>
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
               <p className="text-gray-600 mb-8 text-lg">Looks like you haven't added any dishes yet</p>
-              <Link href="/shop" className="inline-block bg-[#111111] hover:bg-[#111111] text-white px-8 py-4 rounded-lg font-semibold transition-colors whitespace-nowrap">
+              <Link href="/menu" className="inline-block bg-[#111111] hover:bg-[#111111] text-white px-8 py-4 rounded-lg font-semibold transition-colors whitespace-nowrap">
                 Continue Shopping
               </Link>
             </div>
@@ -239,7 +239,7 @@ export default function CartPage() {
                     </Link>
 
                     <Link
-                      href="/shop"
+                      href="/menu"
                       className="block w-full text-center text-[#0A0F1D] hover:text-black font-semibold py-2 whitespace-nowrap"
                     >
                       Continue Shopping

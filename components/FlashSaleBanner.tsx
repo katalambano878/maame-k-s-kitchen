@@ -20,7 +20,7 @@ export default function FlashSaleBanner() {
     discount: 30,
     endTime: new Date(Date.now() + 6 * 60 * 60 * 1000),
     ctaText: 'Shop Now',
-    ctaLink: '/shop'
+    ctaLink: '/menu'
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
