@@ -77,7 +77,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           HERO
       ═══════════════════════════════════════ */}
-      <section className="relative w-full h-[100svh] min-h-[600px] overflow-hidden bg-[#0a0a0a] flex flex-col">
+      <section className="relative w-full h-[65svh] sm:h-[100svh] min-h-[480px] sm:min-h-[600px] overflow-hidden bg-[#0a0a0a] flex flex-col">
 
         {/* ── Slide backgrounds ── */}
         {['/home_hero_1.jpeg', '/home_hero_2.jpeg', '/home_hero_3.jpeg'].map((src, idx) => (
@@ -186,7 +186,7 @@ export default function Home() {
 
         {/* ── Bottom info bar ── */}
         <div className="relative z-20 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-          <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 py-4 flex flex-wrap items-center justify-center gap-6 md:gap-10">
+          <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 py-4 hidden sm:flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {[
               { icon: 'ri-e-bike-line',    text: 'Free delivery CA$50+' },
               { icon: 'ri-time-line',      text: '45–60 min delivery' },
