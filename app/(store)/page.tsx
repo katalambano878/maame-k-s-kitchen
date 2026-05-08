@@ -37,13 +37,22 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data: productsData } = await supabase
+        let { data: productsData } = await supabase
           .from('products')
           .select('*, product_variants(*), product_images(*)')
           .eq('status', 'active')
           .eq('featured', true)
           .order('created_at', { ascending: false })
           .limit(8);
+        if (!productsData || productsData.length === 0) {
+          const { data: fallbackProducts } = await supabase
+            .from('products')
+            .select('*, product_variants(*), product_images(*)')
+            .eq('status', 'active')
+            .order('created_at', { ascending: false })
+            .limit(8);
+          productsData = fallbackProducts;
+        }
         setFeaturedProducts(productsData || []);
 
         const { data: categoriesData } = await supabase
@@ -51,7 +60,7 @@ export default function Home() {
           .select('id, name, slug, image_url, metadata')
           .eq('status', 'active')
           .order('name');
-        setCategories((categoriesData || []).filter((c: any) => c.metadata?.featured === true));
+        setCategories(categoriesData || []);
       } catch (e) {
         console.error(e);
       } finally {
@@ -219,7 +228,7 @@ export default function Home() {
                 <div className="aspect-[4/3] rounded-[24px] overflow-hidden relative bg-gray-100 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.18)] transition-all duration-700 transform group-hover:-translate-y-1.5">
                   <div className="absolute inset-0 bg-gray-200" />
                   <Image
-                    src={category.image || category.image_url || 'https://via.placeholder.com/600x450?text=' + encodeURIComponent(category.name)}
+                    src={category.image || category.image_url || '/logo.png' + encodeURIComponent(category.name)}
                     alt={category.name}
                     fill
                     className="object-cover object-center transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
@@ -285,7 +294,7 @@ export default function Home() {
                     name={product.name}
                     price={product.price}
                     originalPrice={product.compare_at_price}
-                    image={product.product_images?.[0]?.url || 'https://via.placeholder.com/400x500'}
+                    image={product.product_images?.[0]?.url || '/logo.png'}
                     rating={product.rating_avg || 5}
                     reviewCount={product.review_count || 0}
                     badge={product.featured ? 'Featured' : undefined}

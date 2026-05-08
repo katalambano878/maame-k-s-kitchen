@@ -13,7 +13,9 @@ const cache = new Map<string, CacheEntry<any>>();
 const DEFAULT_TTL = 10 * 60 * 1000; // 10 minutes — reduce re-fetches during browsing
 
 /**
- * Get data from cache or fetch it fresh
+ * Get data from cache or fetch it fresh.
+ * Only caches successful (non-null) results so a temporary query failure
+ * doesn't lock out the page for the full TTL.
  */
 export async function cachedQuery<T>(
   key: string,
@@ -21,13 +23,21 @@ export async function cachedQuery<T>(
   ttlMs: number = DEFAULT_TTL
 ): Promise<T> {
   const cached = cache.get(key);
-  
+
   if (cached && (Date.now() - cached.timestamp) < ttlMs) {
     return cached.data;
   }
-  
+
   const data = await queryFn();
-  cache.set(key, { data, timestamp: Date.now() });
+
+  // Don't cache null, undefined, or results that look like Supabase errors
+  const isUsable = data !== null && data !== undefined &&
+    !(typeof data === 'object' && 'error' in (data as any) && (data as any).error !== null && (data as any).data === null);
+
+  if (isUsable) {
+    cache.set(key, { data, timestamp: Date.now() });
+  }
+
   return data;
 }
 

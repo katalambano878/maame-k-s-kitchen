@@ -27,7 +27,7 @@ export default async function CategoriesPage() {
 
   const categories = (categoriesData || []).map((c, i) => ({
     ...c,
-    image:  c.image_url || `https://via.placeholder.com/800x600/064e3b/34d399?text=${encodeURIComponent(c.name)}`,
+    image:  c.image_url || '/logo.png',
     style:  FOOD_STYLES[i % FOOD_STYLES.length],
     desc:   c.description || DEFAULT_DESCRIPTIONS.default,
     // first card spans 2 cols for visual interest

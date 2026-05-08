@@ -123,7 +123,7 @@ function ShopContent() {
               name:          p.name,
               price:         p.price,
               originalPrice: p.compare_at_price,
-              image:         p.product_images?.sort((a: any, b: any) => a.position - b.position)?.[0]?.url || '/placeholder-dish.jpg',
+              image:         p.product_images?.sort((a: any, b: any) => a.position - b.position)?.[0]?.url || '/logo.png',
               rating:        p.rating_avg || 0,
               reviewCount:   0,
               badge:         p.compare_at_price > p.price ? 'Special' : undefined,
