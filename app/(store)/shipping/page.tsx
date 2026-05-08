@@ -1,3 +1,18 @@
+import type { Metadata } from 'next';
+
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
+
+export const metadata: Metadata = {
+  title: 'Delivery & Shipping',
+  description: "Maame K's Kitchen delivery information — same-day delivery across Calgary, free delivery on orders over CA\$50, and free pickup at Cornerstone, NE Calgary.",
+  keywords: ['Ghanaian food delivery Calgary', 'same day food delivery Calgary', 'African food delivery NE Calgary', 'Cornerstone food delivery'],
+  alternates: { canonical: `${siteUrl}/shipping` },
+  openGraph: {
+    title: "Delivery & Shipping | Maame K's Kitchen",
+    description: 'Same-day delivery across Calgary. Free delivery on orders over CA$50. Pickup at Cornerstone, NE Calgary.',
+    url: `${siteUrl}/shipping`,
+  },
+};
 import Link from 'next/link';
 
 export default function ShippingPage() {

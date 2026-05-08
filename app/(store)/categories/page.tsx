@@ -1,3 +1,24 @@
+import type { Metadata } from 'next';
+
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
+
+export const metadata: Metadata = {
+  title: 'Menu Categories',
+  description: "Explore Maame K's Kitchen menu by category — rice dishes, soups & stews, grills, sides, drinks and more. Fresh authentic Ghanaian food delivered in Calgary.",
+  keywords: ['Ghanaian food categories Calgary', 'banku', 'jollof', 'waakye', 'Ghanaian soups Calgary', 'African food menu Calgary'],
+  alternates: { canonical: `${siteUrl}/categories` },
+  openGraph: {
+    title: "Menu Categories | Maame K's Kitchen",
+    description: 'Browse all menu categories — rice dishes, soups, grills, sides, drinks and more.',
+    url: `${siteUrl}/categories`,
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: "Maame K's Kitchen Menu Categories" }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Menu Categories | Maame K's Kitchen",
+    description: 'Browse all menu categories — rice dishes, soups, grills, sides, drinks and more.',
+  },
+};
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import PageHero from '@/components/PageHero';

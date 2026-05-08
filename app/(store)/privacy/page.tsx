@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description: "Maame K's Kitchen privacy policy — how we collect, use, and protect your personal information when you order from our website.",
+  alternates: { canonical: `${siteUrl}/privacy` },
+  robots: { index: true, follow: false },
+};
 import Link from 'next/link';
 
 export default function PrivacyPage() {

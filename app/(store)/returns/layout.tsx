@@ -1,25 +1,17 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
 
 export const metadata: Metadata = {
-  title: 'Order Issues & Refunds',
-  description: "Maame Ks Kitchen quality guarantee. If something isn’t right with your order, contact us within 24 hours and we’ll make it right.",
-  keywords: [
-    'order issues Calgary',
-    'refund policy Calgary',
-    "Maame Ks Kitchen quality guarantee",
-    'food order issues',
-  ],
-  alternates: {
-    canonical: `${siteUrl}/returns`,
-  },
+  title: 'Returns & Refunds',
+  description: "Maame K's Kitchen returns and refund policy. Issues with your order? Contact us within 24 hours and we'll make it right with a refund, replacement, or store credit.",
+  alternates: { canonical: `${siteUrl}/returns` },
   openGraph: {
-    title: 'Order Issues & Refunds | Maame Ks Kitchen',
-    description: 'If something isn’t right with your order, contact us within 24 hours and we’ll make it right.',
+    title: "Returns & Refunds | Maame K's Kitchen",
+    description: "Issues with your order? Contact us within 24 hours for a refund, replacement, or store credit.",
     url: `${siteUrl}/returns`,
-    type: 'website',
   },
+  robots: { index: true, follow: true },
 };
 
 export default function ReturnsLayout({ children }: { children: React.ReactNode }) {

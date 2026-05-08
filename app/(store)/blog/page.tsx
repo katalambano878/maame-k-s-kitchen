@@ -1,3 +1,25 @@
+import type { Metadata } from 'next';
+
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: "Recipes, food stories, and a taste of Ghanaian culture — straight from the Maame K's Kitchen team in Calgary, Alberta.",
+  keywords: ['Ghanaian recipes', 'Ghanaian food blog', 'African food Calgary', 'Ghanaian culture food', 'banku recipe', 'jollof rice recipe'],
+  alternates: { canonical: `${siteUrl}/blog` },
+  openGraph: {
+    title: "Blog | Maame K's Kitchen",
+    description: "Recipes, food stories, and a taste of Ghanaian culture from our kitchen in Calgary.",
+    url: `${siteUrl}/blog`,
+    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: "Maame K's Kitchen Blog" }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Blog | Maame K's Kitchen",
+    description: "Recipes, food stories, and a taste of Ghanaian culture from our kitchen in Calgary.",
+  },
+};
 import Link from 'next/link';
 
 export default function BlogPage() {

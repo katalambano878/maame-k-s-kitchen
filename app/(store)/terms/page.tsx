@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
+
+export const metadata: Metadata = {
+  title: 'Terms & Conditions',
+  description: "Maame K's Kitchen terms and conditions — please read before placing an order on our website.",
+  alternates: { canonical: `${siteUrl}/terms` },
+  robots: { index: true, follow: false },
+};
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-white">

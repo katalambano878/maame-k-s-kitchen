@@ -17,7 +17,7 @@
     { "src": "/logo.png", "sizes": "any", "type": "image/png" }
   ],
   "shortcuts": [
-    { "name": "View Menu", "short_name": "Menu", "url": "/shop", "description": "Browse our menu" },
+    { "name": "View Menu", "short_name": "Menu", "url": "/menu", "description": "Browse our full Ghanaian menu" },
     { "name": "My Account", "short_name": "Account", "url": "/account", "description": "Manage your account" },
     { "name": "Track Order", "short_name": "Track", "url": "/order-tracking", "description": "Track your order status" }
   ],

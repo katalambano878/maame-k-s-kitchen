@@ -1,25 +1,25 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with Maame Ks Kitchen. Visit us at Cornerstone, Calgary, Alberta or reach us by phone. We\'re here to help with orders and enquiries.',
+  description: "Get in touch with Maame K's Kitchen. Call (587) 582-2421, WhatsApp us, or find us at Cornerstone, NE Calgary. We're open Monday–Sunday, 10am–9pm.",
   keywords: [
-    'contact Maame Ks Kitchen',
-    'Calgary Ghanaian restaurant contact',
-    'Cornerstone Calgary food',
-    'Calgary Ghanaian restaurant phone',
-    'customer support Calgary',
+    "Maame K's Kitchen contact", 'Ghanaian restaurant Calgary phone', 'contact Ghanaian food Calgary',
+    'Cornerstone Calgary food order', 'Ghanaian catering inquiry Calgary',
   ],
-  alternates: {
-    canonical: `${siteUrl}/contact`,
-  },
+  alternates: { canonical: `${siteUrl}/contact` },
   openGraph: {
-    title: 'Contact Us | Maame Ks Kitchen',
-    description: 'Get in touch with Maame Ks Kitchen. Visit us at Cornerstone, Calgary, Alberta or reach us by phone.',
+    title: "Contact Us | Maame K's Kitchen",
+    description: "Call (587) 582-2421 or WhatsApp us. Based in Cornerstone, NE Calgary. Open Mon–Sun 10am–9pm.",
     url: `${siteUrl}/contact`,
-    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: "Contact Maame K's Kitchen" }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Contact Us | Maame K's Kitchen",
+    description: "Call (587) 582-2421. Based in Cornerstone, NE Calgary. Open Mon–Sun 10am–9pm.",
   },
 };
 

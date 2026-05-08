@@ -81,13 +81,14 @@ export const metadata: Metadata = {
     title: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
     description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
     siteName: "Maame Ks Kitchen",
-    images: [{ url: "/og-image.jpg", width: 500, height: 500, alt: "Maame Ks Kitchen" }],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Maame K's Kitchen — Authentic Ghanaian Cuisine in Calgary, Alberta" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
     description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
     site: "@maamekskitchenyyc",
+    creator: "@maamekskitchenyyc",
   },
   alternates: {
     canonical: siteUrl,
@@ -128,6 +129,15 @@ const organizationSchema = {
     "longitude": 0.0000
   },
   "priceRange": "$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+      "opens": "10:00",
+      "closes": "21:00"
+    }
+  ],
+  "hasMenu": "/menu",
   "currenciesAccepted": "CAD",
   "paymentAccepted": "Cash, Debit, Credit Card, Interac e-Transfer",
   "areaServed": {

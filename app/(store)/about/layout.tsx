@@ -1,26 +1,25 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about Maame Ks Kitchen — your authentic Ghanaian restaurant at Cornerstone, Calgary, Alberta. Our story, mission, and commitment to real Ghanaian flavours.',
+  description: "The story behind Maame K's Kitchen — authentic Ghanaian cuisine served from Cornerstone, NE Calgary. Meet the team behind the flavours of Ghana.",
   keywords: [
-    'about Maame Ks Kitchen',
-    'Calgary Ghanaian restaurant',
-    'Alberta Ghanaian food',
-    'Cornerstone Calgary restaurant',
-    'authentic Ghanaian food',
-    'our story',
+    "Maame K's Kitchen story", 'Ghanaian restaurant Calgary', 'about Ghanaian kitchen',
+    'African restaurant Calgary Alberta', 'Ghanaian chef Calgary', 'Cornerstone Calgary restaurant',
   ],
-  alternates: {
-    canonical: `${siteUrl}/about`,
-  },
+  alternates: { canonical: `${siteUrl}/about` },
   openGraph: {
-    title: 'About Us | Maame Ks Kitchen',
-    description: 'Learn about Maame Ks Kitchen — your authentic Ghanaian restaurant at Cornerstone, Calgary, Alberta.',
+    title: "About Us | Maame K's Kitchen",
+    description: "The story behind Maame K's Kitchen — authentic Ghanaian cuisine from Cornerstone, NE Calgary.",
     url: `${siteUrl}/about`,
-    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: "About Maame K's Kitchen" }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "About Us | Maame K's Kitchen",
+    description: "The story behind Maame K's Kitchen — authentic Ghanaian cuisine from Cornerstone, NE Calgary.",
   },
 };
 

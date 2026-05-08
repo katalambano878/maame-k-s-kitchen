@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { sanitizeHtml } from '@/lib/sanitize';
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
 
 const posts: Record<string, {
   title: string;
@@ -15,203 +15,69 @@ const posts: Record<string, {
   content: string;
 }> = {
   '1': {
-    title: 'The Ultimate Guide to Online Shopping in Canada',
-    image: 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=1200&height=600&seq=blogpost1&orientation=landscape',
-    category: 'Shopping Tips',
+    title: 'The Story Behind Maame Ks Kitchen',
+    image: 'https://readdy.ai/api/search-image?query=Ghanaian%20woman%20chef%20cooking%20authentic%20food%20restaurant%20kitchen%20Calgary%20warm%20lighting&width=1200&height=600&seq=blogpost1&orientation=landscape',
+    category: 'Our Story',
     date: 'December 15, 2024',
     dateISO: '2024-12-15',
     readTime: '8 min read',
-    author: 'Staff Writer',
+    author: 'Maame K',
     content: `
-      <p>Online shopping has revolutionised the way Canadians purchase products, offering convenience, variety, and competitive prices. However, navigating the world of ecommerce can be daunting if you're new to it. This comprehensive guide will help you shop online safely and confidently.</p>
-
-      <h2>Why Shop Online in Canada?</h2>
-      <p>The benefits of online shopping are numerous. You can browse thousands of products from the comfort of your home, compare prices easily, read reviews from other customers, and have items delivered directly to your doorstep. For busy professionals and families, online shopping saves valuable time.</p>
-
-      <p>Moreover, online stores often offer exclusive deals and promotions that aren't available in physical shops. You can shop at any time of day or night, without worrying about store opening hours or traffic.</p>
-
-      <h2>Choosing a Reliable Online Store</h2>
-      <p>Not all online stores are created equal. When shopping online, look for these trust signals:</p>
-      <ul>
-        <li><strong>Secure website:</strong> The URL should start with "https://" and display a padlock icon</li>
-        <li><strong>Clear contact information:</strong> Phone numbers, email addresses, and physical address should be visible</li>
-        <li><strong>Customer reviews:</strong> Real testimonials from verified buyers</li>
-        <li><strong>Return policy:</strong> Clear terms for returns and refunds</li>
-        <li><strong>Professional design:</strong> Well-organised website with detailed product information</li>
-      </ul>
-
-      <h2>Payment Methods in Canada</h2>
-      <p>Online shoppers have several secure payment options:</p>
-      <ul>
-        <li><strong>Mobile Money:</strong> Interac e-Transfer offer convenient payment options</li>
-        <li><strong>Credit/Debit Cards:</strong> Visa and Mastercard are widely accepted</li>
-        <li><strong>Moolre Payment:</strong> Our integrated payment gateway for seamless mobile money and card payments</li>
-      </ul>
-
-      <p>Always ensure you're on a secure connection when entering payment details. Avoid using public Wi-Fi for transactions.</p>
-
-      <h2>Understanding Delivery Options</h2>
-      <p>Delivery times and costs vary by location. In Calgary and major cities, you can often get next-day delivery. Remote areas may take longer. Always check:</p>
-      <ul>
-        <li>Estimated delivery time for your location</li>
-        <li>Delivery costs (many stores offer free shipping above a certain amount)</li>
-        <li>Tracking availability</li>
-        <li>What happens if you're not home for delivery</li>
-      </ul>
-
-      <h2>Tips for Safe Online Shopping</h2>
-      <ol>
-        <li><strong>Research the seller:</strong> Check reviews and ratings before purchasing</li>
-        <li><strong>Read product descriptions carefully:</strong> Note sizes, colours, materials, and specifications</li>
-        <li><strong>Save confirmation emails:</strong> Keep records of your orders and payment</li>
-        <li><strong>Check return policies:</strong> Understand your options if the product isn't suitable</li>
-        <li><strong>Use strong passwords:</strong> Create unique passwords for shopping accounts</li>
-        <li><strong>Monitor your accounts:</strong> Check bank statements for unauthorised charges</li>
-        <li><strong>Be wary of deals that seem too good to be true:</strong> Scammers often lure victims with unrealistic discounts</li>
-      </ol>
-
-      <h2>What to Do If Something Goes Wrong</h2>
-      <p>Despite best efforts, issues can arise. If you receive the wrong item, a damaged product, or don't receive your order at all:</p>
-      <ul>
-        <li>Contact the seller immediately with photos and order details</li>
-        <li>Most reputable stores will offer a replacement or refund</li>
-        <li>If the store is unresponsive, contact your bank or mobile money provider</li>
-        <li>Report fraudulent sellers to relevant authorities</li>
-      </ul>
-
-      <h2>Making the Most of Online Shopping</h2>
-      <p>To enhance your online shopping experience:</p>
-      <ul>
-        <li>Sign up for newsletters to get exclusive deals and early access to sales</li>
-        <li>Use wishlists to save items you're interested in</li>
-        <li>Follow your favourite stores on social media for flash sales</li>
-        <li>Take advantage of loyalty programmes and reward points</li>
-        <li>Shop during major sales events like Black Friday for better prices</li>
-      </ul>
-
-      <h2>Conclusion</h2>
-      <p>Online shopping in Canada is safe, convenient, and increasingly popular. By following these guidelines, you can enjoy all the benefits whilst minimising risks. Start with small purchases from reputable stores to build confidence, and soon you'll wonder how you ever lived without the convenience of online shopping.</p>
-
-      <p>Happy shopping!</p>
+      <p>Every dish we serve carries a story — one that begins thousands of kilometres away in Ghana and ends on your plate in Calgary. Maame Ks Kitchen was born out of a simple conviction: that authentic Ghanaian food deserves a home in Canada.</p>
+      <h2>Where It Began</h2>
+      <p>Growing up in Ghana, food was never just sustenance. It was ceremony. Sunday mornings meant the smell of kontomire stew drifting through the house. Celebrations called for jollof rice cooked over firewood, its smoky flavour something no gas flame can fully replicate. Every milestone had its dish, its ritual, its memory.</p>
+      <p>When I arrived in Calgary, I missed that connection. The Ghanaian community here is warm and close-knit, but authentic Ghanaian food was almost impossible to find.</p>
+      <h2>A Kitchen Becomes a Restaurant</h2>
+      <p>It started small. Friends asking me to cook for their gatherings. Community events where I would bring a pot of groundnut soup and watch it disappear in minutes. Opening Maame Ks Kitchen in Cornerstone, NE Calgary was both terrifying and exhilarating.</p>
+      <p>We wanted to serve food that felt genuinely homemade — not a watered-down version of Ghanaian cuisine adapted for Western palates, but the real thing. The spice levels, the fermented notes in the banku, the palm oil richness of the stews. Authentic.</p>
+      <h2>What Sets Us Apart</h2>
+      <p>We source ingredients carefully. Our palm oil comes from trusted suppliers who work directly with producers in West Africa. Our spices are ground fresh. Our proteins are halal-certified. Nothing is frozen and reheated — every order is prepared fresh.</p>
+      <h2>The Community That Built Us</h2>
+      <p>Every positive review, every returning customer, every message saying "this tastes exactly like my grandmother's cooking" keeps us going. That is the whole point.</p>
     `
   },
   '2': {
-    title: '10 Must-Have Products for Your Home This Season',
-    image: 'https://readdy.ai/api/search-image?query=Beautiful%20modern%20African%20home%20interior%20with%20stylish%20furniture%20decor%20items%20plants%20bright%20natural%20lighting%20contemporary%20design%20magazine%20quality%20photography&width=1200&height=600&seq=blogpost2&orientation=landscape',
-    category: 'Home & Living',
+    title: '5 Ghanaian Dishes You Need to Try This Season',
+    image: 'https://readdy.ai/api/search-image?query=Authentic%20Ghanaian%20food%20spread%20jollof%20rice%20banku%20stew%20colourful%20dishes%20restaurant%20photography%20warm%20lighting&width=1200&height=600&seq=blogpost2&orientation=landscape',
+    category: 'Food Guide',
     date: 'December 12, 2024',
     dateISO: '2024-12-12',
     readTime: '6 min read',
-    author: 'Staff Writer',
+    author: 'Maame K',
     content: `
-      <p>Transform your living space with these carefully selected must-have products. Whether you're refreshing your décor or starting from scratch, these items will elevate your home's comfort and style.</p>
-
-      <h2>1. Smart LED Lighting</h2>
-      <p>Modern LED bulbs with adjustable brightness and colour temperature can dramatically change your home's ambience. Control them from your phone, set schedules, and reduce energy costs.</p>
-
-      <h2>2. Premium Bedding Set</h2>
-      <p>Invest in quality sheets, duvet covers, and pillows. Good sleep is essential, and premium bedding makes a noticeable difference. Look for breathable fabrics suitable for Canada's climate.</p>
-
-      <h2>3. Air Purifier</h2>
-      <p>With increasing air quality concerns, an air purifier removes dust, pollen, and pollutants, creating a healthier indoor environment for your family.</p>
-
-      <h2>4. Organisational Storage Solutions</h2>
-      <p>Declutter your space with stylish storage boxes, baskets, and shelving units. A well-organised home feels more spacious and serene.</p>
-
-      <h2>5. Indoor Plants</h2>
-      <p>Bring nature indoors with low-maintenance plants like snake plants or pothos. They purify air, add visual interest, and create a calming atmosphere.</p>
-
-      <h2>6. Quality Cookware Set</h2>
-      <p>Upgrade your kitchen with durable pots and pans. Quality cookware distributes heat evenly, lasts longer, and makes cooking more enjoyable.</p>
-
-      <h2>7. Comfortable Throw Pillows</h2>
-      <p>Instantly refresh your living room or bedroom with decorative throw pillows. Mix textures and colours to create visual interest.</p>
-
-      <h2>8. Smart Power Strip</h2>
-      <p>Protect your electronics and reduce energy waste with a smart power strip that cuts power to devices in standby mode.</p>
-
-      <h2>9. Bath Towel Set</h2>
-      <p>Luxury doesn't have to be expensive. A set of soft, absorbent towels in coordinating colours makes your bathroom feel like a spa.</p>
-
-      <h2>10. Decorative Mirror</h2>
-      <p>Mirrors make spaces feel larger and brighter by reflecting light. Choose a statement piece that complements your décor style.</p>
-
-      <h2>Shopping Smart</h2>
-      <p>When purchasing home products, consider quality over quantity. It's better to invest in a few well-made items than many cheap ones that won't last. Read reviews, compare prices, and take advantage of seasonal sales.</p>
-
-      <p>Start with the essentials and gradually build your collection. Your home should reflect your personality and meet your practical needs.</p>
+      <p>Ghanaian cuisine is one of West Africa's most diverse and flavour-forward food traditions. Here are five dishes from our menu that every food lover in Calgary needs to experience.</p>
+      <h2>1. Banku with Okro Stew</h2>
+      <p>Banku is fermented corn and cassava dough, cooked to a smooth, slightly sour dumpling. Paired with our okro stew — loaded with seafood, palm oil, and garden eggs — it delivers a combination of textures and flavours that is deeply satisfying.</p>
+      <h2>2. Jollof Rice</h2>
+      <p>Our jollof is cooked slowly in a rich tomato and pepper base with our house spice blend. The result is deeply flavoured rice with a slightly caramelised bottom — the coveted "party jollof" texture that Ghanaians dream about.</p>
+      <h2>3. Waakye</h2>
+      <p>Waakye (pronounced "waa-chay") is rice and beans cooked together with dried millet stalks, which give the dish its distinctive reddish-brown colour and earthy depth. It comes with shito, fried plantain, spaghetti, and your choice of protein.</p>
+      <h2>4. Groundnut Soup with Fufu</h2>
+      <p>Groundnut soup is peanut-based, slow-simmered with tomatoes, peppers, onions, and meat until it becomes a thick, fragrant stew. Fufu — smooth, elastic dough made from cassava and plantain — is the traditional pairing.</p>
+      <h2>5. Kelewele</h2>
+      <p>Ripe plantain cubes seasoned with ginger, cayenne, and spices, deep-fried until golden and caramelised outside with a soft, sweet interior. Nearly impossible to stop eating.</p>
     `
   },
   '3': {
-    title: "How to Choose Quality Products: A Buyer's Guide",
-    image: 'https://readdy.ai/api/search-image?query=Person%20examining%20product%20quality%20checking%20labels%20and%20details%20in%20bright%20retail%20setting%20closeup%20hands%20inspecting%20merchandise%20professional%20photography%20clean%20background&width=1200&height=600&seq=blogpost3&orientation=landscape',
-    category: 'Buying Guide',
+    title: 'What Makes Authentic Ghanaian Food Different',
+    image: 'https://readdy.ai/api/search-image?query=Ghanaian%20spices%20palm%20oil%20ingredients%20peppers%20traditional%20cooking%20West%20African%20food%20culture%20photography&width=1200&height=600&seq=blogpost3&orientation=landscape',
+    category: 'Culture',
     date: 'December 10, 2024',
     dateISO: '2024-12-10',
     readTime: '7 min read',
-    author: 'Staff Writer',
+    author: 'Maame K',
     content: `
-      <p>In a market flooded with options, choosing quality products can be challenging. This guide will help you identify genuine quality and make purchasing decisions you won't regret.</p>
-
-      <h2>Understanding Quality Indicators</h2>
-      <p>Quality isn't just about price. A well-made product offers durability, functionality, and value for money. Here's what to look for:</p>
-
-      <h3>Material Quality</h3>
-      <p>Examine the materials used. Natural fibres, solid wood, stainless steel, and durable plastics indicate better quality. Avoid products that feel flimsy or have a chemical smell.</p>
-
-      <h3>Construction and Craftsmanship</h3>
-      <p>Check seams, joints, and finishes. Quality products have neat stitching, smooth edges, and secure fastenings. Poor construction is evident in loose threads, uneven surfaces, and wobbly parts.</p>
-
-      <h3>Brand Reputation</h3>
-      <p>Established brands invest in quality control and customer satisfaction. Research brands before purchasing. Read reviews and check how they handle complaints.</p>
-
-      <h2>Reading Product Descriptions</h2>
-      <p>Detailed product descriptions are a good sign. Quality sellers provide:</p>
-      <ul>
-        <li>Precise dimensions and specifications</li>
-        <li>Material composition</li>
-        <li>Care instructions</li>
-        <li>Warranty information</li>
-        <li>Multiple clear photos from different angles</li>
-      </ul>
-
-      <h2>The Power of Reviews</h2>
-      <p>Customer reviews are invaluable. Look for:</p>
-      <ul>
-        <li>Verified purchase badges</li>
-        <li>Detailed feedback with photos</li>
-        <li>Recent reviews (product quality can change)</li>
-        <li>How sellers respond to negative reviews</li>
-        <li>Overall rating trends</li>
-      </ul>
-
-      <p>Be sceptical of products with only perfect 5-star reviews or very few reviews relative to sales.</p>
-
-      <h2>Price vs. Value</h2>
-      <p>Expensive doesn't always mean quality, and cheap isn't always poor. Consider:</p>
-      <ul>
-        <li><strong>Cost per use:</strong> A $ 200 item used daily for 5 years offers better value than a $ 50 item replaced yearly</li>
-        <li><strong>Warranty and guarantees:</strong> Quality manufacturers stand behind their products</li>
-        <li><strong>Maintenance costs:</strong> Some cheap items require expensive upkeep</li>
-        <li><strong>Resale value:</strong> Quality items retain value better</li>
-      </ul>
-
-      <h2>Red Flags to Avoid</h2>
-      <p>Watch out for these warning signs:</p>
-      <ul>
-        <li>Vague or missing product information</li>
-        <li>No return policy or unclear terms</li>
-        <li>Prices significantly below market average</li>
-        <li>Poor website quality and numerous spelling errors</li>
-        <li>Lack of contact information</li>
-        <li>Pressure tactics urging immediate purchase</li>
-        <li>No physical address or company details</li>
-      </ul>
-
-      <h2>Conclusion</h2>
-      <p>Choosing quality products requires research, patience, and critical thinking. Don't rush important purchases. Take time to compare options, read reviews, and verify seller credibility. Quality products cost more upfront but offer better value long-term through durability, performance, and satisfaction.</p>
-
-      <p>Remember: the bitterness of poor quality lingers long after the sweetness of a low price is forgotten.</p>
+      <p>Walk into a Ghanaian kitchen and you will notice something immediately: the smell. A deep, layered aroma of palm oil, fermented grain, smoked fish, and fresh peppers that is unlike any other cuisine in the world.</p>
+      <h2>The Role of Fermentation</h2>
+      <p>Fermentation is central to Ghanaian cooking. Banku and kenkey are made from fermented corn dough. The fermentation process, which can take several days, develops a tangy, complex flavour profile that forms the backbone of the dish. There are no substitutes for properly fermented dough.</p>
+      <h2>Palm Oil: The Foundation</h2>
+      <p>Red palm oil is to Ghanaian cooking what olive oil is to Mediterranean cuisine — the default cooking fat, the flavour base, and the colour source all in one. We use unrefined red palm oil that retains its natural flavour compounds, sourced from trusted suppliers.</p>
+      <h2>Fresh Peppers and Heat</h2>
+      <p>Ghanaian food can be spicy, but heat is not the point — flavour is. The peppers used (scotch bonnets, garden peppers) contribute fruity, complex flavour alongside their heat. We calibrate our heat levels to be authentic without overwhelming.</p>
+      <h2>The One-Pot Philosophy</h2>
+      <p>Many Ghanaian dishes are slow-cooked in a single pot over extended time. Groundnut soup simmers for hours until the flavours fully meld. This approach produces depth that fast cooking cannot achieve.</p>
+      <h2>Community and Occasion</h2>
+      <p>In Ghana, specific dishes are associated with specific occasions. Waakye is morning street food. Fufu and soup are for leisurely Sunday afternoons. Jollof rice signals a celebration. When you order from us, you are getting a piece of Ghanaian food culture prepared with the care passed down through generations.</p>
     `
   }
 };
@@ -228,7 +94,9 @@ export async function generateMetadata({
   const { id } = await params;
   const post = posts[id] || posts['1'];
 
-  const description = `${post.title} — Read our latest article on Maame Ks Kitchen blog. Ghanaian food stories and recipes from Calgary, Canada.`;
+  const description = post.category === 'Our Story'
+    ? `${post.title} — The origin story of authentic Ghanaian cuisine coming to Calgary, Alberta.`
+    : `${post.title} — Ghanaian food stories and recipes from the Maame Ks Kitchen team in Calgary.`;
 
   return {
     title: post.title,
@@ -267,47 +135,23 @@ export default async function BlogPostPage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: post.title,
-    description: `${post.title} — Ghanaian food stories and recipes from Maame Ks Kitchen.`,
+    description: `${post.title} — Ghanaian food stories from Maame Ks Kitchen in Calgary.`,
     image: post.image,
     datePublished: post.dateISO,
     dateModified: post.dateISO,
-    author: {
-      '@type': 'Person',
-      name: post.author,
-    },
+    author: { '@type': 'Person', name: post.author },
     publisher: {
       '@type': 'Organization',
-      name: "Maame Ks Kitchen",
-      logo: {
-        '@type': 'ImageObject',
-        url: `${siteUrl}/logo.png`,
-      },
+      name: 'Maame Ks Kitchen',
+      logo: { '@type': 'ImageObject', url: `${siteUrl}/logo.png` },
     },
     url: `${siteUrl}/blog/${id}`,
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `${siteUrl}/blog/${id}`,
-    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${siteUrl}/blog/${id}` },
   };
 
-  const relatedPosts = [
-    {
-      id: id === '1' ? '2' : '1',
-      title: id === '1' ? '10 Must-Have Products for Your Home This Season' : 'The Ultimate Guide to Online Shopping in Canada',
-      image: id === '1'
-        ? 'https://readdy.ai/api/search-image?query=Beautiful%20modern%20African%20home%20interior%20with%20stylish%20furniture%20decor%20items%20plants%20bright%20natural%20lighting%20contemporary%20design%20magazine%20quality%20photography&width=600&height=400&seq=related1&orientation=landscape'
-        : 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=600&height=400&seq=related2&orientation=landscape',
-      category: id === '1' ? 'Home & Living' : 'Shopping Tips'
-    },
-    {
-      id: id === '3' ? '1' : '3',
-      title: id === '3' ? 'The Ultimate Guide to Online Shopping in Canada' : "How to Choose Quality Products: A Buyer's Guide",
-      image: id === '3'
-        ? 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=600&height=400&seq=related3&orientation=landscape'
-        : 'https://readdy.ai/api/search-image?query=Person%20examining%20product%20quality%20checking%20labels%20and%20details%20in%20bright%20retail%20setting%20closeup%20hands%20inspecting%20merchandise%20professional%20photography%20clean%20background&width=600&height=400&seq=related4&orientation=landscape',
-      category: id === '3' ? 'Shopping Tips' : 'Buying Guide'
-    }
-  ];
+  const allIds = ['1', '2', '3'];
+  const relatedIds = allIds.filter((rid) => rid !== id).slice(0, 2);
+  const relatedPosts = relatedIds.map((rid) => ({ id: rid, ...posts[rid] }));
 
   return (
     <div className="min-h-screen bg-white">
@@ -317,30 +161,17 @@ export default async function BlogPostPage({
       />
 
       <div className="relative h-96 bg-[#0d0d0d]">
-        <img
-          src={post.image}
-          alt={post.title}
-          className="w-full h-full object-cover opacity-50"
-        />
+        <img src={post.image} alt={post.title} className="w-full h-full object-cover opacity-50" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <span className="inline-block bg-[#111111] text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
               {post.category}
             </span>
             <h1 className="text-5xl font-bold text-white mb-6">{post.title}</h1>
-            <div className="flex items-center justify-center gap-6 text-emerald-100">
-              <span className="flex items-center gap-2">
-                <i className="ri-user-line"></i>
-                {post.author}
-              </span>
-              <span className="flex items-center gap-2">
-                <i className="ri-calendar-line"></i>
-                {post.date}
-              </span>
-              <span className="flex items-center gap-2">
-                <i className="ri-time-line"></i>
-                {post.readTime}
-              </span>
+            <div className="flex items-center justify-center gap-6 text-amber-100">
+              <span className="flex items-center gap-2"><i className="ri-user-line"></i>{post.author}</span>
+              <span className="flex items-center gap-2"><i className="ri-calendar-line"></i>{post.date}</span>
+              <span className="flex items-center gap-2"><i className="ri-time-line"></i>{post.readTime}</span>
             </div>
           </div>
         </div>
@@ -365,25 +196,18 @@ export default async function BlogPostPage({
                 </div>
                 <div>
                   <p className="font-bold text-gray-900">{post.author}</p>
-                  <p className="text-sm text-gray-500">Content Writer</p>
+                  <p className="text-sm text-gray-500">Maame Ks Kitchen</p>
                 </div>
               </div>
             </div>
             <div>
               <p className="text-sm text-gray-500 mb-3">Share this article</p>
               <div className="flex gap-3">
-                <button className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-[#fdf9ec] transition-colors cursor-pointer">
-                  <i className="ri-facebook-fill text-gray-600"></i>
-                </button>
-                <button className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-[#fdf9ec] transition-colors cursor-pointer">
-                  <i className="ri-twitter-fill text-gray-600"></i>
-                </button>
-                <button className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-[#fdf9ec] transition-colors cursor-pointer">
-                  <i className="ri-linkedin-fill text-gray-600"></i>
-                </button>
-                <button className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-[#fdf9ec] transition-colors cursor-pointer">
-                  <i className="ri-whatsapp-line text-gray-600"></i>
-                </button>
+                {['ri-facebook-fill', 'ri-twitter-fill', 'ri-linkedin-fill', 'ri-whatsapp-line'].map((icon) => (
+                  <button key={icon} className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-[#fdf9ec] transition-colors cursor-pointer">
+                    <i className={`${icon} text-gray-600`}></i>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
@@ -393,25 +217,16 @@ export default async function BlogPostPage({
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Articles</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {relatedPosts.map((relatedPost) => (
-              <Link
-                key={relatedPost.id}
-                href={`/blog/${relatedPost.id}`}
-                className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              >
+              <Link key={relatedPost.id} href={`/blog/${relatedPost.id}`}
+                className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer">
                 <div className="relative h-48">
-                  <img
-                    src={relatedPost.image}
-                    alt={relatedPost.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={relatedPost.image} alt={relatedPost.title} className="w-full h-full object-cover" />
                   <span className="absolute top-4 left-4 bg-[#111111] text-white px-3 py-1 rounded-full text-xs font-medium">
                     {relatedPost.category}
                   </span>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 leading-tight">
-                    {relatedPost.title}
-                  </h3>
+                  <h3 className="text-xl font-bold text-gray-900 leading-tight">{relatedPost.title}</h3>
                 </div>
               </Link>
             ))}
@@ -419,32 +234,16 @@ export default async function BlogPostPage({
         </div>
 
         <div className="mt-16 bg-gradient-to-br from-[#111111] to-[#0d0d0d] rounded-2xl p-12 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Enjoyed This Article?</h2>
-          <p className="text-emerald-100 mb-8 text-lg">
-            Subscribe to our newsletter for more shopping tips and exclusive offers
-          </p>
-          <form className="max-w-md mx-auto flex gap-3">
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="flex-1 px-6 py-4 rounded-full text-gray-900 focus:ring-2 focus:ring-white"
-            />
-            <button
-              type="submit"
-              className="bg-white text-[#C8952A] px-8 py-4 rounded-full font-medium hover:bg-[#fdf9ec] transition-colors whitespace-nowrap"
-            >
-              Subscribe
-            </button>
-          </form>
+          <h2 className="text-3xl font-bold mb-4">Ready to Order?</h2>
+          <p className="text-amber-100 mb-8 text-lg">Authentic Ghanaian cuisine, freshly made in Cornerstone, NE Calgary.</p>
+          <Link href="/menu" className="inline-flex items-center gap-2 bg-white text-[#C8952A] px-8 py-4 rounded-full font-medium hover:bg-[#fdf9ec] transition-colors whitespace-nowrap">
+            Explore Menu<i className="ri-arrow-right-line"></i>
+          </Link>
         </div>
 
         <div className="mt-12 text-center">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-[#C8952A] font-medium hover:gap-3 transition-all"
-          >
-            <i className="ri-arrow-left-line"></i>
-            Back to Blog
+          <Link href="/blog" className="inline-flex items-center gap-2 text-[#C8952A] font-medium hover:gap-3 transition-all">
+            <i className="ri-arrow-left-line"></i>Back to Blog
           </Link>
         </div>
       </div>
