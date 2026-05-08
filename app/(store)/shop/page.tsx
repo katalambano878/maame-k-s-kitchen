@@ -148,7 +148,7 @@ function ShopContent() {
     }
 
     fetchProducts();
-  }, [selectedCategory, maxPrice, sortBy, page, searchParams]);
+  }, [selectedCategory, maxPrice, sortBy, page, searchParams, categories]);
 
   // Client-side dietary filter
   useEffect(() => {

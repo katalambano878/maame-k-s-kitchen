@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -133,8 +133,8 @@ export default function Footer() {
                 links={[
                   { href: '/shop', label: 'Full Menu' },
                   { href: '/categories', label: 'Categories' },
-                  { href: '/shop?sort=newest', label: 'New on the Menu' },
-                  { href: '/shop?sort=bestsellers', label: 'Most Loved' },
+                  { href: '/shop?sort=new', label: 'New on the Menu' },
+                  { href: '/shop?sort=popular', label: 'Most Loved' },
                 ]}
               />
               <NavColumn
