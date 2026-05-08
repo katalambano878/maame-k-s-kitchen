@@ -187,7 +187,7 @@ function ShopContent() {
       />
 
       {/* Mobile filter bar */}
-      <div className="lg:hidden bg-white border-b border-gray-200 py-4 px-4 sticky top-[72px] z-20">
+      <div className="lg:hidden bg-white border-b border-gray-200 py-4 px-4 z-20">
         <div className="flex justify-between items-center">
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -362,7 +362,7 @@ function ShopContent() {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
                     {products.map(p => <ProductCard key={p.id} {...p} />)}
                   </div>
 

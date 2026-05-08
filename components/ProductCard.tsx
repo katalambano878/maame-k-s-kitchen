@@ -125,7 +125,7 @@ export default function ProductCard({
 
         {/* ── Add CTA ── */}
         {inStock && (
-          <div className="absolute bottom-0 inset-x-0 flex items-end justify-center pb-4 z-20 pointer-events-none">
+          <div className="absolute bottom-0 inset-x-0 hidden lg:flex items-end justify-center pb-4 z-20 pointer-events-none">
             {hasVariants ? (
               <Link
                 href={`/product/${slug}`}
