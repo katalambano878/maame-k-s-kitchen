@@ -145,7 +145,7 @@ export default function Header() {
                 </svg>
               </button>
 
-              <Link href="/" className="group flex items-center gap-3 flex-shrink-0 select-none" aria-label={siteName}>
+              <Link href="/" className="group hidden lg:flex items-center gap-3 flex-shrink-0 select-none" aria-label={siteName}>
                 <Image
                   src="/logo.png"
                   alt={siteName}
