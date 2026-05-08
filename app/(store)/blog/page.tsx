@@ -3,8 +3,8 @@ import Link from 'next/link';
 export default function BlogPage() {
   const featuredPost = {
     id: '1',
-    title: 'The Story Behind Maame K's Kitchen',
-    excerpt: 'How a love for authentic Ghanaian food and a dream of sharing it with Calgary led to the opening of Maame K's Kitchen in Cornerstone, NE Calgary.',
+    title: 'The Story Behind Maame Ks Kitchen',
+    excerpt: 'How a love for authentic Ghanaian food and a dream of sharing it with Calgary led to the opening of Maame Ks Kitchen in Cornerstone, NE Calgary.',
     image: 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=1200&height=600&seq=blog1&orientation=landscape',
     category: 'Our Story',
     date: 'December 15, 2024',
@@ -26,7 +26,7 @@ export default function BlogPage() {
     {
       id: '3',
       title: 'What Makes Authentic Ghanaian Food Different',
-      excerpt: 'The spices, the slow-cooking techniques, and the traditions passed down through generations — here's what sets Ghanaian cuisine apart.',
+      excerpt: 'The spices, the slow-cooking techniques, and the traditions passed down through generations — what sets Ghanaian cuisine apart.',
       image: 'https://readdy.ai/api/search-image?query=Person%20examining%20product%20quality%20checking%20labels%20and%20details%20in%20bright%20retail%20setting%20closeup%20hands%20inspecting%20merchandise%20professional%20photography%20clean%20background&width=800&height=500&seq=blog3&orientation=landscape',
       category: 'Culture',
       date: 'December 10, 2024',
@@ -35,8 +35,8 @@ export default function BlogPage() {
     },
     {
       id: '1',
-      title: 'The Story Behind Maame K's Kitchen',
-      excerpt: 'Your first time ordering? Here's everything you need to know about our menu, delivery zones, pickup options, and special requests.',
+      title: 'The Story Behind Maame Ks Kitchen',
+      excerpt: 'Your first time ordering? Here’s everything you need to know about our menu, delivery zones, pickup options, and special requests.',
       image: 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=800&height=500&seq=blog1b&orientation=landscape',
       category: 'Our Story',
       date: 'December 15, 2024',
