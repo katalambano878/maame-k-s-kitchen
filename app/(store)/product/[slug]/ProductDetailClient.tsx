@@ -228,8 +228,8 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://example.com');
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: baseUrl },
-    { name: 'Shop', url: `${baseUrl}/shop` },
-    { name: product.category, url: `${baseUrl}/shop?category=${product.category.toLowerCase().replace(/\s+/g, '-')}` },
+    { name: 'Menu', url: `${baseUrl}/menu` },
+    { name: product.category, url: `${baseUrl}/menu?category=${product.category.toLowerCase().replace(/\s+/g, '-')}` },
     { name: product.name, url: `${baseUrl}/product/${slug}` }
   ]);
 

@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     'Ghanaian takeout Calgary',
   ],
   alternates: {
-    canonical: `${siteUrl}/shop`,
+    canonical: `${siteUrl}/menu`,
   },
   openGraph: {
     title: 'Menu | Maame Ks Kitchen',
     description: 'Browse the full menu — banku, jollof, waakye, fufu, omotuo, Ghanaian Dish, and traditional Ghanaian sides in Calgary, Alberta.',
-    url: `${siteUrl}/shop`,
+    url: `${siteUrl}/menu`,
     type: 'website',
   },
   twitter: {

@@ -418,7 +418,7 @@ export async function sendWelcomeMessage(user: { email: string, firstName: strin
   </table>
 </div>
 
-${emailButton('Start Shopping', `${BRAND.url}/shop`)}
+${emailButton('Start Shopping', `${BRAND.url}/menu`)}
 `, `Welcome to ${BRAND.name}, ${firstName}!`)
     });
 

@@ -1,4 +1,4 @@
-﻿/* eslint-disable @next/next/no-page-custom-font */
+/* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { CartProvider } from "@/context/CartContext";
@@ -153,7 +153,7 @@ const websiteSchema = {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": `${siteUrl}/shop?search={search_term_string}`
+      "urlTemplate": `${siteUrl}/menu?search={search_term_string}`
     },
     "query-input": "required name=search_term_string"
   }

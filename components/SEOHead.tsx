@@ -187,7 +187,7 @@ export function generateWebsiteSchema() {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${siteUrl}/shop?search={search_term_string}`
+        urlTemplate: `${siteUrl}/menu?search={search_term_string}`
       },
       'query-input': 'required name=search_term_string'
     }

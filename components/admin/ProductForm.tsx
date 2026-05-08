@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -368,7 +368,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">URL Slug</label>
                 <div className="flex items-center">
-                  <span className="text-gray-600 bg-gray-100 px-4 py-3 border-2 border-r-0 border-gray-300 rounded-l-lg text-sm whitespace-nowrap">maamekskitchen.ca/shop/</span>
+                  <span className="text-gray-600 bg-gray-100 px-4 py-3 border-2 border-r-0 border-gray-300 rounded-l-lg text-sm whitespace-nowrap">maamekskitchen.ca/product/</span>
                   <input type="text" value={slug} onChange={e => setSlug(e.target.value)} className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
                 </div>
               </div>
