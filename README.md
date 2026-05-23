@@ -10,7 +10,7 @@ The online ordering site and admin dashboard for Maame Ks Kitchen, a Ghanaian re
 - **UI:** React 19 + TypeScript
 - **Styling:** Tailwind CSS
 - **Database:** Supabase (PostgreSQL)
-- **Payments:** Moolre _(swap for Stripe before going live in Canada — see [`CUSTOMIZE.md`](./CUSTOMIZE.md) §9)_
+- **Payments:** Stripe
 - **Email:** Resend
 
 ## Getting Started

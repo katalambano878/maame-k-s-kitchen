@@ -152,7 +152,8 @@ For every other table (coupons, blog_posts, support_tickets, etc.):
 Add to `.env.local`:
 
 ```
-MOOLRE_CALLBACK_SECRET=<strong random string, used to verify payment callbacks>
+STRIPE_SECRET_KEY=sk_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
 ---
@@ -175,9 +176,9 @@ const { data } = await supabase.from('orders').select('*');
 
 Server-side code in this project also enforces:
 
-1. **Payment verify endpoint** — verifies amount/status against Moolre's API; the `fromRedirect` flag is no longer trusted on its own.
+1. **Stripe payment verify endpoint** — confirms `checkout.session.completed` with Stripe's API; webhook is the primary fulfillment path.
 2. **Payment initiation** — order amount is fetched from the database, never trusted from the client.
-3. **Payment callback** — callback secret verification is mandatory when configured; amount mismatches are rejected.
+3. **Stripe webhook** — signature verification via `STRIPE_WEBHOOK_SECRET`; amount mismatches are rejected.
 4. **Middleware** — server-side auth check for every `/admin` route.
 5. **Notifications API** — sensitive notification types require admin auth; contact-form input is validated.
 6. **Order tracking** — email verification is mandatory.

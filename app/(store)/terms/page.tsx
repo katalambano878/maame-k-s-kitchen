@@ -148,12 +148,12 @@ export default function TermsPage() {
             <div className="bg-gray-50 p-6 rounded-xl mb-6">
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-center gap-2">
-                  <i className="ri-smartphone-line text-[#C8952A]"></i>
-                  <span>Mobile Money (Interac e-Transfer) via Moolre</span>
+                  <i className="ri-bank-card-line text-[#C8952A]"></i>
+                  <span>Credit/Debit Cards (Visa, Mastercard, Amex) via Stripe</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <i className="ri-bank-card-line text-[#C8952A]"></i>
-                  <span>Credit/Debit Cards (Visa, Mastercard) via Moolre</span>
+                  <i className="ri-smartphone-line text-[#C8952A]"></i>
+                  <span>Apple Pay and Google Pay via Stripe (where available)</span>
                 </li>
               </ul>
             </div>

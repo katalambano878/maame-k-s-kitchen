@@ -52,7 +52,7 @@ export default function CheckoutPage() {
 
   const [deliveryMethod, setDeliveryMethod] = useState('pickup');
   const [orderNotes, setOrderNotes] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('moolre');
+  const [paymentMethod, setPaymentMethod] = useState('stripe');
   const [errors, setErrors] = useState<any>({});
 
 
@@ -97,9 +97,9 @@ export default function CheckoutPage() {
     if (!shippingData.email) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(shippingData.email)) newErrors.email = 'Invalid email';
     if (!shippingData.phone) newErrors.phone = 'Phone is required';
-    if (deliveryMethod === 'delivery' && !shippingData.address) newErrors.address = 'Delivery address is required';
-    if (deliveryMethod === 'delivery' && !shippingData.city) newErrors.city = 'City is required';
-    if (deliveryMethod === 'delivery' && !shippingData.region) newErrors.region = 'Province is required';
+    if (deliveryMethod === 'doorstep' && !shippingData.address) newErrors.address = 'Delivery address is required';
+    if (deliveryMethod === 'doorstep' && !shippingData.city) newErrors.city = 'City is required';
+    if (deliveryMethod === 'doorstep' && !shippingData.region) newErrors.region = 'Province is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -112,7 +112,7 @@ export default function CheckoutPage() {
   };
 
   const handleContinueToPayment = async () => {
-    // Skip step 3 and directly initiate payment with default method (Moolre/Mobile Money)
+    // Proceed directly to Stripe checkout from step 2
     await handlePlaceOrder();
   };
 
@@ -141,6 +141,17 @@ export default function CheckoutPage() {
       const trackingNumber = `SLI-${trackingId}`;
 
       // 1. Create Order
+      const addressJson = {
+        firstName: shippingData.firstName,
+        lastName: shippingData.lastName,
+        email: shippingData.email,
+        phone: shippingData.phone,
+        address: shippingData.address,
+        city: shippingData.city,
+        region: shippingData.region,
+        country: 'Canada',
+      };
+
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert([{
@@ -156,15 +167,18 @@ export default function CheckoutPage() {
           shipping_total: deliveryFee,
           discount_total: 0,
           total: total,
-          delivery_method: deliveryMethod,
+          shipping_method: deliveryMethod,
+          delivery_type: deliveryMethod === 'doorstep' ? 'delivery' : 'pickup',
           payment_method: paymentMethod,
-          delivery_address: deliveryMethod === 'delivery' ? shippingData : null,
+          shipping_address: addressJson,
+          billing_address: addressJson,
           notes: orderNotes,
           metadata: {
             guest_checkout: !user,
             first_name: shippingData.firstName,
             last_name: shippingData.lastName,
-            tracking_number: trackingNumber
+            tracking_number: trackingNumber,
+            delivery_method: deliveryMethod,
           }
         }])
         .select()
@@ -244,17 +258,13 @@ export default function CheckoutPage() {
       });
 
       // 4. Handle Payment Redirects or Completion
-      if (paymentMethod === 'moolre') {
+      if (paymentMethod === 'stripe') {
         try {
-          // Payment link reminder will be sent automatically after 15 mins if unpaid (via cron)
-
-          const paymentRes = await fetch('/api/payment/moolre', {
+          const paymentRes = await fetch('/api/payment/stripe/create-checkout-session', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               orderId: orderNumber,
-              amount: total,
-              customerEmail: shippingData.email
             })
           });
 
@@ -264,18 +274,15 @@ export default function CheckoutPage() {
             throw new Error(paymentResult.message || 'Payment initialization failed');
           }
 
-          // Clear cart before redirecting
           clearCart();
-
-          // Redirect to Moolre
           window.location.href = paymentResult.url;
           return;
-
-        } catch (paymentErr: any) {
+        } catch (paymentErr: unknown) {
+          const message = paymentErr instanceof Error ? paymentErr.message : 'Payment initialization failed';
           console.error('Payment Error:', paymentErr);
-          alert('Failed to initialize payment: ' + paymentErr.message);
+          alert('Failed to initialize payment: ' + message);
           setIsLoading(false);
-          return; // Stop execution
+          return;
         }
       }
 
@@ -594,7 +601,7 @@ export default function CheckoutPage() {
                           Processing...
                         </>
                       ) : (
-                        'Pay with Mobile Money'
+                        'Pay Securely with Stripe'
                       )}
                     </button>
                   </div>

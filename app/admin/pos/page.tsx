@@ -186,9 +186,11 @@ export default function POSPage() {
     const validateCheckout = (): string | null => {
         if (cart.length === 0) return 'Cart is empty';
 
-        if (paymentMethod === 'momo') {
-            const phone = getOrderPhone();
-            if (!phone) return 'Phone number is required for Mobile Money payment';
+        if (paymentMethod === 'stripe') {
+            const email = getOrderEmail();
+            if (!email || email === 'pos-walkin@store.local') {
+                return 'Customer email is required for Stripe payment link';
+            }
         }
 
         if (paymentMethod === 'cash') {
@@ -270,7 +272,7 @@ export default function POSPage() {
                     discount_total: 0,
                     total: grandTotal,
                     shipping_method: deliveryMethod,
-                    payment_method: paymentMethod === 'momo' ? 'moolre' : paymentMethod,
+                    payment_method: paymentMethod === 'stripe' ? 'stripe' : paymentMethod,
                     shipping_address: addressData,
                     billing_address: addressData,
                     metadata: {
@@ -367,25 +369,22 @@ export default function POSPage() {
                 }
             }
 
-            // 5. If Momo — initiate Moolre payment
-            if (paymentMethod === 'momo') {
-                const paymentRes = await fetch('/api/payment/moolre', {
+            // 5. If Stripe — create checkout link for customer
+            if (paymentMethod === 'stripe') {
+                const paymentRes = await fetch('/api/payment/stripe/create-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         orderId: orderNumber,
-                        amount: grandTotal,
-                        customerEmail: customerEmail
                     })
                 });
 
                 const paymentResult = await paymentRes.json();
 
                 if (!paymentResult.success) {
-                    throw new Error(paymentResult.message || 'Failed to initiate Mobile Money payment');
+                    throw new Error(paymentResult.message || 'Failed to create Stripe payment link');
                 }
 
-                // Show completed with payment link
                 setCompletedOrder({
                     id: order.id,
                     orderNumber,
@@ -772,18 +771,17 @@ export default function POSPage() {
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <input
                                                         type="email"
-                                                        placeholder="Email"
+                                                        placeholder={paymentMethod === 'stripe' ? 'Email (Required) *' : 'Email'}
                                                         value={guestDetails.email}
                                                         onChange={e => setGuestDetails({ ...guestDetails, email: e.target.value })}
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#C8952A] text-sm"
+                                                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#C8952A] text-sm ${paymentMethod === 'stripe' && !guestDetails.email ? 'border-[#C8952A] bg-[#fdf9ec]' : 'border-gray-300'}`}
                                                     />
                                                     <input
                                                         type="tel"
-                                                        placeholder={paymentMethod === 'momo' ? 'Phone (Required) *' : 'Phone'}
+                                                        placeholder="Phone"
                                                         value={guestDetails.phone}
                                                         onChange={e => setGuestDetails({ ...guestDetails, phone: e.target.value })}
-                                                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#C8952A] text-sm ${paymentMethod === 'momo' && !guestDetails.phone ? 'border-[#C8952A] bg-[#fdf9ec]' : 'border-gray-300'
-                                                            }`}
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#C8952A] text-sm"
                                                     />
                                                 </div>
                                             </div>
@@ -866,7 +864,7 @@ export default function POSPage() {
                                             {[
                                                 { key: 'cash', label: 'Cash', icon: 'ri-money-cny-circle-line' },
                                                 { key: 'card', label: 'Card', icon: 'ri-bank-card-line' },
-                                                { key: 'momo', label: 'Mobile Money', icon: 'ri-smartphone-line' }
+                                                { key: 'stripe', label: 'Stripe', icon: 'ri-secure-payment-line' }
                                             ].map(method => (
                                                 <button
                                                     key={method.key}
@@ -919,14 +917,14 @@ export default function POSPage() {
                                         </div>
                                     )}
 
-                                    {/* Mobile Money info */}
-                                    {paymentMethod === 'momo' && (
+                                    {/* Stripe info */}
+                                    {paymentMethod === 'stripe' && (
                                         <div className="bg-[#fdf9ec] border border-[#e8c87a] rounded-lg p-3">
                                             <div className="flex items-start space-x-2">
-                                                <i className="ri-information-line text-[#C8952A] mt-0.5"></i>
+                                                <i className="ri-secure-payment-line text-[#C8952A] mt-0.5"></i>
                                                 <div className="text-sm text-[#a07020]">
-                                                    <p className="font-semibold">Mobile Money Payment</p>
-                                                    <p className="mt-1">A Moolre payment link will be generated. The customer can pay via their phone, or you can open the link on your device.</p>
+                                                    <p className="font-semibold">Stripe Online Payment</p>
+                                                    <p className="mt-1">A Stripe Checkout link will be generated. Send it to the customer or open it on your device to collect payment by card.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -957,10 +955,10 @@ export default function POSPage() {
                                                 <i className="ri-loader-4-line animate-spin"></i>
                                                 <span>Processing...</span>
                                             </>
-                                        ) : paymentMethod === 'momo' ? (
+                                        ) : paymentMethod === 'stripe' ? (
                                             <>
-                                                <i className="ri-smartphone-line"></i>
-                                                <span>Generate Payment Link</span>
+                                                <i className="ri-secure-payment-line"></i>
+                                                <span>Generate Stripe Link</span>
                                             </>
                                         ) : (
                                             <>

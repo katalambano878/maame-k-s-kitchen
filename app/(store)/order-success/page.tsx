@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase';
 function OrderSuccessContent() {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get('order');
-  const paymentSuccess = searchParams.get('payment_success');
+  const sessionId = searchParams.get('session_id');
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showConfetti, setShowConfetti] = useState(true);
@@ -36,9 +36,9 @@ function OrderSuccessContent() {
         if (error) throw error;
         setOrder(orderData);
 
-        // If redirected from payment and order is still pending, try to verify
-        if (paymentSuccess === 'true' && orderData && orderData.payment_status !== 'paid') {
-          verifyPayment(orderNumber, orderData);
+        // If redirected from Stripe and order is still pending, verify payment
+        if (sessionId && orderData && orderData.payment_status !== 'paid') {
+          verifyPayment(orderNumber, sessionId);
         }
       } catch (err) {
         console.error('Error fetching order:', err);
@@ -47,16 +47,15 @@ function OrderSuccessContent() {
       }
     }
     fetchOrder();
-  }, [orderNumber]);
+  }, [orderNumber, sessionId]);
 
-  // Payment verification - called when user is redirected from Moolre with payment_success=true
-  const verifyPayment = async (orderNum: string, initialOrder: any) => {
+  // Payment verification — called after Stripe redirects back with session_id
+  const verifyPayment = async (orderNum: string, stripeSessionId: string) => {
     setVerifying(true);
     
-    // Wait 3 seconds to give the callback a chance to process first
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // Wait briefly to give the webhook a chance to process first
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Re-fetch order to check if callback already updated it
     const { data: refreshed } = await supabase
       .from('orders')
       .select('*, order_items (*)')
@@ -69,20 +68,17 @@ function OrderSuccessContent() {
       return;
     }
 
-    // Callback hasn't fired - verify via our endpoint
-    // Verify payment via Moolre API — we no longer trust the redirect alone
     try {
-      const res = await fetch('/api/payment/moolre/verify', {
+      const res = await fetch('/api/payment/stripe/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderNumber: orderNum })
+        body: JSON.stringify({ orderNumber: orderNum, sessionId: stripeSessionId })
       });
       
       const result = await res.json();
       console.log('Payment verification result:', result);
       
       if (result.success && result.payment_status === 'paid') {
-        // Re-fetch full order data
         const { data: updated } = await supabase
           .from('orders')
           .select('*, order_items (*)')

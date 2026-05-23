@@ -139,7 +139,7 @@ const organizationSchema = {
   ],
   "hasMenu": "/menu",
   "currenciesAccepted": "CAD",
-  "paymentAccepted": "Cash, Debit, Credit Card, Interac e-Transfer",
+  "paymentAccepted": "Cash, Debit, Credit Card, Stripe",
   "areaServed": {
     "@type": "City",
     "name": "Calgary"

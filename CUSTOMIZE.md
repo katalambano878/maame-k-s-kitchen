@@ -88,26 +88,43 @@ Copy `.env.example` to `.env.local` and fill in:
 
 - 🟡 Set to **`Proprietary - All Rights Reserved`** — typical for a private business codebase. If you want a different license (MIT, Apache, etc.), edit `LICENSE` and `package.json`.
 
-## 9. Payment gateway — IMPORTANT
+## 9. Stripe payment setup
 
-🔴 **The codebase still uses Moolre as the payment gateway.** Moolre is a Canada-based mobile-money/card processor — it does not work for Canadian businesses.
+🟢 **Stripe Checkout is integrated.** Online orders redirect to Stripe for card payment; the webhook marks orders as paid.
 
-You have two paths:
+Add these to `.env.local`:
 
-### Option A: Swap Moolre for Stripe (recommended for Canada)
-This is a real code change. The Moolre integration lives in:
-- `app/api/payment/moolre/route.ts`
-- `app/api/payment/moolre/callback/route.ts`
-- `app/api/payment/moolre/verify/route.ts`
-- `app/(store)/pay/[orderId]/page.tsx` (UI)
-- `app/(store)/checkout/page.tsx` (calls the moolre API)
+```bash
+STRIPE_SECRET_KEY=sk_test_...           # Stripe Dashboard → Developers → API keys
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...         # From Stripe webhook endpoint
+```
 
-You'd replace these with Stripe Checkout (or Stripe Payment Intents). Estimated effort: ~half a day for a developer.
+### Stripe Dashboard setup
 
-### Option B: Keep Moolre and offer it alongside Interac e-Transfer / cash on pickup
-The customer-facing FAQ copy already mentions Visa/Mastercard, Interac e-Transfer, and cash on pickup as accepted methods. If you want online-card processing, you'd still need a Canadian processor (Stripe, Square, etc.) — Moolre transactions will fail for CAD/Canadian cards.
+1. Create a [Stripe account](https://dashboard.stripe.com/register) and enable **CAD**.
+2. Copy your **Secret key** and **Publishable key** into `.env.local`.
+3. Add a webhook endpoint:
+   - **URL:** `https://maamekskitchen.ca/api/payment/stripe/webhook`
+   - **Events:** `checkout.session.completed`
+   - Copy the **Signing secret** into `STRIPE_WEBHOOK_SECRET`.
+4. For local testing, use the [Stripe CLI](https://stripe.com/docs/stripe-cli):
+   ```bash
+   stripe listen --forward-to localhost:3004/api/payment/stripe/webhook
+   ```
+   Use the CLI signing secret in `.env.local` while developing.
 
-For launch, you may want to **disable online payment** entirely and accept Interac e-Transfer + cash on pickup only — a small change in `app/(store)/checkout/page.tsx`.
+### Payment flow
+
+- Checkout → order created → Stripe Checkout Session → customer pays → webhook fulfills order
+- `/pay/[orderId]` — retry payment for unpaid orders
+- POS → **Stripe** option generates a payment link for in-store card payments
+
+### API routes
+
+- `app/api/payment/stripe/create-checkout-session/route.ts`
+- `app/api/payment/stripe/webhook/route.ts`
+- `app/api/payment/stripe/verify/route.ts` (fallback after redirect)
 
 ## 10. Supabase setup
 
@@ -185,7 +202,7 @@ These components were built for a fashion store. They still work but may not be 
 - [ ] Menu items added with photos
 - [ ] Logo and PWA icons added to `/public/`
 - [ ] Hero images added to `/public/`
-- [ ] Payment provider decided and wired (Stripe recommended)
+- [ ] Stripe keys and webhook configured (see §9)
 - [ ] Test order placed end-to-end (cart → checkout → payment → confirmation email)
 - [ ] Test admin order view
 - [ ] Privacy policy and terms reviewed by a lawyer
