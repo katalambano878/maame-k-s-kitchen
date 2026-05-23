@@ -15,7 +15,7 @@ const posts: Record<string, {
   content: string;
 }> = {
   '1': {
-    title: 'The Story Behind Maame Ks Kitchen',
+    title: 'The Story Behind Maame K’s Kitchen',
     image: 'https://readdy.ai/api/search-image?query=Ghanaian%20woman%20chef%20cooking%20authentic%20food%20restaurant%20kitchen%20Calgary%20warm%20lighting&width=1200&height=600&seq=blogpost1&orientation=landscape',
     category: 'Our Story',
     date: 'December 15, 2024',
@@ -23,12 +23,12 @@ const posts: Record<string, {
     readTime: '8 min read',
     author: 'Maame K',
     content: `
-      <p>Every dish we serve carries a story — one that begins thousands of kilometres away in Ghana and ends on your plate in Calgary. Maame Ks Kitchen was born out of a simple conviction: that authentic Ghanaian food deserves a home in Canada.</p>
+      <p>Every dish we serve carries a story — one that begins thousands of kilometres away in Ghana and ends on your plate in Calgary. Maame K’s Kitchen was born out of a simple conviction: that authentic Ghanaian food deserves a home in Canada.</p>
       <h2>Where It Began</h2>
       <p>Growing up in Ghana, food was never just sustenance. It was ceremony. Sunday mornings meant the smell of kontomire stew drifting through the house. Celebrations called for jollof rice cooked over firewood, its smoky flavour something no gas flame can fully replicate. Every milestone had its dish, its ritual, its memory.</p>
       <p>When I arrived in Calgary, I missed that connection. The Ghanaian community here is warm and close-knit, but authentic Ghanaian food was almost impossible to find.</p>
       <h2>A Kitchen Becomes a Restaurant</h2>
-      <p>It started small. Friends asking me to cook for their gatherings. Community events where I would bring a pot of groundnut soup and watch it disappear in minutes. Opening Maame Ks Kitchen in Cornerstone, NE Calgary was both terrifying and exhilarating.</p>
+      <p>It started small. Friends asking me to cook for their gatherings. Community events where I would bring a pot of groundnut soup and watch it disappear in minutes. Opening Maame K’s Kitchen in Cornerstone, NE Calgary was both terrifying and exhilarating.</p>
       <p>We wanted to serve food that felt genuinely homemade — not a watered-down version of Ghanaian cuisine adapted for Western palates, but the real thing. The spice levels, the fermented notes in the banku, the palm oil richness of the stews. Authentic.</p>
       <h2>What Sets Us Apart</h2>
       <p>We source ingredients carefully. Our palm oil comes from trusted suppliers who work directly with producers in West Africa. Our spices are ground fresh. Our proteins are halal-certified. Nothing is frozen and reheated — every order is prepared fresh.</p>
@@ -96,14 +96,14 @@ export async function generateMetadata({
 
   const description = post.category === 'Our Story'
     ? `${post.title} — The origin story of authentic Ghanaian cuisine coming to Calgary, Alberta.`
-    : `${post.title} — Ghanaian food stories and recipes from the Maame Ks Kitchen team in Calgary.`;
+    : `${post.title} — Ghanaian food stories and recipes from the Maame K’s Kitchen team in Calgary.`;
 
   return {
     title: post.title,
     description,
     authors: [{ name: post.author }],
     openGraph: {
-      title: `${post.title} | Maame Ks Kitchen`,
+      title: `${post.title} | Maame K’s Kitchen`,
       description,
       url: `${siteUrl}/blog/${id}`,
       type: 'article',
@@ -135,14 +135,14 @@ export default async function BlogPostPage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: post.title,
-    description: `${post.title} — Ghanaian food stories from Maame Ks Kitchen in Calgary.`,
+    description: `${post.title} — Ghanaian food stories from Maame K’s Kitchen in Calgary.`,
     image: post.image,
     datePublished: post.dateISO,
     dateModified: post.dateISO,
     author: { '@type': 'Person', name: post.author },
     publisher: {
       '@type': 'Organization',
-      name: 'Maame Ks Kitchen',
+      name: 'Maame K’s Kitchen',
       logo: { '@type': 'ImageObject', url: `${siteUrl}/logo.png` },
     },
     url: `${siteUrl}/blog/${id}`,
@@ -196,7 +196,7 @@ export default async function BlogPostPage({
                 </div>
                 <div>
                   <p className="font-bold text-gray-900">{post.author}</p>
-                  <p className="text-sm text-gray-500">Maame Ks Kitchen</p>
+                  <p className="text-sm text-gray-500">Maame K’s Kitchen</p>
                 </div>
               </div>
             </div>

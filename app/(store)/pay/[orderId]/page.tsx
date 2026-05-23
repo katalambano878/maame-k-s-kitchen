@@ -128,7 +128,7 @@ export default function PaymentPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-6">
-            <span className="text-2xl font-['Pacifico'] text-[#C8952A]">Maame Ks Kitchen</span>
+            <span className="text-2xl font-['Pacifico'] text-[#C8952A]">Maame K’s Kitchen</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Complete Your Payment</h1>
           <p className="text-gray-600 mt-2">Hi {customerName}, your order is waiting for payment.</p>

@@ -1,6 +1,6 @@
-# Customization Checklist — Maame Ks Kitchen
+# Customization Checklist — Maame K’s Kitchen
 
-This codebase has been populated with the brand identity for **Maame Ks Kitchen**, an authentic Ghanaian restaurant in Cornerstone, Calgary, Alberta. Use this checklist to finish any remaining setup before going live.
+This codebase has been populated with the brand identity for **Maame K’s Kitchen**, an authentic Ghanaian restaurant in Cornerstone, Calgary, Alberta. Use this checklist to finish any remaining setup before going live.
 
 > Items marked **🟢 Applied** have already been wired in. Items marked **🟡 Confirm** were filled with reasonable defaults that you should verify and update if needed. Items marked **🔴 Action required** still need manual work from you.
 
@@ -8,7 +8,7 @@ This codebase has been populated with the brand identity for **Maame Ks Kitchen*
 
 ## 1. Business identity
 
-- 🟢 Brand name: **Maame Ks Kitchen** (uses curly apostrophe `’` to avoid quote-string collisions)
+- 🟢 Brand name: **Maame K’s Kitchen** (uses curly apostrophe `’` to avoid quote-string collisions)
 - 🟢 Brand monogram: **MK** (used in header, mobile drawer, OG image, and PWA splash)
 - 🟢 Tagline default: *Authentic Ghanaian cuisine in Calgary*
 - 🟢 Schema.org type: `Restaurant` + `LocalBusiness` + `Organization`
@@ -77,7 +77,7 @@ Copy `.env.example` to `.env.local` and fill in:
 - `SUPABASE_SERVICE_ROLE_KEY` — service role key (server-only, never commit)
 - `SUPABASE_PROJECT_REF` and `SUPABASE_DB_PASSWORD` — for migration scripts
 - `RESEND_API_KEY` — for transactional emails (sign up at resend.com)
-- `EMAIL_FROM` — already set to `Maame Ks Kitchen <noreply@maamekskitchen.ca>` (you'll need to verify this domain in Resend)
+- `EMAIL_FROM` — already set to `Maame K’s Kitchen <noreply@maamekskitchen.ca>` (you'll need to verify this domain in Resend)
 - `ADMIN_EMAIL` — where customer notifications get sent (e.g. `hello@maamekskitchen.ca`)
 - 🔴 **Payment gateway**: see Section 9 below
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID` *(optional)* — Google Analytics 4
@@ -164,7 +164,7 @@ For each item, add:
 
 ## 13. SEO
 
-- 🟢 Site title, description, keywords, Open Graph, Twitter Cards, Schema.org all populated for Maame Ks Kitchen
+- 🟢 Site title, description, keywords, Open Graph, Twitter Cards, Schema.org all populated for Maame K’s Kitchen
 - 🟢 OG image auto-renders with brand name and MK monogram
 - 🔴 Add `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` to env vars to verify Google Search Console
 - 🔴 Submit your sitemap (`/sitemap.xml`) to Google Search Console after launch

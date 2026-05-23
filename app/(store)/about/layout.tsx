@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: "About Us | Maame K's Kitchen",
     description: "The story behind Maame K's Kitchen — authentic Ghanaian cuisine from Cornerstone, NE Calgary.",
     url: `${siteUrl}/about`,
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: "About Maame K's Kitchen" }],
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: "About Maame K's Kitchen" }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -23,6 +23,13 @@ export const metadata: Metadata = {
   },
 };
 
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+
 export default function AboutLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <BreadcrumbJsonLd items={[{ name: 'About', path: '/about' }]} />
+      {children}
+    </>
+  );
 }

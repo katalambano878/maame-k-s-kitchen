@@ -53,7 +53,7 @@ export default function ContactPage() {
 
   const contactPhone   = getSetting('contact_phone')   || '(587) 582-2421';
   const contactAddress = getSetting('contact_address') || 'Cornerstone, NE Calgary, Alberta';
-  const siteName       = getSetting('site_name')       || 'Maame Ks Kitchen';
+  const siteName       = getSetting('site_name')       || 'Maame K’s Kitchen';
   const tiktokMain     = getSetting('social_tiktok')   || '';
   const tiktokJoy      = getSetting('social_tiktok_secondary') || '';
   const instagram      = getSetting('social_instagram') || '';

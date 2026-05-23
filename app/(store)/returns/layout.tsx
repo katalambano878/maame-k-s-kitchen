@@ -14,6 +14,13 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+
 export default function ReturnsLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <BreadcrumbJsonLd items={[{ name: 'Returns & Refunds', path: '/returns' }]} />
+      {children}
+    </>
+  );
 }

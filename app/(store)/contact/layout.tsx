@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: "Contact Us | Maame K's Kitchen",
     description: "Call (587) 582-2421 or WhatsApp us. Based in Cornerstone, NE Calgary. Open Mon–Sun 10am–9pm.",
     url: `${siteUrl}/contact`,
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: "Contact Maame K's Kitchen" }],
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: "Contact Maame K's Kitchen" }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -23,6 +23,13 @@ export const metadata: Metadata = {
   },
 };
 
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <BreadcrumbJsonLd items={[{ name: 'Contact', path: '/contact' }]} />
+      {children}
+    </>
+  );
 }

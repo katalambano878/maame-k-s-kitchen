@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     description: "Recipes, food stories, and a taste of Ghanaian culture from our kitchen in Calgary.",
     url: `${siteUrl}/blog`,
     type: 'website',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: "Maame K's Kitchen Blog" }],
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: "Maame K's Kitchen Blog" }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -25,8 +25,8 @@ import Link from 'next/link';
 export default function BlogPage() {
   const featuredPost = {
     id: '1',
-    title: 'The Story Behind Maame Ks Kitchen',
-    excerpt: 'How a love for authentic Ghanaian food and a dream of sharing it with Calgary led to the opening of Maame Ks Kitchen in Cornerstone, NE Calgary.',
+    title: 'The Story Behind Maame K’s Kitchen',
+    excerpt: 'How a love for authentic Ghanaian food and a dream of sharing it with Calgary led to the opening of Maame K’s Kitchen in Cornerstone, NE Calgary.',
     image: 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=1200&height=600&seq=blog1&orientation=landscape',
     category: 'Our Story',
     date: 'December 15, 2024',
@@ -57,7 +57,7 @@ export default function BlogPage() {
     },
     {
       id: '1',
-      title: 'The Story Behind Maame Ks Kitchen',
+      title: 'The Story Behind Maame K’s Kitchen',
       excerpt: 'Your first time ordering? Here’s everything you need to know about our menu, delivery zones, pickup options, and special requests.',
       image: 'https://readdy.ai/api/search-image?query=Modern%20African%20woman%20shopping%20online%20on%20laptop%20in%20bright%20contemporary%20home%20office%20coffee%20cup%20plants%20natural%20light%20relaxed%20lifestyle%20photography%20minimal%20clean%20background&width=800&height=500&seq=blog1b&orientation=landscape',
       category: 'Our Story',

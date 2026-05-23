@@ -16,8 +16,8 @@ interface SEOProps {
 }
 
 export function generateMetadata({
-  title = "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
-  description = 'Authentic Ghanaian cuisine from Maame Ks Kitchen. Order banku, jollof, waakye, fufu, and more — delivered fresh from Cornerstone, Calgary, Alberta.',
+  title = "Maame K’s Kitchen — Authentic Ghanaian Cuisine in Calgary",
+  description = 'Authentic Ghanaian cuisine from Maame K’s Kitchen. Order banku, jollof, waakye, fufu, and more — delivered fresh from Cornerstone, Calgary, Alberta.',
   keywords = [],
   ogImage,
   ogType = 'website',
@@ -32,11 +32,11 @@ export function generateMetadata({
   const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
   const defaultOgImage = `${siteUrl}/opengraph-image`;
   const resolvedOgImage = ogImage || defaultOgImage;
-  const siteName = "Maame Ks Kitchen";
+  const siteName = "Maame K’s Kitchen";
   const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
   const defaultKeywords = [
-    "Maame Ks Kitchen",
+    "Maame K’s Kitchen",
     'Ghanaian food Calgary',
     'Ghanaian restaurant Calgary',
     'African food Calgary',
@@ -117,7 +117,7 @@ export function generateProductSchema(product: {
     sku: product.sku,
     brand: {
       '@type': 'Brand',
-      name: product.brand || "Maame Ks Kitchen"
+      name: product.brand || "Maame K’s Kitchen"
     },
     offers: {
       '@type': 'Offer',
@@ -166,7 +166,7 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: "Maame Ks Kitchen",
+    name: "Maame K’s Kitchen",
     url: siteUrl,
     sameAs: [
       'https://www.instagram.com/maame.k_kitchen/',
@@ -181,7 +181,7 @@ export function generateWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: "Maame Ks Kitchen",
+    name: "Maame K’s Kitchen",
     url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',

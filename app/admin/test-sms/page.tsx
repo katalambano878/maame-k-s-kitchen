@@ -8,7 +8,7 @@ export default function TestSmsPage() {
     const [isPending, startTransition] = useTransition();
     const [result, setResult] = useState<any>(null);
     const [phone, setPhone] = useState('');
-    const [message, setMessage] = useState('Test message from Maame Ks Kitchen admin');
+    const [message, setMessage] = useState('Test message from Maame K’s Kitchen admin');
 
     const handleSend = () => {
         setResult(null);

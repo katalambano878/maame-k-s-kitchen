@@ -17,12 +17,12 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
-    template: "%s | Maame Ks Kitchen"
+    default: "Maame K’s Kitchen — Authentic Ghanaian Cuisine in Calgary",
+    template: "%s | Maame K’s Kitchen"
   },
-  description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
+  description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
   keywords: [
-    "Maame Ks Kitchen",
+    "Maame K’s Kitchen",
     "Ghanaian food Calgary",
     "Ghanaian restaurant Calgary",
     "Ghanaian food Alberta",
@@ -37,10 +37,10 @@ export const metadata: Metadata = {
     "Ghanaian takeout Calgary",
     "Ghanaian delivery Calgary",
   ],
-  authors: [{ name: "Maame Ks Kitchen" }],
-  creator: "Maame Ks Kitchen",
-  publisher: "Maame Ks Kitchen",
-  applicationName: "Maame Ks Kitchen",
+  authors: [{ name: "Maame K’s Kitchen" }],
+  creator: "Maame K’s Kitchen",
+  publisher: "Maame K’s Kitchen",
+  applicationName: "Maame K’s Kitchen",
   referrer: "origin-when-cross-origin",
   robots: {
     index: true,
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: "Maame Ks Kitchen",
+    title: "Maame K’s Kitchen",
   },
   formatDetection: {
     telephone: true,
@@ -78,15 +78,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_CA",
     url: siteUrl,
-    title: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
-    siteName: "Maame Ks Kitchen",
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Maame K's Kitchen — Authentic Ghanaian Cuisine in Calgary, Alberta" }],
+    title: "Maame K’s Kitchen — Authentic Ghanaian Cuisine in Calgary",
+    description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    siteName: "Maame K’s Kitchen",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Maame K's Kitchen — Authentic Ghanaian Cuisine in Calgary, Alberta" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Maame Ks Kitchen — Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame Ks Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    title: "Maame K’s Kitchen — Authentic Ghanaian Cuisine in Calgary",
+    description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
     site: "@maamekskitchenyyc",
     creator: "@maamekskitchenyyc",
   },
@@ -103,7 +103,7 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": ["Organization", "LocalBusiness", "Restaurant"],
   "@id": `${siteUrl}/#organization`,
-  "name": "Maame Ks Kitchen",
+  "name": "Maame K’s Kitchen",
   "url": siteUrl,
   "logo": {
     "@type": "ImageObject",
@@ -117,16 +117,10 @@ const organizationSchema = {
   "servesCuisine": ["Ghanaian", "West African"],
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Cornerstone, NE Calgary, Alberta",
+    "streetAddress": "Cornerstone, NE Calgary",
     "addressLocality": "Calgary",
     "addressRegion": "AB",
-    "postalCode": "",
     "addressCountry": "CA"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 0.0000,
-    "longitude": 0.0000
   },
   "priceRange": "$$",
   "openingHoursSpecification": [
@@ -155,7 +149,7 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${siteUrl}/#website`,
-  "name": "Maame Ks Kitchen",
+  "name": "Maame K’s Kitchen",
   "url": siteUrl,
   "description": "Authentic Ghanaian cuisine in Calgary, Canada",
   "publisher": { "@id": `${siteUrl}/#organization` },
@@ -181,7 +175,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#C8952A" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Maame Ks Kitchen" />
+        <meta name="apple-mobile-web-app-title" content="Maame K’s Kitchen" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-TileColor" content="#111111" />
         <meta name="msapplication-tap-highlight" content="no" />

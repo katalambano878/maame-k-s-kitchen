@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -261,7 +261,7 @@ export default function AdminLayout({
       >
         <div className="h-full px-4 py-6 overflow-y-auto">
           <Link href="/admin" className="flex flex-col items-start gap-1 mb-8 px-2 cursor-pointer">
-            <Image src="/logo.png" alt="Maame Ks Kitchen" width={160} height={48} className="h-10 w-auto object-contain" />
+            <Image src="/logo.png" alt="Maame K’s Kitchen" width={160} height={48} className="h-10 w-auto object-contain" />
             <span className="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase ml-0.5">Admin Panel</span>
           </Link>
 

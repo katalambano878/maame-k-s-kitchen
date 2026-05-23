@@ -12,7 +12,7 @@ async function getProductMeta(slug: string) {
     );
     const { data } = await supabase
       .from('products')
-      .select('name, description, product_images(url)')
+      .select('id, name, description, price, sku, status, product_images(url), categories(name)')
       .eq('slug', slug)
       .single();
     return data;
@@ -31,8 +31,8 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: 'Product Not Found',
-      description: 'This product could not be found.',
+      title: 'Dish Not Found',
+      description: 'This dish could not be found on our menu.',
       robots: { index: false, follow: false },
     };
   }
@@ -41,28 +41,36 @@ export async function generateMetadata({
   const rawDescription = product.description || '';
   const description = rawDescription
     ? rawDescription.replace(/<[^>]*>/g, '').slice(0, 155)
-    : `Shop ${title} at Maame Ks Kitchen — authentic Ghanaian cuisine from Cornerstone, Calgary, Alberta, Canada, Canada.`;
+    : `Order ${title} from Maame K\u2019s Kitchen — authentic Ghanaian cuisine in Cornerstone, Calgary, Alberta.`;
 
   const images = product.product_images as { url: string }[] | null;
   const firstImage = images?.[0]?.url;
+  const ogImage = firstImage || `${siteUrl}/opengraph-image`;
 
   return {
     title,
     description,
+    keywords: [
+      title,
+      `${title} Calgary`,
+      'Ghanaian food Calgary',
+      'order online',
+      'Maame K\u2019s Kitchen',
+    ],
     openGraph: {
-      title: `${title} | Maame Ks Kitchen`,
+      title: `${title} | Maame K\u2019s Kitchen`,
       description,
       url: `${siteUrl}/product/${slug}`,
       type: 'website',
-      images: firstImage
-        ? [{ url: firstImage, width: 800, height: 800, alt: title }]
-        : undefined,
+      siteName: 'Maame K\u2019s Kitchen',
+      locale: 'en_CA',
+      images: [{ url: ogImage, width: firstImage ? 800 : 1200, height: firstImage ? 800 : 630, alt: title }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | Maame Ks Kitchen`,
+      title: `${title} | Maame K\u2019s Kitchen`,
       description,
-      images: firstImage ? [firstImage] : undefined,
+      images: [ogImage],
     },
     alternates: {
       canonical: `${siteUrl}/product/${slug}`,
@@ -76,5 +84,62 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <ProductDetailClient slug={slug} />;
+  const product = await getProductMeta(slug);
+
+  const productSchema = product
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: (product.description || '').replace(/<[^>]*>/g, '').slice(0, 500),
+        image: (product.product_images as { url: string }[] | null)?.map((i) => i.url) || [`${siteUrl}/opengraph-image`],
+        sku: product.sku || product.id || slug,
+        brand: { '@type': 'Brand', name: 'Maame K\u2019s Kitchen' },
+        category: (product.categories as { name: string } | null)?.name || 'Ghanaian Cuisine',
+        offers: {
+          '@type': 'Offer',
+          price: product.price,
+          priceCurrency: 'CAD',
+          availability:
+            product.status === 'active'
+              ? 'https://schema.org/InStock'
+              : 'https://schema.org/OutOfStock',
+          url: `${siteUrl}/product/${slug}`,
+          priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split('T')[0],
+          seller: { '@type': 'Restaurant', name: 'Maame K\u2019s Kitchen' },
+        },
+      }
+    : null;
+
+  const breadcrumbSchema = product
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+          { '@type': 'ListItem', position: 2, name: 'Menu', item: `${siteUrl}/menu` },
+          { '@type': 'ListItem', position: 3, name: product.name, item: `${siteUrl}/product/${slug}` },
+        ],
+      }
+    : null;
+
+  return (
+    <>
+      {productSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        />
+      )}
+      {breadcrumbSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      )}
+      <ProductDetailClient slug={slug} />
+    </>
+  );
 }

@@ -21,7 +21,7 @@ function getOpenStatus() {
 export default function Home() {
   usePageTitle('');
   const { getSetting } = useCMS();
-  const siteName = getSetting('site_name') || 'Maame Ks Kitchen';
+  const siteName = getSetting('site_name') || 'Maame K’s Kitchen';
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

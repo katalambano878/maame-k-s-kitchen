@@ -4,9 +4,9 @@ import { escapeHtml } from '@/lib/sanitize';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 'missing_api_key');
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@maamekskitchen.ca';
-const EMAIL_FROM = process.env.EMAIL_FROM || "Maame Ks Kitchen <noreply@maamekskitchen.ca>";
+const EMAIL_FROM = process.env.EMAIL_FROM || "Maame K’s Kitchen <noreply@maamekskitchen.ca>";
 const BRAND = {
-    name: "Maame Ks Kitchen",
+    name: "Maame K’s Kitchen",
     color: '#059669',
     colorLight: '#ecfdf5',
     colorDark: '#064e3b',

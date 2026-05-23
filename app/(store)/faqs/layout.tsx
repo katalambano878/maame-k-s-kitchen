@@ -4,9 +4,9 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions',
-  description: 'Answers to common questions about ordering, delivery, pickup, payments, and more at Maame Ks Kitchen — authentic Ghanaian cuisine in Calgary, Alberta.',
+  description: 'Answers to common questions about ordering, delivery, pickup, payments, and more at Maame K’s Kitchen — authentic Ghanaian cuisine in Calgary, Alberta.',
   keywords: [
-    'FAQ Maame Ks Kitchen',
+    'FAQ Maame K’s Kitchen',
     'Ghanaian restaurant FAQ Calgary',
     'delivery questions Calgary',
     'payment methods Calgary',
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     canonical: `${siteUrl}/faqs`,
   },
   openGraph: {
-    title: 'Frequently Asked Questions | Maame Ks Kitchen',
-    description: 'Answers to common questions about ordering, shipping, returns, and payments at Maame Ks Kitchen.',
+    title: 'Frequently Asked Questions | Maame K’s Kitchen',
+    description: 'Answers to common questions about ordering, shipping, returns, and payments at Maame K’s Kitchen.',
     url: `${siteUrl}/faqs`,
     type: 'website',
   },
@@ -93,7 +93,7 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: 'How do I contact Maame Ks Kitchen?',
+      name: 'How do I contact Maame K’s Kitchen?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'You can reach us by phone at (587) 582-2421, follow us on Instagram @maame.k_kitchen or TikTok @maamekskitchenyyc, or visit us at Cornerstone, Calgary, Alberta. You can also use the contact form on our website.',
@@ -102,6 +102,8 @@ const faqSchema = {
   ],
 };
 
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+
 export default function FaqsLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -109,6 +111,7 @@ export default function FaqsLayout({ children }: { children: React.ReactNode }) 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+      <BreadcrumbJsonLd items={[{ name: 'FAQs', path: '/faqs' }]} />
       {children}
     </>
   );
