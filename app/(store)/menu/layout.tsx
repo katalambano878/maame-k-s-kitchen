@@ -41,8 +41,9 @@ async function getMenuData(): Promise<CategoryGroup[]> {
     if (!products) return [];
     const map = new Map<string, CategoryGroup>();
     for (const p of products as any[]) {
-      const catName = p.categories?.name || 'Menu';
-      const catSlug = p.categories?.slug || 'menu';
+      const cat = Array.isArray(p.categories) ? p.categories[0] : p.categories;
+      const catName = cat?.name || 'Menu';
+      const catSlug = cat?.slug || 'menu';
       if (!map.has(catSlug)) map.set(catSlug, { name: catName, slug: catSlug, items: [] });
       map.get(catSlug)!.items.push({
         name: p.name,

@@ -86,16 +86,23 @@ export default async function ProductDetailPage({
   const { slug } = await params;
   const product = await getProductMeta(slug);
 
+  const rawImages = (product?.product_images ?? []) as unknown as { url: string }[];
+  const imageUrls = rawImages.map((i) => i.url);
+  const rawCategory = product?.categories as unknown;
+  const categoryName = Array.isArray(rawCategory)
+    ? (rawCategory[0] as { name?: string } | undefined)?.name
+    : (rawCategory as { name?: string } | null | undefined)?.name;
+
   const productSchema = product
     ? {
         '@context': 'https://schema.org',
         '@type': 'Product',
         name: product.name,
         description: (product.description || '').replace(/<[^>]*>/g, '').slice(0, 500),
-        image: (product.product_images as { url: string }[] | null)?.map((i) => i.url) || [`${siteUrl}/opengraph-image`],
+        image: imageUrls.length > 0 ? imageUrls : [`${siteUrl}/opengraph-image`],
         sku: product.sku || product.id || slug,
         brand: { '@type': 'Brand', name: 'Maame K\u2019s Kitchen' },
-        category: (product.categories as { name: string } | null)?.name || 'Ghanaian Cuisine',
+        category: categoryName || 'Ghanaian Cuisine',
         offers: {
           '@type': 'Offer',
           price: product.price,
