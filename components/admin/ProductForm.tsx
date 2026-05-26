@@ -135,6 +135,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
       };
 
       let productId = initialData?.id;
+      let createdNewProduct = false;
       if (isEditMode && productId) {
         const { error } = await supabase.from('products').update(productData).eq('id', productId);
         if (error) throw error;
@@ -153,6 +154,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
             .single();
           if (!error && data) {
             productId = data.id;
+            createdNewProduct = true;
             lastError = null;
             break;
           }
@@ -167,34 +169,45 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
         if (!productId) throw lastError || new Error('Could not generate a unique slug for this dish.');
       }
 
-      if (isEditMode) await supabase.from('product_variants').delete().eq('product_id', productId);
-      const validPortions = portions.filter(p => p.name.trim());
-      if (validPortions.length > 0) {
-        const { error: variantError } = await supabase
-          .from('product_variants')
-          .insert(validPortions.map((p, i) => ({
-            product_id: productId,
-            option1: p.name,
-            name: p.name,
-            price: parseFloat(p.price) || parseFloat(price),
-            quantity: parseInt(p.stock) || 0,
-            sku: p.sku || generateSku(),
-            position: i,
-          })));
-        if (variantError) throw variantError;
-      }
+      try {
+        if (isEditMode) await supabase.from('product_variants').delete().eq('product_id', productId);
+        const validPortions = portions.filter(p => p.name.trim());
+        if (validPortions.length > 0) {
+          const { error: variantError } = await supabase
+            .from('product_variants')
+            .insert(validPortions.map((p, i) => ({
+              product_id: productId,
+              option1: p.name,
+              name: p.name,
+              price: parseFloat(p.price) || parseFloat(price),
+              quantity: parseInt(p.stock) || 0,
+              sku: p.sku || generateSku(),
+              metadata: { position: i },
+            })));
+          if (variantError) throw variantError;
+        }
 
-      if (imageUrls.length > 0) {
-        if (isEditMode) await supabase.from('product_images').delete().eq('product_id', productId);
-        const { error: imageError } = await supabase
-          .from('product_images')
-          .insert(imageUrls.map((url, i) => ({
-            product_id: productId,
-            url,
-            position: i,
-            alt_text: dishName,
-          })));
-        if (imageError) throw imageError;
+        if (imageUrls.length > 0) {
+          if (isEditMode) await supabase.from('product_images').delete().eq('product_id', productId);
+          const { error: imageError } = await supabase
+            .from('product_images')
+            .insert(imageUrls.map((url, i) => ({
+              product_id: productId,
+              url,
+              position: i,
+              alt_text: dishName,
+            })));
+          if (imageError) throw imageError;
+        }
+      } catch (childError) {
+        // If we just created the parent product but a child insert failed,
+        // roll the orphan product back so the admin can retry cleanly.
+        if (createdNewProduct && productId) {
+          await supabase.from('product_variants').delete().eq('product_id', productId);
+          await supabase.from('product_images').delete().eq('product_id', productId);
+          await supabase.from('products').delete().eq('id', productId);
+        }
+        throw childError;
       }
 
       alert(isEditMode ? 'Dish updated!' : 'Dish added to menu!');
