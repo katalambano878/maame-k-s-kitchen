@@ -10,7 +10,8 @@ import { useCMS } from '@/context/CMSContext';
 
 const NAV_LINKS = [
   { label: 'Menu',       href: '/menu',       icon: 'ri-restaurant-2-line' },
-  { label: 'Categories', href: '/categories', icon: 'ri-grid-line' },
+  { label: 'Meal Prep',  href: '/meal-prep',  icon: 'ri-calendar-check-line' },
+  { label: 'Events',     href: '/events',     icon: 'ri-calendar-event-line' },
   { label: 'About',      href: '/about',      icon: 'ri-information-line' },
   { label: 'Contact',    href: '/contact',    icon: 'ri-phone-line' },
 ];
@@ -118,7 +119,7 @@ export default function Header() {
             </span>
             <span className="hidden lg:flex items-center gap-1.5 text-[10.5px] font-medium text-white/60 tracking-wide">
               <i className="ri-e-bike-line" style={{ color: '#C8952A' }} />
-              Free delivery over CA$50
+              Delivery across Calgary · Pickup Cornerstone NE
             </span>
           </div>
         </div>
@@ -453,7 +454,7 @@ export default function Header() {
             <div className="px-5 py-4 border-t border-gray-100 space-y-1">
               <div className="flex items-center gap-1.5 justify-center">
                 <i className="ri-map-pin-line text-[11px] text-gray-400" />
-                <span className="text-[10px] text-gray-400">Cornerstone, NE Calgary · Free delivery CA$50+</span>
+                <span className="text-[10px] text-gray-400">Cornerstone, NE Calgary · Delivery & pickup</span>
               </div>
               <p className="text-[9px] tracking-[0.2em] uppercase text-gray-300 text-center font-medium">
                 © {new Date().getFullYear()} {siteName}

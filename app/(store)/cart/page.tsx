@@ -54,7 +54,7 @@ export default function CartPage() {
     }
   }
 
-  const deliveryFee = subtotal >= 50 ? 0 : 5;
+  const deliveryFee = 5;
   const total = subtotal - couponDiscount + deliveryFee;
 
   return (
@@ -213,7 +213,7 @@ export default function CartPage() {
                         <span className="font-semibold">{deliveryFee === 0 ? 'FREE' : `CA$$${deliveryFee.toFixed(2)}`}</span>
                       </div>
                       {deliveryFee > 0 && (
-                        <p className="text-xs text-[#C8952A]">Free delivery on orders over CA$$50</p>
+                        <p className="text-xs text-gray-500">Delivery fee calculated at checkout</p>
                       )}
                     </div>
 

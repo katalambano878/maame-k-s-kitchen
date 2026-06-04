@@ -64,7 +64,7 @@ const faqSchema = {
       name: 'How much does delivery cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Standard delivery within Calgary costs $5.99. Orders over $75 qualify for FREE delivery. Pickup is also available at no charge from our Cornerstone, Calgary, Alberta location.',
+        text: 'Standard delivery within Calgary costs $5.99. Pickup is also available at no charge from our Cornerstone, NE Calgary location.',
       },
     },
     {

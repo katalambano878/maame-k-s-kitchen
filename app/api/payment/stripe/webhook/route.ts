@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { fulfillOrderPayment } from '@/lib/fulfill-order-payment';
+import {
+  fulfillSubscriptionCheckout,
+  handleSubscriptionInvoicePaid,
+  syncSubscriptionFromStripe,
+} from '@/lib/fulfill-subscription';
 import { getStripe } from '@/lib/stripe';
+import Stripe from 'stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -33,7 +39,14 @@ export async function POST(req: Request) {
 
   try {
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
+      const session = event.data.object as Stripe.Checkout.Session;
+
+      if (session.mode === 'subscription' && session.metadata?.type === 'meal_prep') {
+        await fulfillSubscriptionCheckout(session);
+        console.log('[Stripe Webhook] Meal-prep subscription activated:', session.id);
+        return NextResponse.json({ received: true });
+      }
+
       const orderNumber = session.metadata?.order_number;
 
       if (!orderNumber) {
@@ -62,6 +75,26 @@ export async function POST(req: Request) {
 
       await fulfillOrderPayment(orderNumber, paymentRef);
       console.log('[Stripe Webhook] Order fulfilled:', orderNumber);
+    }
+
+    if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
+      const subscription = event.data.object as Stripe.Subscription;
+      await syncSubscriptionFromStripe(subscription);
+      console.log('[Stripe Webhook] Subscription synced:', subscription.id, subscription.status);
+    }
+
+    if (event.type === 'invoice.paid') {
+      const invoice = event.data.object as Stripe.Invoice;
+      const subId =
+        typeof invoice.subscription === 'string'
+          ? invoice.subscription
+          : invoice.subscription?.id ||
+            (invoice.parent as { subscription_details?: { subscription?: string } } | null)
+              ?.subscription_details?.subscription;
+      if (subId && (invoice.billing_reason === 'subscription_cycle' || invoice.billing_reason === 'subscription_create')) {
+        await handleSubscriptionInvoicePaid(invoice);
+        console.log('[Stripe Webhook] Subscription invoice fulfilled:', invoice.id);
+      }
     }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Webhook handler failed';

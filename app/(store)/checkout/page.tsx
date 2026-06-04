@@ -9,6 +9,7 @@ import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useRecaptcha } from '@/hooks/useRecaptcha';
+import { formatPreorderNotice } from '@/lib/product-availability';
 
 export default function CheckoutPage() {
   usePageTitle('Checkout');
@@ -86,9 +87,26 @@ export default function CheckoutPage() {
 
   // Calculate Totals
   const subtotal = cartSubtotal;
-  const deliveryFee = deliveryMethod === 'pickup' ? 0 : (subtotal >= 50 ? 0 : 5);
+  const deliveryFee = deliveryMethod === 'pickup' ? 0 : 5;
   const tax = 0; // No Tax
   const total = subtotal + deliveryFee + tax;
+
+  const preorderCartItems = cart.filter((item) => item.preorder);
+  const maxPreorderHours = preorderCartItems.length
+    ? Math.max(...preorderCartItems.map((item) => item.preorderLeadHours || 24))
+    : 0;
+  const hasSaturdayOnly = cart.some((item) => item.saturdayOnly);
+  const preorderNotice =
+    preorderCartItems.length > 0 || hasSaturdayOnly
+      ? [
+          preorderCartItems.length > 0
+            ? `${preorderCartItems.length} dish${preorderCartItems.length > 1 ? 'es' : ''} require advance notice (up to ${formatPreorderNotice(maxPreorderHours)}).`
+            : null,
+          hasSaturdayOnly ? 'Some items are Saturday-menu only and will be scheduled accordingly.' : null,
+        ]
+          .filter(Boolean)
+          .join(' ')
+      : undefined;
 
   const validateShipping = () => {
     const newErrors: any = {};
@@ -179,6 +197,16 @@ export default function CheckoutPage() {
             last_name: shippingData.lastName,
             tracking_number: trackingNumber,
             delivery_method: deliveryMethod,
+            ...(preorderCartItems.length > 0 && {
+              preorder_items: preorderCartItems.map((item) => ({
+                name: item.name,
+                quantity: item.quantity,
+                lead_hours: item.preorderLeadHours || 24,
+                saturday_only: !!item.saturdayOnly,
+              })),
+              max_preorder_lead_hours: maxPreorderHours,
+            }),
+            ...(hasSaturdayOnly && { has_saturday_menu_items: true }),
           }
         }])
         .select()
@@ -621,6 +649,7 @@ export default function CheckoutPage() {
               shipping={deliveryFee}
               tax={tax}
               total={total}
+              preorderNotice={preorderNotice}
             />
           </div>
         </div>

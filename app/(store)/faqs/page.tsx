@@ -45,7 +45,7 @@ export default function FAQsPage() {
     {
       category: 'shipping',
       question: 'How much does delivery cost?',
-      answer: 'Standard delivery within Calgary costs $5.99. Orders over $75 qualify for FREE delivery. Pickup is always free from our Cornerstone, NE Calgary location.'
+      answer: 'Standard delivery within Calgary costs $5.99. Pickup is always free from our Cornerstone, NE Calgary location.'
     },
     {
       category: 'shipping',

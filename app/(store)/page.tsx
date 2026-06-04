@@ -188,7 +188,7 @@ export default function Home() {
         <div className="relative z-20 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 py-4 hidden sm:flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {[
-              { icon: 'ri-e-bike-line',    text: 'Free delivery CA$50+' },
+              { icon: 'ri-e-bike-line',    text: 'Delivery across Calgary' },
               { icon: 'ri-time-line',      text: '45–60 min delivery' },
               { icon: 'ri-map-pin-2-line', text: 'Cornerstone, NE Calgary' },
               { icon: 'ri-star-fill',      text: '5.0 · Loved by locals' },

@@ -12,6 +12,9 @@ export type CartItem = {
     slug: string;
     maxStock?: number;
     moq?: number; // Minimum Order Quantity
+    preorder?: boolean;
+    preorderLeadHours?: number;
+    saturdayOnly?: boolean;
 };
 
 type CartContextType = {

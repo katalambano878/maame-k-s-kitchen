@@ -63,7 +63,7 @@ export default function AboutPage() {
         <div className="relative z-10 max-w-5xl mx-auto px-6 sm:px-10 lg:px-8 py-24 sm:py-32 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-[#e8b428] text-[10px] font-bold tracking-[0.3em] uppercase mb-8">
             <span className="w-1.5 h-1.5 rounded-full animate-pulse bg-[#C8952A]" />
-            Cornerstone, Calgary · Est. 2026
+            Cornerstone, NE Calgary · Est. 2026
           </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
             Real Ghanaian Food,<br />
@@ -147,6 +147,29 @@ export default function AboutPage() {
                 Get In Touch
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Chop Bar Experience ---- */}
+      <section className="py-16 md:py-24 bg-[#0d0d0d] text-white">
+        <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-8">
+          <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 text-[#e8b428] font-bold text-[10px] tracking-[0.28em] uppercase mb-6 border border-white/10">
+            Community Event
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-black mb-6 tracking-tight">
+            The Chop Bar Experience
+          </h2>
+          <p className="text-lg text-white/65 leading-relaxed font-light max-w-3xl mb-6">
+            We host a food fest called <strong className="text-white font-semibold">The Chop Bar Experience</strong> — a community gathering where you can <strong className="text-white font-semibold">dine in or take out</strong>, enjoy authentic Ghanaian food, and connect with people in a warm, social atmosphere. It&apos;s more than a meal — it&apos;s meeting neighbours, sharing stories, and celebrating culture together in Cornerstone, NE Calgary.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/events" className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#C8952A] hover:bg-[#b88425] text-white rounded-full font-bold text-sm transition-all">
+              <i className="ri-calendar-event-line" /> See Events
+            </Link>
+            <Link href="/contact" className="inline-flex items-center gap-2 px-7 py-3.5 border border-white/25 text-white hover:bg-white/10 rounded-full font-semibold text-sm transition-all">
+              Book Catering
+            </Link>
           </div>
         </div>
       </section>

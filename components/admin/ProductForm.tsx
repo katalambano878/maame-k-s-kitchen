@@ -12,6 +12,28 @@ interface ProductFormProps {
 
 const ALLERGENS = ['Nuts', 'Dairy', 'Eggs', 'Gluten', 'Shellfish', 'Soy', 'Fish', 'Sesame'];
 
+function VideoUrlInput({ onAdd }: { onAdd: (url: string) => void }) {
+  const [url, setUrl] = useState('');
+  return (
+    <div className="flex gap-2">
+      <input
+        type="url"
+        value={url}
+        onChange={e => setUrl(e.target.value)}
+        placeholder="https://youtube.com/watch?v=... or direct MP4 link"
+        className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] text-sm"
+      />
+      <button
+        type="button"
+        onClick={() => { if (url.trim()) { onAdd(url); setUrl(''); } }}
+        className="px-4 py-2 bg-[#111111] text-white rounded-lg text-sm font-semibold whitespace-nowrap cursor-pointer"
+      >
+        Add link
+      </button>
+    </div>
+  );
+}
+
 export default function ProductForm({ initialData, isEditMode = false }: ProductFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -35,6 +57,26 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
   const [prepTime, setPrepTime] = useState(initialData?.prep_time?.toString() || '');
   const [calories, setCalories] = useState(initialData?.calories?.toString() || '');
   const [isAvailableToday, setIsAvailableToday] = useState(initialData?.is_available_today ?? true);
+  const [availabilityMode, setAvailabilityMode] = useState<'standard' | 'preorder'>(
+    initialData?.availability_mode === 'preorder' || initialData?.metadata?.availability_mode === 'preorder'
+      ? 'preorder'
+      : 'standard'
+  );
+  const [preorderLeadHours, setPreorderLeadHours] = useState(
+    String(initialData?.preorder_lead_hours ?? initialData?.metadata?.preorder_lead_hours ?? 24)
+  );
+  const [saturdayOnly, setSaturdayOnly] = useState(() => {
+    const days: string[] = initialData?.available_days || initialData?.metadata?.available_days || [];
+    return days.includes('saturday');
+  });
+  const [videoUrls, setVideoUrls] = useState<string[]>(
+    initialData?.metadata?.videos ||
+    (initialData?.product_images || [])
+      .filter((i: any) => i.media_type === 'video')
+      .map((i: any) => i.url) ||
+    []
+  );
+  const [uploadingVideo, setUploadingVideo] = useState(false);
   const [allergens, setAllergens] = useState<string[]>(initialData?.allergens || []);
   const [ingredients, setIngredients] = useState(
     Array.isArray(initialData?.ingredients)
@@ -89,6 +131,36 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
     }
   };
 
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setUploadingVideo(true);
+    const failed: string[] = [];
+    for (const file of files) {
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'mp4';
+      if (!['mp4', 'webm', 'mov', 'm4v'].includes(ext)) {
+        failed.push(`${file.name}: use MP4, WebM, or MOV`);
+        continue;
+      }
+      const path = `videos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { data, error } = await supabase.storage.from('products').upload(path, file);
+      if (error || !data) {
+        failed.push(`${file.name}: ${error?.message || 'upload failed'}`);
+        continue;
+      }
+      const { data: { publicUrl } } = supabase.storage.from('products').getPublicUrl(path);
+      setVideoUrls(prev => [...prev, publicUrl]);
+    }
+    setUploadingVideo(false);
+    e.target.value = '';
+    if (failed.length) alert(`Could not upload ${failed.length} video(s):\n\n${failed.join('\n')}`);
+  };
+
+  const addVideoUrl = (url: string) => {
+    const trimmed = url.trim();
+    if (trimmed && !videoUrls.includes(trimmed)) setVideoUrls(prev => [...prev, trimmed]);
+  };
+
   const handleSubmit = async () => {
     if (!dishName.trim()) { alert('Dish name is required'); setActiveTab('general'); return; }
     if (!price) { alert('Price is required'); setActiveTab('pricing'); return; }
@@ -131,6 +203,10 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
           keywords,
           focus_keyword: focusKeyword,
           noindex,
+          availability_mode: availabilityMode,
+          preorder_lead_hours: availabilityMode === 'preorder' ? parseInt(preorderLeadHours) || 24 : null,
+          available_days: saturdayOnly ? ['saturday'] : [],
+          videos: videoUrls,
         },
       };
 
@@ -187,17 +263,19 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
           if (variantError) throw variantError;
         }
 
-        if (imageUrls.length > 0) {
+        if (imageUrls.length > 0 || videoUrls.length > 0) {
           if (isEditMode) await supabase.from('product_images').delete().eq('product_id', productId);
-          const { error: imageError } = await supabase
-            .from('product_images')
-            .insert(imageUrls.map((url, i) => ({
-              product_id: productId,
-              url,
-              position: i,
-              alt_text: dishName,
-            })));
-          if (imageError) throw imageError;
+          if (imageUrls.length > 0) {
+            const { error: imageError } = await supabase.from('product_images').insert(
+              imageUrls.map((url, i) => ({
+                product_id: productId,
+                url,
+                position: i,
+                alt_text: dishName,
+              }))
+            );
+            if (imageError) throw imageError;
+          }
         }
       } catch (childError) {
         // If we just created the parent product but a child insert failed,
@@ -387,6 +465,50 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                   <input type="number" value={lowStockThreshold} onChange={e => setLowStockThreshold(e.target.value)} min="0" className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
                   <p className="text-xs text-gray-500 mt-1">Alert when daily quantity drops below this number</p>
                 </div>
+
+                <div className="p-5 border-2 border-[#e8c87a] rounded-xl bg-[#fdf9ec] space-y-4">
+                  <h4 className="font-bold text-gray-900 flex items-center gap-2">
+                    <i className="ri-calendar-check-line text-[#C8952A]"></i>
+                    Order &amp; Schedule
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">Availability Type</label>
+                      <select
+                        value={availabilityMode}
+                        onChange={e => setAvailabilityMode(e.target.value as 'standard' | 'preorder')}
+                        className="w-full px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] cursor-pointer bg-white"
+                      >
+                        <option value="standard">Standard — order anytime</option>
+                        <option value="preorder">Preorder — advance notice required</option>
+                      </select>
+                    </div>
+                    {availabilityMode === 'preorder' && (
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-900 mb-2">Minimum Notice (hours)</label>
+                        <input
+                          type="number"
+                          min={1}
+                          value={preorderLeadHours}
+                          onChange={e => setPreorderLeadHours(e.target.value)}
+                          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] bg-white"
+                        />
+                        <p className="text-xs text-gray-600 mt-1">e.g. 24 = at least 24 hours before pickup/delivery</p>
+                      </div>
+                    )}
+                  </div>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={saturdayOnly}
+                      onChange={e => setSaturdayOnly(e.target.checked)}
+                      className="w-5 h-5 accent-[#C8952A]"
+                    />
+                    <span className="text-sm text-gray-800">
+                      <strong>Saturday menu only</strong> — show this dish on Saturdays (assign category &quot;Saturday Menu&quot; too if you like)
+                    </span>
+                  </label>
+                </div>
               </div>
             </div>
           )}
@@ -474,6 +596,30 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
               </div>
               <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700">
                 <strong>Tips:</strong> Use well-lit, high-quality food photos (min 800x800px). Supported: JPG, PNG, WebP (max 5MB each).
+              </div>
+
+              <div className="pt-6 border-t border-gray-200 space-y-4">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">Dish Videos</h3>
+                  <p className="text-gray-600 text-sm">Optional — upload a clip or paste a YouTube/Vimeo link so customers see your dish in action.</p>
+                </div>
+                {videoUrls.map((url, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3 border-2 border-gray-200 rounded-lg bg-gray-50">
+                    <i className="ri-video-line text-xl text-[#C8952A]"></i>
+                    <span className="flex-1 text-sm font-mono truncate text-gray-700">{url}</span>
+                    <button type="button" onClick={() => setVideoUrls(prev => prev.filter((_, idx) => idx !== i))} className="text-red-500 hover:bg-red-50 p-2 rounded-lg cursor-pointer">
+                      <i className="ri-delete-bin-line"></i>
+                    </button>
+                  </div>
+                ))}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-[#C8952A] hover:bg-[#fdf9ec] cursor-pointer text-sm font-semibold text-gray-600">
+                    <i className={uploadingVideo ? 'ri-loader-4-line animate-spin' : 'ri-film-line'}></i>
+                    {uploadingVideo ? 'Uploading video...' : 'Upload video (MP4)'}
+                    <input type="file" accept="video/mp4,video/webm,video/quicktime" className="hidden" onChange={handleVideoUpload} />
+                  </label>
+                </div>
+                <VideoUrlInput onAdd={addVideoUrl} />
               </div>
             </div>
           )}

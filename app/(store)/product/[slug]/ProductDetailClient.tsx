@@ -11,6 +11,15 @@ import { StructuredData, generateProductSchema, generateBreadcrumbSchema } from 
 import { notFound } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import {
+  getAvailabilityMode,
+  getPreorderLeadHours,
+  isSaturdayOnly,
+  isProductAvailableToday,
+  getProductVideos,
+  formatPreorderNotice,
+} from '@/lib/product-availability';
+import { embedVideoUrl, isEmbeddableStream } from '@/lib/video-embed';
 
 
 
@@ -174,7 +183,10 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
       quantity: quantity,
       variant: variantLabel,
       slug: product.slug,
-      moq: product.moq || 1
+      moq: product.moq || 1,
+      preorder: getAvailabilityMode(product) === 'preorder',
+      preorderLeadHours: getPreorderLeadHours(product),
+      saturdayOnly: isSaturdayOnly(product),
     });
   };
 
@@ -207,6 +219,12 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
   const discount = product.compare_at_price ? Math.round((1 - activePrice / product.compare_at_price) * 100) : 0;
   const minVariantPrice = hasVariants ? Math.min(...product.variants.map((v: any) => v.price || product.price)) : product.price;
+
+  const isPreorder = getAvailabilityMode(product) === 'preorder';
+  const preorderLeadHours = getPreorderLeadHours(product);
+  const saturdayOnly = isSaturdayOnly(product);
+  const availableToday = isProductAvailableToday(product);
+  const productVideos = getProductVideos(product);
 
   const productSchema = generateProductSchema({
     name: product.name,
@@ -292,6 +310,30 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     ))}
                   </div>
                 )}
+
+                {productVideos.length > 0 && (
+                  <div className="mt-6 space-y-4">
+                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Watch</h3>
+                    {productVideos.map((url, index) => {
+                      const embed = embedVideoUrl(url);
+                      if (!embed) return null;
+                      return (
+                        <div key={index} className="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
+                          {isEmbeddableStream(url) ? (
+                            <iframe
+                              src={embed}
+                              title={`${product.name} video ${index + 1}`}
+                              className="w-full h-full"
+                              allowFullScreen
+                            />
+                          ) : (
+                            <video src={embed} controls className="w-full h-full" />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col xl:pl-8">
@@ -306,6 +348,20 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     </button>
                   </div>
                   <h1 className="text-3xl md:text-4xl lg:text-[44px] font-serif font-medium text-gray-900 leading-[1.1] tracking-tight">{product.name}</h1>
+                  {(isPreorder || saturdayOnly) && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {isPreorder && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#fdf9ec] text-[#a07020] text-xs font-bold uppercase tracking-wider border border-[#e8c87a]">
+                          Pre-order · {formatPreorderNotice(preorderLeadHours)}
+                        </span>
+                      )}
+                      {saturdayOnly && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-bold uppercase tracking-wider border border-gray-200">
+                          Saturday menu
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex items-center mb-7">
@@ -333,7 +389,24 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   )}
                 </div>
 
-                <p className="text-gray-500 leading-[1.8] mb-10 text-[15.5px] font-light max-w-[95%]">{product.description}</p>
+                <p className="text-gray-500 leading-[1.8] mb-6 text-[15.5px] font-light max-w-[95%]">{product.description}</p>
+
+                {(isPreorder || (saturdayOnly && !availableToday)) && (
+                  <div className="mb-8 p-4 rounded-xl bg-[#fdf9ec] border border-[#e8c87a] text-[#6b5018] text-sm leading-relaxed">
+                    {isPreorder && (
+                      <p className="font-medium">
+                        <i className="ri-time-line mr-1.5 align-middle"></i>
+                        This dish requires advance notice ({formatPreorderNotice(preorderLeadHours)}). We will confirm your ready date after you place your order.
+                      </p>
+                    )}
+                    {saturdayOnly && !availableToday && (
+                      <p className={isPreorder ? 'mt-2' : ''}>
+                        <i className="ri-calendar-line mr-1.5 align-middle"></i>
+                        Available on Saturdays only. You can still order now — we will schedule it for the next available Saturday.
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 {/* Size / Name Variant Selector */}
                 {hasVariants && (() => {

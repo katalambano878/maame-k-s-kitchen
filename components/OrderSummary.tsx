@@ -13,12 +13,22 @@ interface OrderSummaryProps {
   shipping: number;
   tax: number;
   total: number;
+  preorderNotice?: string;
 }
 
-export default function OrderSummary({ items, subtotal, shipping, tax, total }: OrderSummaryProps) {
+export default function OrderSummary({ items, subtotal, shipping, tax, total, preorderNotice }: OrderSummaryProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 sticky top-4">
       <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
+
+      {preorderNotice && (
+        <div className="mb-6 p-4 bg-[#fdf9ec] border border-[#e8c87a] rounded-lg text-sm text-[#6b5018] leading-relaxed">
+          <div className="flex items-start gap-2">
+            <i className="ri-time-line text-lg flex-shrink-0 mt-0.5"></i>
+            <p>{preorderNotice}</p>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-4 mb-6">
         {items.map((item) => (

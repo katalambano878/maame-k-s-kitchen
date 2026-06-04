@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import OrderHistory from './OrderHistory';
 import AddressBook from './AddressBook';
+import MealPrepSubscription from './MealPrepSubscription';
 import { supabase } from '@/lib/supabase';
 
 function AccountContent() {
@@ -19,7 +20,7 @@ function AccountContent() {
   // Update active tab when URL param changes
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab && ['profile', 'orders', 'addresses', 'security'].includes(tab)) {
+    if (tab && ['profile', 'orders', 'meal-prep', 'addresses', 'security'].includes(tab)) {
       setActiveTab(tab);
     }
   }, [searchParams]);
@@ -191,6 +192,7 @@ function AccountContent() {
                 <nav className="p-2 space-y-1">
                   {[
                     { id: 'profile', icon: 'ri-user-settings-line', label: 'Profile Settings' },
+                    { id: 'meal-prep', icon: 'ri-calendar-check-line', label: 'Meal Prep' },
                     { id: 'orders', icon: 'ri-shopping-bag-3-line', label: 'Order History' },
                     { id: 'addresses', icon: 'ri-map-pin-2-line', label: 'Addresses' },
                     { id: 'security', icon: 'ri-shield-keyhole-line', label: 'Security' }
@@ -216,6 +218,7 @@ function AccountContent() {
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                 {[
                   { id: 'profile', icon: 'ri-user-settings-line', label: 'Profile' },
+                  { id: 'meal-prep', icon: 'ri-calendar-check-line', label: 'Meal Prep' },
                   { id: 'orders', icon: 'ri-shopping-bag-3-line', label: 'Orders' },
                   { id: 'addresses', icon: 'ri-map-pin-2-line', label: 'Address' },
                   { id: 'security', icon: 'ri-shield-keyhole-line', label: 'Security' }
@@ -361,6 +364,7 @@ function AccountContent() {
                   </div>
                 )}
 
+                {activeTab === 'meal-prep' && <MealPrepSubscription />}
                 {activeTab === 'orders' && <OrderHistory />}
 
                 {activeTab === 'addresses' && <AddressBook />}

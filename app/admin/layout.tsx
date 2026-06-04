@@ -216,6 +216,16 @@ export default function AdminLayout({
     },
 
     {
+      title: 'Events',
+      icon: 'ri-calendar-event-line',
+      path: '/admin/events'
+    },
+    {
+      title: 'Subscriptions',
+      icon: 'ri-repeat-line',
+      path: '/admin/subscriptions'
+    },
+    {
       title: 'Blog',
       icon: 'ri-article-line',
       path: '/admin/blog',

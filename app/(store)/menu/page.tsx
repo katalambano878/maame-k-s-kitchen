@@ -9,6 +9,7 @@ import ProductCardSkeleton from '@/components/skeletons/ProductCardSkeleton';
 import { supabase } from '@/lib/supabase';
 import { cachedQuery } from '@/lib/query-cache';
 import PageHero from '@/components/PageHero';
+import { getAvailabilityMode, getPreorderLeadHours, isSaturdayOnly } from '@/lib/product-availability';
 
 const DIETARY_OPTIONS = [
   { id: 'halal',        label: 'Halal',        icon: 'ri-award-line' },
@@ -114,6 +115,10 @@ function ShopContent() {
             const variants          = p.product_variants || [];
             const hasVariants       = variants.length > 0;
             const minVariantPrice   = hasVariants ? Math.min(...variants.map((v: any) => v.price || p.price)) : undefined;
+            const hasSpecial = p.compare_at_price > p.price;
+            const isPreorder = getAvailabilityMode(p) === 'preorder';
+            const saturdayOnly = isSaturdayOnly({ ...p, categories: p.categories });
+            const badge = isPreorder ? 'Pre-order' : saturdayOnly ? 'Saturday' : hasSpecial ? 'Special' : undefined;
             return {
               id:            p.id,
               slug:          p.slug,
@@ -123,7 +128,10 @@ function ShopContent() {
               image:         p.product_images?.sort((a: any, b: any) => a.position - b.position)?.[0]?.url || '/logo.png',
               rating:        p.rating_avg || 0,
               reviewCount:   0,
-              badge:         p.compare_at_price > p.price ? 'Special' : undefined,
+              badge,
+              preorder:      isPreorder,
+              preorderLeadHours: getPreorderLeadHours(p),
+              saturdayOnly,
               inStock:       p.status === 'active',
               moq:           p.moq || 1,
               category:      p.categories?.name,
@@ -185,6 +193,37 @@ function ShopContent() {
         subtitle="Authentic Ghanaian cuisine made fresh daily — banku, jollof, waakye, fufu, omotuo, soups, stews & traditional sides"
         backgroundImage="/home_hero_1.jpeg"
       />
+
+      {/* Quick category links */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 mb-6">
+        <div className="flex flex-wrap gap-2 justify-center">
+          {[
+            { label: 'Full Menu', slug: 'all' },
+            { label: 'Saturday Menu', slug: 'saturday-menu' },
+            { label: 'Salads & Sides', slug: 'sides' },
+            { label: 'Pastries', slug: 'pastries' },
+          ].map(({ label, slug }) => (
+            <button
+              key={slug}
+              type="button"
+              onClick={() => { setSelectedCategory(slug); setPage(1); }}
+              className={`px-4 py-2 rounded-full text-sm font-semibold border-2 transition-colors cursor-pointer ${
+                selectedCategory === slug
+                  ? 'bg-[#111111] text-white border-[#111111]'
+                  : 'bg-white text-gray-700 border-gray-200 hover:border-[#C8952A]'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        {selectedCategory === 'saturday-menu' && (
+          <p className="text-center text-sm text-[#C8952A] mt-3 font-medium">
+            <i className="ri-calendar-line mr-1"></i>
+            Saturday specials — made fresh every Saturday in Cornerstone, NE Calgary
+          </p>
+        )}
+      </div>
 
       {/* Mobile filter bar */}
       <div className="lg:hidden bg-white border-b border-gray-200 py-4 px-4 z-20">

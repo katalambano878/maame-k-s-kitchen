@@ -42,6 +42,9 @@ interface ProductCardProps {
   spiceLevel?: 0 | 1 | 2 | 3;
   dietaryFlags?: string[];
   portionNote?: string;
+  preorder?: boolean;
+  preorderLeadHours?: number;
+  saturdayOnly?: boolean;
   // Legacy — unused, kept so call-sites don't break
   colorVariants?: ColorVariant[];
 }
@@ -52,6 +55,7 @@ export default function ProductCard({
   inStock = true, moq = 1,
   hasVariants = false, minVariantPrice,
   prepTime, spiceLevel = 0, dietaryFlags = [], portionNote,
+  preorder, preorderLeadHours, saturdayOnly,
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const [added, setAdded] = useState(false);
@@ -64,7 +68,7 @@ export default function ProductCard({
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!inStock || added) return;
-    addToCart({ id, name, price, image, quantity: moq, slug, moq, maxStock: 20 });
+    addToCart({ id, name, price, image, quantity: moq, slug, moq, maxStock: 20, preorder, preorderLeadHours, saturdayOnly });
     setAdded(true);
     setTimeout(() => setAdded(false), 1600);
   };
