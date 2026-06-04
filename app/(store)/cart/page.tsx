@@ -54,7 +54,7 @@ export default function CartPage() {
     }
   }
 
-  const deliveryFee = 5;
+  const deliveryFee: number = 5;
   const total = subtotal - couponDiscount + deliveryFee;
 
   return (

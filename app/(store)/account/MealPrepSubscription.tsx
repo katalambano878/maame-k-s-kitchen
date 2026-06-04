@@ -81,7 +81,22 @@ export default function MealPrepSubscription() {
           .eq('week_id', activeWeek.id)
           .order('sort_order');
 
-        setWeekItems((items as WeekItem[]) || []);
+        const normalized: WeekItem[] = (items || []).map((row: any) => {
+          const p = row.products;
+          const product = Array.isArray(p) ? p[0] : p;
+          return {
+            product_id: row.product_id,
+            products: product
+              ? {
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  product_images: product.product_images,
+                }
+              : { id: row.product_id, name: 'Unknown dish', price: 0 },
+          };
+        });
+        setWeekItems(normalized);
 
         const { data: existing } = await supabase
           .from('meal_prep_selections')

@@ -3,6 +3,7 @@ import { verifyAuth } from '@/lib/auth';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { getStripe } from '@/lib/stripe';
 import { getCancelEligibility } from '@/lib/subscription-dates';
+import { getSubscriptionPeriod, normalizeJoinedPlan } from '@/lib/stripe-subscription-helpers';
 
 export async function POST(req: Request) {
   try {
@@ -27,11 +28,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, message: 'No active subscription found' }, { status: 404 });
     }
 
-    const plan = sub.subscription_plans as {
+    const plan = normalizeJoinedPlan<{
       cancel_notice_days: number;
       delivery_day: string;
       name: string;
-    } | null;
+    }>(sub.subscription_plans);
 
     const noticeDays = plan?.cancel_notice_days ?? 3;
     const deliveryDay = plan?.delivery_day ?? 'saturday';
@@ -39,6 +40,12 @@ export async function POST(req: Request) {
 
     const stripe = getStripe();
     const subscription = await stripe.subscriptions.retrieve(sub.stripe_subscription_id);
+    const period = getSubscriptionPeriod(subscription);
+    const periodEnd = period.currentPeriodEnd;
+
+    if (!periodEnd) {
+      return NextResponse.json({ success: false, message: 'Could not read subscription billing period' }, { status: 500 });
+    }
 
     if (eligibility.beforeDeadline) {
       await stripe.subscriptions.update(sub.stripe_subscription_id, {
@@ -58,11 +65,11 @@ export async function POST(req: Request) {
         success: true,
         message: eligibility.message,
         effective: 'end_of_period',
-        periodEnd: subscription.current_period_end,
+        periodEnd,
       });
     }
 
-    const nextPeriodEnd = subscription.current_period_end + 7 * 24 * 60 * 60;
+    const nextPeriodEnd = periodEnd + 7 * 24 * 60 * 60;
 
     await stripe.subscriptions.update(sub.stripe_subscription_id, {
       cancel_at: nextPeriodEnd,

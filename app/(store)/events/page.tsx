@@ -115,7 +115,6 @@ export default function EventsPage() {
       <PageHero
         title="Events & Experiences"
         subtitle="The Chop Bar Experience, catering highlights, and community gatherings — dine in, take out, connect."
-        breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Events' }]}
       />
 
       <section className="max-w-6xl mx-auto px-6 py-12">

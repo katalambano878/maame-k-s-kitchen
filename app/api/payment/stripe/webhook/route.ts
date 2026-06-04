@@ -7,6 +7,7 @@ import {
   syncSubscriptionFromStripe,
 } from '@/lib/fulfill-subscription';
 import { getStripe } from '@/lib/stripe';
+import { getInvoiceSubscriptionId } from '@/lib/stripe-subscription-helpers';
 import Stripe from 'stripe';
 
 export const runtime = 'nodejs';
@@ -85,12 +86,7 @@ export async function POST(req: Request) {
 
     if (event.type === 'invoice.paid') {
       const invoice = event.data.object as Stripe.Invoice;
-      const subId =
-        typeof invoice.subscription === 'string'
-          ? invoice.subscription
-          : invoice.subscription?.id ||
-            (invoice.parent as { subscription_details?: { subscription?: string } } | null)
-              ?.subscription_details?.subscription;
+      const subId = getInvoiceSubscriptionId(invoice);
       if (subId && (invoice.billing_reason === 'subscription_cycle' || invoice.billing_reason === 'subscription_create')) {
         await handleSubscriptionInvoicePaid(invoice);
         console.log('[Stripe Webhook] Subscription invoice fulfilled:', invoice.id);

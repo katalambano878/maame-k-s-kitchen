@@ -5,9 +5,10 @@ interface PageHeroProps {
     title: string;
     subtitle?: string;
     backgroundImage?: string;
+    badge?: string;
 }
 
-export default function PageHero({ title, subtitle, backgroundImage }: PageHeroProps) {
+export default function PageHero({ title, subtitle, backgroundImage, badge }: PageHeroProps) {
     return (
         <div className={`relative overflow-hidden flex items-center justify-center min-h-[60vh] ${!backgroundImage ? 'bg-[#0d0d0d]' : ''}`}>
             {backgroundImage ? (
@@ -33,7 +34,7 @@ export default function PageHero({ title, subtitle, backgroundImage }: PageHeroP
                 {/* Optional Tag - adding structure for future use or decorative line */}
                 <div className="mb-6 overflow-hidden">
                     <span className="inline-block py-1 px-4 text-white/90 text-sm md:text-base tracking-[0.3em] uppercase font-semibold border border-white/20 rounded-full backdrop-blur-md bg-white/5 animate-in slide-in-from-bottom-3 duration-700">
-                        {title.split(' ')[0]} Collection
+                        {badge ?? `${title.split(' ')[0]} Collection`}
                     </span>
                 </div>
 

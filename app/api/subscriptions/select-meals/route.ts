@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/auth';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { normalizeJoinedPlan } from '@/lib/stripe-subscription-helpers';
 
 export async function POST(req: Request) {
   try {
@@ -52,7 +53,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const mealsPerWeek = (sub.subscription_plans as { meals_per_week: number })?.meals_per_week ?? 5;
+    const plan = normalizeJoinedPlan<{ meals_per_week: number }>(sub.subscription_plans);
+    const mealsPerWeek = plan?.meals_per_week ?? 5;
     const totalQty = selections.reduce((sum, s) => sum + (s.quantity || 0), 0);
 
     if (totalQty === 0) {

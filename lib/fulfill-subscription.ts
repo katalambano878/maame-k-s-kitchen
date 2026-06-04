@@ -1,6 +1,10 @@
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { getStripe } from '@/lib/stripe';
 import { upsertMealPrepSubscription } from '@/lib/stripe-meal-prep';
+import {
+  getInvoiceSubscriptionId,
+  getSubscriptionPeriod,
+} from '@/lib/stripe-subscription-helpers';
 import Stripe from 'stripe';
 
 export async function fulfillSubscriptionCheckout(session: Stripe.Checkout.Session) {
@@ -32,6 +36,8 @@ export async function fulfillSubscriptionCheckout(session: Stripe.Checkout.Sessi
     .update({ stripe_customer_id: customerId })
     .eq('id', userId);
 
+  const period = getSubscriptionPeriod(subscription);
+
   await upsertMealPrepSubscription({
     userId,
     planId,
@@ -39,8 +45,8 @@ export async function fulfillSubscriptionCheckout(session: Stripe.Checkout.Sessi
     stripeSubscriptionId: subscription.id,
     status: subscription.status,
     cancelAtPeriodEnd: subscription.cancel_at_period_end,
-    currentPeriodStart: subscription.current_period_start,
-    currentPeriodEnd: subscription.current_period_end,
+    currentPeriodStart: period.currentPeriodStart,
+    currentPeriodEnd: period.currentPeriodEnd,
     deliveryMethod: session.metadata?.delivery_method || 'pickup',
   });
 }
@@ -63,6 +69,8 @@ export async function syncSubscriptionFromStripe(subscription: Stripe.Subscripti
     return;
   }
 
+  const period = getSubscriptionPeriod(subscription);
+
   await upsertMealPrepSubscription({
     userId,
     planId,
@@ -70,24 +78,12 @@ export async function syncSubscriptionFromStripe(subscription: Stripe.Subscripti
     stripeSubscriptionId: subscription.id,
     status: subscription.status,
     cancelAtPeriodEnd: subscription.cancel_at_period_end,
-    currentPeriodStart: subscription.current_period_start,
-    currentPeriodEnd: subscription.current_period_end,
+    currentPeriodStart: period.currentPeriodStart,
+    currentPeriodEnd: period.currentPeriodEnd,
     pendingCancelAt: subscription.cancel_at
       ? new Date(subscription.cancel_at * 1000).toISOString()
       : null,
   });
-}
-
-function getInvoiceSubscriptionId(invoice: Stripe.Invoice): string | null {
-  if (typeof invoice.subscription === 'string') return invoice.subscription;
-  if (invoice.subscription && typeof invoice.subscription === 'object') {
-    return invoice.subscription.id;
-  }
-  const parent = invoice.parent as { subscription_details?: { subscription?: string } } | null;
-  if (typeof parent?.subscription_details?.subscription === 'string') {
-    return parent.subscription_details.subscription;
-  }
-  return null;
 }
 
 export async function handleSubscriptionInvoicePaid(invoice: Stripe.Invoice) {
