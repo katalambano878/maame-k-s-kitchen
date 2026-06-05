@@ -194,8 +194,8 @@ function ShopContent() {
         backgroundImage="/home_hero_1.jpeg"
       />
 
-      {/* Quick category links */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 mb-6">
+      {/* Quick category links — sit below hero (no negative margin; avoids hero clipping tabs) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mb-2 bg-white relative z-10 border-b border-gray-100">
         <div className="flex flex-wrap gap-2 justify-center">
           {[
             { label: 'Full Menu', slug: 'all' },

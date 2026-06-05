@@ -56,12 +56,16 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
   const [spiceLevel, setSpiceLevel] = useState<number>(initialData?.spice_level ?? 0);
   const [prepTime, setPrepTime] = useState(initialData?.prep_time?.toString() || '');
   const [calories, setCalories] = useState(initialData?.calories?.toString() || '');
-  const [isAvailableToday, setIsAvailableToday] = useState(initialData?.is_available_today ?? true);
-  const [availabilityMode, setAvailabilityMode] = useState<'standard' | 'preorder'>(
-    initialData?.availability_mode === 'preorder' || initialData?.metadata?.availability_mode === 'preorder'
-      ? 'preorder'
-      : 'standard'
-  );
+  type DishAvailability = 'available' | 'unavailable' | 'preorder';
+  const getInitialDishAvailability = (): DishAvailability => {
+    const isPreorder =
+      initialData?.availability_mode === 'preorder' ||
+      initialData?.metadata?.availability_mode === 'preorder';
+    if (isPreorder) return 'preorder';
+    if (initialData?.is_available_today === false) return 'unavailable';
+    return 'available';
+  };
+  const [dishAvailability, setDishAvailability] = useState<DishAvailability>(getInitialDishAvailability);
   const [preorderLeadHours, setPreorderLeadHours] = useState(
     String(initialData?.preorder_lead_hours ?? initialData?.metadata?.preorder_lead_hours ?? 24)
   );
@@ -191,7 +195,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
         spice_level: spiceLevel,
         prep_time: prepTime ? parseInt(prepTime) : null,
         calories: calories ? parseInt(calories) : null,
-        is_available_today: isAvailableToday,
+        is_available_today: dishAvailability !== 'unavailable',
         allergens,
         ingredients: ingredientsArray,
         seo_title: seoTitle || null,
@@ -203,8 +207,8 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
           keywords,
           focus_keyword: focusKeyword,
           noindex,
-          availability_mode: availabilityMode,
-          preorder_lead_hours: availabilityMode === 'preorder' ? parseInt(preorderLeadHours) || 24 : null,
+          availability_mode: dishAvailability === 'preorder' ? 'preorder' : 'standard',
+          preorder_lead_hours: dishAvailability === 'preorder' ? parseInt(preorderLeadHours) || 24 : null,
           available_days: saturdayOnly ? ['saturday'] : [],
           videos: videoUrls,
         },
@@ -368,12 +372,64 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                     <label className="block text-sm font-semibold text-gray-900 mb-2">Calories (kcal)</label>
                     <input type="number" value={calories} onChange={e => setCalories(e.target.value)} placeholder="e.g. 450" min="0" className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A]" />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">Available Today</label>
-                    <button type="button" onClick={() => setIsAvailableToday(!isAvailableToday)} className={`w-full py-3 rounded-lg font-semibold border-2 transition-colors cursor-pointer ${isAvailableToday ? 'bg-green-50 border-green-400 text-green-700' : 'bg-gray-50 border-gray-300 text-gray-600'}`}>
-                      <i className={`${isAvailableToday ? 'ri-checkbox-circle-line' : 'ri-close-circle-line'} mr-2`}></i>{isAvailableToday ? 'Available' : 'Unavailable'}
-                    </button>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-3">Availability</label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {([
+                      { value: 'available' as const, label: 'Available', icon: 'ri-checkbox-circle-line', active: 'bg-green-50 border-green-400 text-green-700' },
+                      { value: 'unavailable' as const, label: 'Unavailable', icon: 'ri-close-circle-line', active: 'bg-gray-100 border-gray-400 text-gray-700' },
+                      { value: 'preorder' as const, label: 'Preorder', icon: 'ri-calendar-check-line', active: 'bg-[#fdf9ec] border-[#C8952A] text-[#7a5418]' },
+                    ]).map(({ value, label, icon, active }) => (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setDishAvailability(value)}
+                        className={`py-3 rounded-lg font-semibold border-2 transition-colors cursor-pointer text-sm ${dishAvailability === value ? active : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                      >
+                        <i className={`${icon} mr-1`}></i>{label}
+                      </button>
+                    ))}
                   </div>
+                  {dishAvailability === 'preorder' && (
+                    <div className="mt-4 grid md:grid-cols-2 gap-4 p-4 bg-[#fdf9ec] border border-[#e8c87a] rounded-lg">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-900 mb-2">Minimum Notice (hours)</label>
+                        <input
+                          type="number"
+                          min={1}
+                          value={preorderLeadHours}
+                          onChange={e => setPreorderLeadHours(e.target.value)}
+                          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] bg-white"
+                        />
+                        <p className="text-xs text-gray-600 mt-1">e.g. 24 = at least 24 hours before pickup/delivery</p>
+                      </div>
+                      <label className="flex items-start gap-3 cursor-pointer pt-1">
+                        <input
+                          type="checkbox"
+                          checked={saturdayOnly}
+                          onChange={e => setSaturdayOnly(e.target.checked)}
+                          className="w-5 h-5 accent-[#C8952A] mt-1"
+                        />
+                        <span className="text-sm text-gray-800">
+                          <strong>Saturday menu only</strong> — show this dish on Saturdays (assign category &quot;Saturday Menu&quot; too if you like)
+                        </span>
+                      </label>
+                    </div>
+                  )}
+                  {dishAvailability === 'available' && (
+                    <label className="flex items-center gap-3 cursor-pointer mt-4">
+                      <input
+                        type="checkbox"
+                        checked={saturdayOnly}
+                        onChange={e => setSaturdayOnly(e.target.checked)}
+                        className="w-5 h-5 accent-[#C8952A]"
+                      />
+                      <span className="text-sm text-gray-800">
+                        <strong>Saturday menu only</strong> — limit to Saturdays only
+                      </span>
+                    </label>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-3">Spice Level</label>
@@ -466,49 +522,6 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                   <p className="text-xs text-gray-500 mt-1">Alert when daily quantity drops below this number</p>
                 </div>
 
-                <div className="p-5 border-2 border-[#e8c87a] rounded-xl bg-[#fdf9ec] space-y-4">
-                  <h4 className="font-bold text-gray-900 flex items-center gap-2">
-                    <i className="ri-calendar-check-line text-[#C8952A]"></i>
-                    Order &amp; Schedule
-                  </h4>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">Availability Type</label>
-                      <select
-                        value={availabilityMode}
-                        onChange={e => setAvailabilityMode(e.target.value as 'standard' | 'preorder')}
-                        className="w-full px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] cursor-pointer bg-white"
-                      >
-                        <option value="standard">Standard — order anytime</option>
-                        <option value="preorder">Preorder — advance notice required</option>
-                      </select>
-                    </div>
-                    {availabilityMode === 'preorder' && (
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-900 mb-2">Minimum Notice (hours)</label>
-                        <input
-                          type="number"
-                          min={1}
-                          value={preorderLeadHours}
-                          onChange={e => setPreorderLeadHours(e.target.value)}
-                          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] bg-white"
-                        />
-                        <p className="text-xs text-gray-600 mt-1">e.g. 24 = at least 24 hours before pickup/delivery</p>
-                      </div>
-                    )}
-                  </div>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={saturdayOnly}
-                      onChange={e => setSaturdayOnly(e.target.checked)}
-                      className="w-5 h-5 accent-[#C8952A]"
-                    />
-                    <span className="text-sm text-gray-800">
-                      <strong>Saturday menu only</strong> — show this dish on Saturdays (assign category &quot;Saturday Menu&quot; too if you like)
-                    </span>
-                  </label>
-                </div>
               </div>
             </div>
           )}

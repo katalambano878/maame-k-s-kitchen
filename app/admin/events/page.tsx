@@ -18,7 +18,7 @@ const emptyForm = {
   status: 'published',
   is_upcoming: false,
   event_date: '',
-  location: 'Cornerstone, NE Calgary, Alberta',
+  location: 'Cornerstone, NE Calgary',
   cover_image_url: '',
   gallery_urls: '' as string,
   video_urls: '' as string,

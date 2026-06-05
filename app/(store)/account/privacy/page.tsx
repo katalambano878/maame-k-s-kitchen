@@ -25,7 +25,7 @@ export default function PrivacySettingsPage() {
           { id: 'ORD-2024-002', date: '2024-03-20', total: 89.99 }
         ],
         addresses: [
-          { type: 'Home', street: 'Cornerstone, Calgary', city: 'Calgary', zip: '' }
+          { type: 'Home', street: 'Cornerstone, NE Calgary', city: 'Calgary', zip: '' }
         ],
         preferences: {
           newsletter: true,

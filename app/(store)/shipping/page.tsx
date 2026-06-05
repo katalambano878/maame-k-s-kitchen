@@ -4,7 +4,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
 
 export const metadata: Metadata = {
   title: 'Delivery & Shipping',
-  description: "Maame K's Kitchen delivery and pickup information — same-day delivery within Calgary and free pickup from Cornerstone, NE Calgary, Alberta.",
+  description: "Maame K's Kitchen delivery and pickup information — same-day delivery within Calgary and free pickup from Cornerstone, NE Calgary.",
   keywords: ['Ghanaian food delivery Calgary', 'same day food delivery Calgary', 'African food delivery NE Calgary', 'Cornerstone food delivery'],
   alternates: { canonical: `${siteUrl}/shipping` },
   openGraph: {
@@ -47,7 +47,7 @@ export default function ShippingPage() {
               </li>
               <li className="flex items-start gap-2">
                 <i className="ri-checkbox-circle-line text-[#C8952A] mt-1 flex-shrink-0"></i>
-                <span><strong className="text-gray-900">Store pickup</strong> is available at no charge from our Cornerstone, Calgary, Alberta, Canada location.</span>
+                <span><strong className="text-gray-900">Store pickup</strong> is available at no charge from our Cornerstone, NE Calgary location.</span>
               </li>
             </ul>
           </section>
@@ -88,7 +88,7 @@ export default function ShippingPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">Store Pickup</h3>
-                  <p className="text-gray-600 text-sm">Free — Cornerstone, Calgary, Alberta, Canada</p>
+                  <p className="text-gray-600 text-sm">Free — Cornerstone, NE Calgary</p>
                 </div>
               </div>
             </div>
@@ -101,7 +101,7 @@ export default function ShippingPage() {
             </p>
             <div className="bg-[#0d0d0d] rounded-2xl p-8 text-white border border-white/10">
               <p className="text-gray-300 mb-2"><strong className="text-white">Phone:</strong> (587) 582-2421 / (587) 582-2421</p>
-              <p className="text-gray-300 mb-4"><strong className="text-white">Location:</strong> Cornerstone, Calgary, Alberta, Canada</p>
+              <p className="text-gray-300 mb-4"><strong className="text-white">Location:</strong> Cornerstone, NE Calgary</p>
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/contact"

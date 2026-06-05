@@ -35,7 +35,7 @@ export default function Header() {
 
   const { cartCount, isCartOpen, setIsCartOpen } = useCart();
   const { getSetting } = useCMS();
-  const siteName = getSetting('site_name') || 'Mama K';
+  const siteName = getSetting('site_name') || "Maame K's Kitchen";
   const monogram = 'MK';
   const biz = getBusinessStatus();
 

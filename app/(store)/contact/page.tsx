@@ -52,7 +52,7 @@ export default function ContactPage() {
   const { getToken, verifying }           = useRecaptcha();
 
   const contactPhone   = getSetting('contact_phone')   || '(587) 582-2421';
-  const contactAddress = getSetting('contact_address') || 'Cornerstone, NE Calgary, Alberta';
+  const contactAddress = getSetting('contact_address') || 'Cornerstone, NE Calgary';
   const siteName       = getSetting('site_name')       || 'Maame K’s Kitchen';
   const tiktokMain     = getSetting('social_tiktok')   || '';
   const tiktokJoy      = getSetting('social_tiktok_secondary') || '';
@@ -278,7 +278,7 @@ export default function ContactPage() {
               </div>
               <div className="mt-6 pt-5 border-t border-white/10 flex items-center gap-2 text-[12px] text-white/50">
                 <i className="ri-map-pin-line text-[#C8952A]" />
-                Cornerstone, NE Calgary, Alberta
+                Cornerstone, NE Calgary
               </div>
             </div>
 

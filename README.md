@@ -2,7 +2,7 @@
 
 > Authentic Ghanaian cuisine in Calgary — order banku, jollof, waakye, fufu, and more for delivery or pickup.
 
-The online ordering site and admin dashboard for Maame K’s Kitchen, a Ghanaian restaurant in Cornerstone, Calgary, Alberta.
+The online ordering site and admin dashboard for Maame K’s Kitchen, a Ghanaian restaurant in Cornerstone, NE Calgary.
 
 ## Tech Stack
 
@@ -50,7 +50,7 @@ npm run supabase:push    # push migrations
 ## Brand & contact
 
 - **Phone:** (587) 582-2421
-- **Address:** Cornerstone, Calgary, Alberta, Canada
+- **Address:** Cornerstone, NE Calgary
 - **Instagram:** [@maame.k_kitchen](https://www.instagram.com/maame.k_kitchen/)
 - **TikTok:** [@maamekskitchenyyc](https://www.tiktok.com/@maamekskitchenyyc)
 - **Snapchat:** [maameks_kitchen](https://www.snapchat.com/add/maameks_kitchen)

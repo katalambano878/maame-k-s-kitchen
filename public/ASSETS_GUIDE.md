@@ -25,6 +25,8 @@ All original project assets have been removed from this codebase. Drop your own 
 | `/public/cart_hero.png` | 1920×600px (PNG/WebP) | Cart page header |
 | `/public/wishlist_hero.png` | 1920×600px (PNG/WebP) | Wishlist page header |
 | `/public/contact_hero.png` | 1920×600px (PNG/WebP) | Contact page header |
+| `/public/events_hero.jpeg` | 1920×1080px (JPG/WebP) | Events page header |
+| `/public/meal_prep_hero.jpeg` | 1920×1080px (JPG/WebP) | Meal prep subscription page header |
 | `/public/about-team.png` | 800×1000px (PNG/WebP) | About page team / story image |
 
 ## Open Graph / Social Preview

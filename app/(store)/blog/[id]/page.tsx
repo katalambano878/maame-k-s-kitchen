@@ -95,7 +95,7 @@ export async function generateMetadata({
   const post = posts[id] || posts['1'];
 
   const description = post.category === 'Our Story'
-    ? `${post.title} — The origin story of authentic Ghanaian cuisine coming to Calgary, Alberta.`
+    ? `${post.title} — The origin story of authentic Ghanaian cuisine coming to Cornerstone, NE Calgary.`
     : `${post.title} — Ghanaian food stories and recipes from the Maame K’s Kitchen team in Calgary.`;
 
   return {
@@ -206,7 +206,7 @@ export default async function BlogPostPage({
                 {['ri-facebook-fill', 'ri-twitter-fill', 'ri-linkedin-fill', 'ri-whatsapp-line'].map((icon) => (
                   <button key={icon} className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-[#fdf9ec] transition-colors cursor-pointer">
                     <i className={`${icon} text-gray-600`}></i>
-                  </button>
+                </button>
                 ))}
               </div>
             </div>

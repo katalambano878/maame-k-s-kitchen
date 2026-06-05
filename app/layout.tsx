@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     default: "Maame K’s Kitchen — Authentic Ghanaian Cuisine in Calgary",
     template: "%s | Maame K’s Kitchen"
   },
-  description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta. Real flavours of Canada you can trust.",
+  description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, NE Calgary. Real flavours of Canada you can trust.",
   keywords: [
     "Maame K’s Kitchen",
     "Ghanaian food Calgary",
@@ -79,14 +79,14 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: siteUrl,
     title: "Maame K’s Kitchen — Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, NE Calgary.",
     siteName: "Maame K’s Kitchen",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Maame K's Kitchen — Authentic Ghanaian Cuisine in Calgary, Alberta" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Maame K's Kitchen — Authentic Ghanaian Cuisine in Cornerstone, NE Calgary" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Maame K’s Kitchen — Authentic Ghanaian Cuisine in Calgary",
-    description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, Calgary, Alberta.",
+    description: "Order from Maame K’s Kitchen — banku, jollof, waakye, fufu and authentic Ghanaian dishes in Cornerstone, NE Calgary.",
     site: "@maamekskitchenyyc",
     creator: "@maamekskitchenyyc",
   },
@@ -112,7 +112,7 @@ const organizationSchema = {
     "height": 317
   },
   "image": `${siteUrl}/logo.png`,
-  "description": "Authentic Ghanaian restaurant serving banku, jollof, waakye, fufu, and traditional dishes in Cornerstone, Calgary, Alberta.",
+  "description": "Authentic Ghanaian restaurant serving banku, jollof, waakye, fufu, and traditional dishes in Cornerstone, NE Calgary.",
   "telephone": "+15875822421",
   "servesCuisine": ["Ghanaian", "West African"],
   "address": {

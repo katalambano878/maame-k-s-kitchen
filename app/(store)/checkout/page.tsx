@@ -10,6 +10,13 @@ import { supabase } from '@/lib/supabase';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useRecaptcha } from '@/hooks/useRecaptcha';
 import { formatPreorderNotice } from '@/lib/product-availability';
+import {
+  calculateCouponDiscount,
+  loadAppliedCouponFromSession,
+  saveAppliedCouponToSession,
+  toCartCoupon,
+  type CartCoupon,
+} from '@/lib/coupons';
 
 export default function CheckoutPage() {
   usePageTitle('Checkout');
@@ -55,6 +62,7 @@ export default function CheckoutPage() {
   const [orderNotes, setOrderNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('stripe');
   const [errors, setErrors] = useState<any>({});
+  const [appliedCoupon, setAppliedCoupon] = useState<CartCoupon | null>(null);
 
 
 
@@ -85,11 +93,20 @@ export default function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStep]);
 
+  useEffect(() => {
+    const stored = loadAppliedCouponFromSession();
+    if (stored) setAppliedCoupon(toCartCoupon(stored));
+  }, []);
+
   // Calculate Totals
   const subtotal = cartSubtotal;
   const deliveryFee = deliveryMethod === 'pickup' ? 0 : 5;
   const tax = 0; // No Tax
-  const total = subtotal + deliveryFee + tax;
+  const couponDiscount = appliedCoupon
+    ? calculateCouponDiscount(subtotal, appliedCoupon, deliveryFee)
+    : 0;
+  const effectiveShipping = appliedCoupon?.isFreeShipping ? 0 : deliveryFee;
+  const total = subtotal - couponDiscount + effectiveShipping + tax;
 
   const preorderCartItems = cart.filter((item) => item.preorder);
   const maxPreorderHours = preorderCartItems.length
@@ -182,8 +199,8 @@ export default function CheckoutPage() {
           currency: 'CAD',
           subtotal: subtotal,
           tax_total: tax,
-          shipping_total: deliveryFee,
-          discount_total: 0,
+          shipping_total: effectiveShipping,
+          discount_total: couponDiscount,
           total: total,
           shipping_method: deliveryMethod,
           delivery_type: deliveryMethod === 'doorstep' ? 'delivery' : 'pickup',
@@ -207,6 +224,11 @@ export default function CheckoutPage() {
               max_preorder_lead_hours: maxPreorderHours,
             }),
             ...(hasSaturdayOnly && { has_saturday_menu_items: true }),
+            ...(appliedCoupon && {
+              coupon_id: appliedCoupon.id,
+              coupon_code: appliedCoupon.code,
+              coupon_discount: couponDiscount,
+            }),
           }
         }])
         .select()
@@ -302,6 +324,7 @@ export default function CheckoutPage() {
             throw new Error(paymentResult.message || 'Payment initialization failed');
           }
 
+          saveAppliedCouponToSession(null);
           clearCart();
           window.location.href = paymentResult.url;
           return;
@@ -314,7 +337,17 @@ export default function CheckoutPage() {
         }
       }
 
-      // 5. Send Notifications (For COD or others)
+      // 5. Redeem coupon (non-Stripe — Stripe redeems on payment confirmation)
+      if (appliedCoupon) {
+        fetch('/api/coupons/redeem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ couponId: appliedCoupon.id, orderNumber }),
+        }).catch((err) => console.error('Coupon redeem error:', err));
+        saveAppliedCouponToSession(null);
+      }
+
+      // 6. Send Notifications (For COD or others)
       fetch('/api/notifications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -324,7 +357,7 @@ export default function CheckoutPage() {
         })
       }).catch(err => console.error('Notification trigger error:', err));
 
-      // 6. Clear Cart & Redirect (For COD)
+      // 7. Clear Cart & Redirect (For COD)
       clearCart();
       router.push(`/order-success?order=${orderNumber}`);
 
@@ -646,10 +679,12 @@ export default function CheckoutPage() {
             <OrderSummary
               items={cart}
               subtotal={subtotal}
-              shipping={deliveryFee}
+              shipping={effectiveShipping}
               tax={tax}
               total={total}
               preorderNotice={preorderNotice}
+              couponCode={appliedCoupon?.code}
+              discount={couponDiscount}
             />
           </div>
         </div>

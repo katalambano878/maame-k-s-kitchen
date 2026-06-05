@@ -1,6 +1,34 @@
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendOrderConfirmation } from '@/lib/notifications';
 
+async function redeemCouponFromOrderMetadata(orderNumber: string) {
+  const { data: order } = await supabaseAdmin
+    .from('orders')
+    .select('metadata')
+    .eq('order_number', orderNumber)
+    .maybeSingle();
+
+  const couponId = (order?.metadata as { coupon_id?: string } | null)?.coupon_id;
+  if (!couponId) return;
+
+  const { data: coupon } = await supabaseAdmin
+    .from('coupons')
+    .select('id, usage_count, usage_limit')
+    .eq('id', couponId)
+    .maybeSingle();
+
+  if (!coupon) return;
+  if (coupon.usage_limit != null && (coupon.usage_count ?? 0) >= coupon.usage_limit) return;
+
+  await supabaseAdmin
+    .from('coupons')
+    .update({
+      usage_count: (coupon.usage_count ?? 0) + 1,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', couponId);
+}
+
 export async function fulfillOrderPayment(orderNumber: string, paymentRef: string) {
   const { data: orderJson, error: updateError } = await supabaseAdmin.rpc('mark_order_paid', {
     order_ref: orderNumber,
@@ -9,6 +37,13 @@ export async function fulfillOrderPayment(orderNumber: string, paymentRef: strin
 
   if (updateError) {
     throw new Error(updateError.message || 'Failed to mark order as paid');
+  }
+
+  try {
+    await redeemCouponFromOrderMetadata(orderNumber);
+  } catch (couponError: unknown) {
+    const message = couponError instanceof Error ? couponError.message : String(couponError);
+    console.error('[Payment] Coupon redeem failed:', message);
   }
 
   if (orderJson?.email) {

@@ -4,7 +4,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions',
-  description: 'Answers to common questions about ordering, delivery, pickup, payments, and more at Maame K’s Kitchen — authentic Ghanaian cuisine in Calgary, Alberta.',
+  description: 'Answers to common questions about ordering, delivery, pickup, payments, and more at Maame K’s Kitchen — authentic Ghanaian cuisine in Cornerstone, NE Calgary.',
   keywords: [
     'FAQ Maame K’s Kitchen',
     'Ghanaian restaurant FAQ Calgary',
@@ -56,7 +56,7 @@ const faqSchema = {
       name: 'What are your delivery times?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Calgary orders are typically delivered same-day or next day. Pickup is available at no charge from our Cornerstone, Calgary, Alberta location.',
+        text: 'Calgary orders are typically delivered same-day or next day. Pickup is available at no charge from Cornerstone, NE Calgary.',
       },
     },
     {
@@ -96,7 +96,7 @@ const faqSchema = {
       name: 'How do I contact Maame K’s Kitchen?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'You can reach us by phone at (587) 582-2421, follow us on Instagram @maame.k_kitchen or TikTok @maamekskitchenyyc, or visit us at Cornerstone, Calgary, Alberta. You can also use the contact form on our website.',
+        text: 'You can reach us by phone at (587) 582-2421, follow us on Instagram @maame.k_kitchen or TikTok @maamekskitchenyyc, or visit us at Cornerstone, NE Calgary. You can also use the contact form on our website.',
       },
     },
   ],

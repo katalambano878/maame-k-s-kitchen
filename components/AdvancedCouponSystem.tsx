@@ -1,91 +1,65 @@
 'use client';
 
-import { useState } from 'react';
-
-interface Coupon {
-  code: string;
-  discount: number;
-  type: 'percentage' | 'fixed';
-  minPurchase?: number;
-  maxDiscount?: number;
-  description: string;
-}
+import { useEffect, useState } from 'react';
+import {
+  AppliedCoupon,
+  calculateCouponDiscount,
+  fetchActiveCoupons,
+  toCartCoupon,
+  validateCouponCode,
+  type CartCoupon,
+} from '@/lib/coupons';
 
 interface AdvancedCouponSystemProps {
   subtotal: number;
-  onApply: (coupon: Coupon) => void;
+  deliveryFee?: number;
+  onApply: (coupon: CartCoupon) => void;
   onRemove: () => void;
-  appliedCoupon: Coupon | null;
+  appliedCoupon: CartCoupon | null;
 }
 
-export default function AdvancedCouponSystem({ 
-  subtotal, 
-  onApply, 
+export default function AdvancedCouponSystem({
+  subtotal,
+  deliveryFee = 0,
+  onApply,
   onRemove,
-  appliedCoupon 
+  appliedCoupon,
 }: AdvancedCouponSystemProps) {
   const [couponCode, setCouponCode] = useState('');
   const [error, setError] = useState('');
   const [showAvailable, setShowAvailable] = useState(false);
+  const [availableCoupons, setAvailableCoupons] = useState<AppliedCoupon[]>([]);
+  const [loadingList, setLoadingList] = useState(false);
+  const [applying, setApplying] = useState(false);
 
-  const availableCoupons: Coupon[] = [
-    { 
-      code: 'WELCOME10', 
-      discount: 10, 
-      type: 'percentage',
-      minPurchase: 100,
-      description: '10% off on orders over $100'
-    },
-    { 
-      code: 'SAVE20', 
-      discount: 20, 
-      type: 'percentage',
-      minPurchase: 200,
-      maxDiscount: 50,
-      description: '20% off (max $50) on orders over $200'
-    },
-    { 
-      code: 'FREE50', 
-      discount: 50, 
-      type: 'fixed',
-      minPurchase: 500,
-      description: '$50 off on orders over $500'
-    },
-    { 
-      code: 'NEWCUSTOMER', 
-      discount: 15, 
-      type: 'percentage',
-      maxDiscount: 30,
-      description: '15% off (max $30) for new customers'
-    }
-  ];
+  useEffect(() => {
+    setLoadingList(true);
+    fetchActiveCoupons()
+      .then(setAvailableCoupons)
+      .finally(() => setLoadingList(false));
+  }, []);
 
-  const handleApply = () => {
+  const tryApply = async (code: string) => {
+    setApplying(true);
     setError('');
-    const coupon = availableCoupons.find(c => c.code.toLowerCase() === couponCode.toLowerCase());
-    
-    if (!coupon) {
-      setError('Invalid coupon code');
+    const { coupon, error: err } = await validateCouponCode(code, subtotal);
+    setApplying(false);
+    if (err || !coupon) {
+      setError(err || 'Invalid coupon');
       return;
     }
-
-    if (coupon.minPurchase && subtotal < coupon.minPurchase) {
-      setError(`Minimum purchase of $${coupon.minPurchase} required`);
-      return;
-    }
-
-    onApply(coupon);
+    onApply(toCartCoupon(coupon));
     setCouponCode('');
     setShowAvailable(false);
   };
 
-  const handleQuickApply = (coupon: Coupon) => {
-    if (coupon.minPurchase && subtotal < coupon.minPurchase) {
-      setError(`Add $${(coupon.minPurchase - subtotal).toFixed(2)} more to use this coupon`);
+  const handleQuickApply = (coupon: AppliedCoupon) => {
+    if (coupon.minPurchase > 0 && subtotal < coupon.minPurchase) {
+      setError(`Add CA$${(coupon.minPurchase - subtotal).toFixed(2)} more to use this coupon`);
       return;
     }
     setError('');
-    onApply(coupon);
+    onApply(toCartCoupon(coupon));
     setShowAvailable(false);
   };
 
@@ -94,9 +68,7 @@ export default function AdvancedCouponSystem({
       {!appliedCoupon ? (
         <>
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-2">
-              Have a coupon code?
-            </label>
+            <label className="block text-sm font-semibold text-gray-900 mb-2">Have a coupon code?</label>
             <div className="flex space-x-2">
               <input
                 type="text"
@@ -109,10 +81,12 @@ export default function AdvancedCouponSystem({
                 className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8952A] focus:border-[#C8952A] text-sm"
               />
               <button
-                onClick={handleApply}
-                className="bg-[#111111] hover:bg-[#111111] text-white px-6 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap"
+                type="button"
+                onClick={() => tryApply(couponCode)}
+                disabled={applying || !couponCode.trim()}
+                className="bg-[#111111] hover:bg-black text-white px-6 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap disabled:opacity-50"
               >
-                Apply
+                {applying ? '...' : 'Apply'}
               </button>
             </div>
             {error && (
@@ -124,6 +98,7 @@ export default function AdvancedCouponSystem({
           </div>
 
           <button
+            type="button"
             onClick={() => setShowAvailable(!showAvailable)}
             className="text-sm text-[#C8952A] hover:text-[#7a5418] font-medium flex items-center whitespace-nowrap"
           >
@@ -133,43 +108,50 @@ export default function AdvancedCouponSystem({
 
           {showAvailable && (
             <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-              {availableCoupons.map((coupon) => {
-                const isEligible = !coupon.minPurchase || subtotal >= coupon.minPurchase;
-                const needed = coupon.minPurchase ? coupon.minPurchase - subtotal : 0;
+              {loadingList ? (
+                <p className="text-sm text-gray-500 text-center py-2">Loading coupons...</p>
+              ) : availableCoupons.length === 0 ? (
+                <p className="text-sm text-gray-500 text-center py-2">No active coupons right now.</p>
+              ) : (
+                availableCoupons.map((coupon) => {
+                  const isEligible = !coupon.minPurchase || subtotal >= coupon.minPurchase;
+                  const needed = coupon.minPurchase ? coupon.minPurchase - subtotal : 0;
 
-                return (
-                  <div
-                    key={coupon.code}
-                    className={`bg-white rounded-lg p-4 border-2 transition-all ${
-                      isEligible
-                        ? 'border-[#e8c87a] hover:border-[#C8952A]/50'
-                        : 'border-gray-200 opacity-60'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <span className="bg-[#fdf9ec] text-[#a07020] px-3 py-1 rounded-lg font-bold text-sm">
-                          {coupon.code}
-                        </span>
-                        {!isEligible && (
-                          <span className="text-xs text-gray-500">
-                            Add ${needed.toFixed(2)} more
+                  return (
+                    <div
+                      key={coupon.code}
+                      className={`bg-white rounded-lg p-4 border-2 transition-all ${
+                        isEligible
+                          ? 'border-[#e8c87a] hover:border-[#C8952A]/50'
+                          : 'border-gray-200 opacity-60'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                          <span className="bg-[#fdf9ec] text-[#a07020] px-3 py-1 rounded-lg font-bold text-sm">
+                            {coupon.code}
                           </span>
+                          {!isEligible && (
+                            <span className="text-xs text-gray-500">
+                              Add CA${needed.toFixed(2)} more
+                            </span>
+                          )}
+                        </div>
+                        {isEligible && (
+                          <button
+                            type="button"
+                            onClick={() => handleQuickApply(coupon)}
+                            className="text-[#C8952A] hover:text-[#7a5418] font-semibold text-sm whitespace-nowrap"
+                          >
+                            Apply
+                          </button>
                         )}
                       </div>
-                      {isEligible && (
-                        <button
-                          onClick={() => handleQuickApply(coupon)}
-                          className="text-[#C8952A] hover:text-[#7a5418] font-semibold text-sm whitespace-nowrap"
-                        >
-                          Apply
-                        </button>
-                      )}
+                      <p className="text-sm text-gray-600">{coupon.description}</p>
                     </div>
-                    <p className="text-sm text-gray-600">{coupon.description}</p>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           )}
         </>
@@ -182,8 +164,13 @@ export default function AdvancedCouponSystem({
                 <span className="font-bold text-[#a07020]">{appliedCoupon.code}</span>
               </div>
               <p className="text-sm text-[#C8952A]">{appliedCoupon.description}</p>
+              <p className="text-xs text-[#7a5418] mt-1">
+                Saves CA$
+                {calculateCouponDiscount(subtotal, appliedCoupon, deliveryFee).toFixed(2)}
+              </p>
             </div>
             <button
+              type="button"
               onClick={onRemove}
               className="w-8 h-8 flex items-center justify-center text-[#C8952A] hover:text-[#7a5418] transition-colors"
             >

@@ -4,7 +4,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://maamekskitchen.ca';
 
 export const metadata: Metadata = {
   title: 'Blog',
-  description: "Recipes, food stories, and a taste of Ghanaian culture — straight from the Maame K's Kitchen team in Calgary, Alberta.",
+  description: "Recipes, food stories, and a taste of Ghanaian culture — straight from the Maame K's Kitchen team in Cornerstone, NE Calgary.",
   keywords: ['Ghanaian recipes', 'Ghanaian food blog', 'African food Calgary', 'Ghanaian culture food', 'banku recipe', 'jollof rice recipe'],
   alternates: { canonical: `${siteUrl}/blog` },
   openGraph: {

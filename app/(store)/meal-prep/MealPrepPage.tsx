@@ -93,6 +93,7 @@ export default function MealPrepPage() {
       <PageHero
         title="Weekly Meal Prep"
         subtitle="Authentic Ghanaian meals, prepped fresh and delivered every Saturday in Calgary."
+        backgroundImage="/meal_prep_hero.jpeg"
         badge="Subscribe & Save Time"
       />
 

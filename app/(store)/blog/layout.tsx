@@ -4,7 +4,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 
 export const metadata: Metadata = {
   title: 'Blog',
-  description: 'Ghanaian food stories, recipes, and culinary inspiration from Maame K’s Kitchen. Stay updated with our latest dishes from Calgary, Alberta.',
+  description: 'Ghanaian food stories, recipes, and culinary inspiration from Maame K’s Kitchen. Stay updated with our latest dishes from Cornerstone, NE Calgary.',
   keywords: [
     'Ghanaian food blog',
     'African food blog Calgary',

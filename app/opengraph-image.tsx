@@ -43,7 +43,7 @@ export default function Image() {
 
           {/* Eyebrow */}
           <div style={{ color: '#C8952A', fontSize: 13, fontWeight: 700, letterSpacing: '0.45em', textTransform: 'uppercase', marginBottom: 28, display: 'flex' }}>
-            Cornerstone · Calgary · Alberta · Canada
+            Cornerstone, NE Calgary
           </div>
 
           {/* MK Monogram */}

@@ -1,6 +1,6 @@
 # Customization Checklist — Maame K’s Kitchen
 
-This codebase has been populated with the brand identity for **Maame K’s Kitchen**, an authentic Ghanaian restaurant in Cornerstone, Calgary, Alberta. Use this checklist to finish any remaining setup before going live.
+This codebase has been populated with the brand identity for **Maame K’s Kitchen**, an authentic Ghanaian restaurant in Cornerstone, NE Calgary. Use this checklist to finish any remaining setup before going live.
 
 > Items marked **🟢 Applied** have already been wired in. Items marked **🟡 Confirm** were filled with reasonable defaults that you should verify and update if needed. Items marked **🔴 Action required** still need manual work from you.
 
@@ -17,7 +17,7 @@ This codebase has been populated with the brand identity for **Maame K’s Kitch
 ## 2. Contact details
 
 - 🟢 Phone: **(587) 582-2421** (E.164: `+15875822421`)
-- 🟢 Address: **Cornerstone, Calgary, Alberta, Canada** (or `Cornerstone, NE Calgary, Alberta`)
+- 🟢 Address: **Cornerstone, NE Calgary**
 - 🟡 Email: **`hello@maamekskitchen.ca`** — *Confirm this is your real address. If different, search/replace globally.*
 
 ## 3. Domain

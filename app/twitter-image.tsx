@@ -39,7 +39,7 @@ export default function Image() {
           </div>
           <div style={{ width: 72, height: 2, background: '#C8952A', marginBottom: 18, display: 'flex' }} />
           <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 18, letterSpacing: '0.22em', textTransform: 'uppercase', display: 'flex' }}>
-            Calgary, Alberta · Canada
+            Cornerstone, NE Calgary
           </div>
         </div>
       </div>

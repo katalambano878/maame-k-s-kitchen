@@ -94,7 +94,7 @@ export default function Footer() {
               </Link>
 
               <p className="text-white/45 text-[12px] leading-relaxed font-light max-w-[240px]">
-                Authentic Ghanaian flavours, made fresh in Cornerstone, Calgary, Alberta.
+                Authentic Ghanaian flavours, made fresh in Cornerstone, NE Calgary.
               </p>
 
               {socials.length > 0 && (
@@ -117,7 +117,7 @@ export default function Footer() {
               <div className="space-y-1">
                 <p className="text-[9px] font-extrabold uppercase tracking-[0.3em] text-white/30">Hours</p>
                 <p className="text-white/50 text-[12px] font-light">Mon &ndash; Sun &nbsp; 10:00 AM &ndash; 9:00 PM MT</p>
-                <p className="text-white/35 text-[11px] font-light">Cornerstone, NE Calgary, Alberta</p>
+                <p className="text-white/35 text-[11px] font-light">Cornerstone, NE Calgary</p>
                 {contactPhone && (
                   <a href={`tel:${contactPhone}`} className="block text-white/45 hover:text-white text-[12px] font-light transition-colors duration-300">
                     {contactPhone}

@@ -2,7 +2,14 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {
+  calculateCouponDiscount,
+  loadAppliedCouponFromSession,
+  saveAppliedCouponToSession,
+  toCartCoupon,
+  type CartCoupon,
+} from '@/lib/coupons';
 import CartCountdown from '@/components/CartCountdown';
 import AdvancedCouponSystem from '@/components/AdvancedCouponSystem';
 import { useCart } from '@/context/CartContext';
@@ -12,7 +19,12 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 export default function CartPage() {
   usePageTitle('Your Order');
   const { cart: cartItems, removeFromCart, updateQuantity, subtotal, addToCart } = useCart();
-  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<CartCoupon | null>(null);
+
+  useEffect(() => {
+    const saved = loadAppliedCouponFromSession();
+    if (saved) setAppliedCoupon(toCartCoupon(saved));
+  }, []);
   const [savedItems, setSavedItems] = useState<any[]>([]);
 
   // Function to move item to saved for later (local state only for now)
@@ -33,29 +45,35 @@ export default function CartPage() {
     }
   };
 
-  const applyCoupon = (coupon: any) => {
+  const applyCoupon = (coupon: CartCoupon) => {
     setAppliedCoupon(coupon);
+    saveAppliedCouponToSession({
+      id: coupon.id,
+      code: coupon.code,
+      type: coupon.isFreeShipping ? 'free_shipping' : coupon.type === 'percentage' ? 'percentage' : 'fixed_amount',
+      discount: coupon.discount,
+      maxDiscount: coupon.maxDiscount,
+      minPurchase: coupon.minPurchase,
+      description: coupon.description,
+    });
   };
 
   const removeCoupon = () => {
     setAppliedCoupon(null);
+    saveAppliedCouponToSession(null);
   };
 
   // Savings calculation is tricky without originalPrice in Context.
   // Assuming 0 for now unless we update Context.
   const savings = 0;
 
-  let couponDiscount = 0;
-  if (appliedCoupon) {
-    if (appliedCoupon.type === 'percentage') {
-      couponDiscount = subtotal * (appliedCoupon.discount / 100);
-    } else {
-      couponDiscount = appliedCoupon.discount;
-    }
-  }
-
   const deliveryFee: number = 5;
-  const total = subtotal - couponDiscount + deliveryFee;
+  const couponDiscount = appliedCoupon
+    ? calculateCouponDiscount(subtotal, appliedCoupon, deliveryFee)
+    : 0;
+  const effectiveDelivery =
+    appliedCoupon?.isFreeShipping ? 0 : deliveryFee;
+  const total = subtotal - couponDiscount + effectiveDelivery;
 
   return (
     <div className="min-h-screen bg-gray-50">

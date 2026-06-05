@@ -108,7 +108,7 @@ export default function Home() {
         {/* ── Slide content — unique text per slide ── */}
         {[
           {
-            eyebrow: 'Cornerstone, Calgary — Est. 2025',
+            eyebrow: 'Cornerstone, NE Calgary — Est. 2025',
             headline: ['Taste of ', 'Ghana,', '\nin Calgary'],
             sub: 'Banku, jollof, waakye, fufu, omotuo and more — cooked fresh daily and delivered to your door.',
           },

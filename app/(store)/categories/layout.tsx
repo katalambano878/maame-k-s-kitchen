@@ -4,7 +4,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 
 export const metadata: Metadata = {
   title: 'Browse Menu',
-  description: 'Browse our menu at Maame K’s Kitchen — banku, jollof, waakye, fufu, soups, stews and traditional sides. Authentic Ghanaian cuisine in Calgary, Alberta.',
+  description: 'Browse our menu at Maame K’s Kitchen — banku, jollof, waakye, fufu, soups, stews and traditional sides. Authentic Ghanaian cuisine in Cornerstone, NE Calgary.',
   keywords: [
     'Ghanaian food menu Calgary',
     'rice dishes Calgary',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Browse Menu | Maame K’s Kitchen',
-    description: 'Browse our menu — banku, jollof, waakye, fufu, soups, stews and traditional sides in Calgary, Alberta.',
+    description: 'Browse our menu — banku, jollof, waakye, fufu, soups, stews and traditional sides in Cornerstone, NE Calgary.',
     url: `${siteUrl}/categories`,
     type: 'website',
   },

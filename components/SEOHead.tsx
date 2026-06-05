@@ -17,7 +17,7 @@ interface SEOProps {
 
 export function generateMetadata({
   title = "Maame K’s Kitchen — Authentic Ghanaian Cuisine in Calgary",
-  description = 'Authentic Ghanaian cuisine from Maame K’s Kitchen. Order banku, jollof, waakye, fufu, and more — delivered fresh from Cornerstone, Calgary, Alberta.',
+  description = 'Authentic Ghanaian cuisine from Maame K’s Kitchen. Order banku, jollof, waakye, fufu, and more — delivered fresh from Cornerstone, NE Calgary.',
   keywords = [],
   ogImage,
   ogType = 'website',

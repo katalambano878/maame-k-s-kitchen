@@ -72,7 +72,7 @@ const defaultSettings: SiteSettings = {
     site_logo: '/logo.png',
     contact_email: 'hello@maamekskitchen.ca',
     contact_phone: '(587) 582-2421',
-    contact_address: 'Cornerstone, NE Calgary, Alberta, Canada',
+    contact_address: 'Cornerstone, NE Calgary',
     social_facebook: '',
     social_instagram: 'https://www.instagram.com/maame.k_kitchen/',
     social_twitter: '',

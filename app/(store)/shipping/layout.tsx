@@ -4,7 +4,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
 
 export const metadata: Metadata = {
   title: 'Delivery & Pickup',
-  description: "Maame K’s Kitchen delivery and pickup information — same-day delivery within Calgary, scheduled delivery to neighbouring areas, and free pickup from Cornerstone, NE Calgary, Alberta.",
+  description: "Maame K’s Kitchen delivery and pickup information — same-day delivery within Calgary, scheduled delivery to neighbouring areas, and free pickup from Cornerstone, NE Calgary.",
   keywords: [
     "Maame K’s Kitchen delivery",
     'Ghanaian food delivery Calgary',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Delivery & Pickup | Maame K’s Kitchen',
-    description: 'Same-day delivery within Calgary, scheduled delivery to neighbouring areas, and free pickup from Cornerstone, NE Calgary, Alberta.',
+    description: 'Same-day delivery within Calgary, scheduled delivery to neighbouring areas, and free pickup from Cornerstone, NE Calgary.',
     url: `${siteUrl}/shipping`,
     type: 'website',
   },

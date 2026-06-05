@@ -41,7 +41,7 @@ export async function generateMetadata({
   const rawDescription = product.description || '';
   const description = rawDescription
     ? rawDescription.replace(/<[^>]*>/g, '').slice(0, 155)
-    : `Order ${title} from Maame K\u2019s Kitchen — authentic Ghanaian cuisine in Cornerstone, Calgary, Alberta.`;
+    : `Order ${title} from Maame K\u2019s Kitchen — authentic Ghanaian cuisine in Cornerstone, NE Calgary.`;
 
   const images = product.product_images as { url: string }[] | null;
   const firstImage = images?.[0]?.url;
