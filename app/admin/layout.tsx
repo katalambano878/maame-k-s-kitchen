@@ -168,6 +168,11 @@ export default function AdminLayout({
       path: '/admin/products'
     },
     {
+      title: 'Saturday Menu',
+      icon: 'ri-calendar-2-line',
+      path: '/admin/saturday-menu'
+    },
+    {
       title: 'Categories',
       icon: 'ri-folder-line',
       path: '/admin/categories'

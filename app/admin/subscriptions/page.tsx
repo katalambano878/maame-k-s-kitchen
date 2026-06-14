@@ -70,6 +70,12 @@ export default function AdminSubscriptionsPage() {
   const [editingWeekId, setEditingWeekId] = useState<string | null>(null);
   const [savingWeek, setSavingWeek] = useState(false);
 
+  const [showAddDish, setShowAddDish] = useState(false);
+  const [newDish, setNewDish] = useState({ name: '', price: '', description: '' });
+  const [dishImageFile, setDishImageFile] = useState<File | null>(null);
+  const [addingDish, setAddingDish] = useState(false);
+  const [dishSearch, setDishSearch] = useState('');
+
   const [showPlanModal, setShowPlanModal] = useState(false);
   const [editingPlanId, setEditingPlanId] = useState<string | null>(null);
   const [planForm, setPlanForm] = useState(emptyPlanForm);
@@ -290,6 +296,75 @@ export default function AdminSubscriptionsPage() {
         ? f.productIds.filter((p) => p !== id)
         : [...f.productIds, id],
     }));
+  };
+
+  const generateSku = () =>
+    `MKK-${Date.now().toString(36).toUpperCase().slice(-4)}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
+
+  const addDish = async () => {
+    const name = newDish.name.trim();
+    if (!name) return alert('Dish name is required');
+    const price = parseFloat(newDish.price);
+    if (isNaN(price) || price < 0) return alert('Enter a valid price');
+
+    setAddingDish(true);
+    try {
+      let imageUrl = '';
+      if (dishImageFile) {
+        const ext = dishImageFile.name.split('.').pop();
+        const path = `dishes/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const { error: upErr } = await supabase.storage.from('products').upload(path, dishImageFile);
+        if (!upErr) {
+          imageUrl = supabase.storage.from('products').getPublicUrl(path).data.publicUrl;
+        }
+      }
+
+      const baseSlug = slugify(name);
+      let productId: string | null = null;
+      let attempt = 0;
+      let lastError: any = null;
+      while (attempt < 5) {
+        const slug = attempt === 0 ? baseSlug : `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
+        const { data, error } = await supabase
+          .from('products')
+          .insert({
+            name,
+            price,
+            slug,
+            status: 'active',
+            sku: generateSku(),
+            quantity: 0,
+            description: newDish.description.trim() || null,
+          })
+          .select('id')
+          .single();
+        if (!error && data) {
+          productId = data.id;
+          break;
+        }
+        if (error?.code === '23505') {
+          attempt++;
+          lastError = error;
+          continue;
+        }
+        throw error;
+      }
+      if (!productId) throw lastError || new Error('Could not create dish');
+
+      if (imageUrl) {
+        await supabase.from('product_images').insert({ product_id: productId, url: imageUrl, position: 0 });
+      }
+
+      await fetchAll();
+      setWeekForm((f) => ({ ...f, productIds: [...f.productIds, productId as string] }));
+      setNewDish({ name: '', price: '', description: '' });
+      setDishImageFile(null);
+      setShowAddDish(false);
+    } catch (e: any) {
+      alert(e.message || 'Failed to add dish');
+    } finally {
+      setAddingDish(false);
+    }
   };
 
   useEffect(() => {
@@ -608,18 +683,108 @@ export default function AdminSubscriptionsPage() {
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-gray-700 block mb-2">Dishes this week</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Dishes this week
+                  {weekForm.productIds.length > 0 && (
+                    <span className="ml-2 text-xs font-normal text-[#C8952A]">{weekForm.productIds.length} selected</span>
+                  )}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowAddDish((s) => !s)}
+                  className="text-sm text-[#C8952A] font-semibold hover:underline"
+                >
+                  {showAddDish ? 'Close' : '+ Add a new dish'}
+                </button>
+              </div>
+
+              {showAddDish && (
+                <div className="mb-3 p-4 rounded-xl border border-[#e8c87a] bg-[#fdf9ec] space-y-3">
+                  <p className="text-xs text-gray-600">
+                    Add a meal on the spot. It becomes a dish you can include this week and in future weeks.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="col-span-2">
+                      <label className="text-xs font-semibold text-gray-700 block mb-1">Dish name *</label>
+                      <input
+                        value={newDish.name}
+                        onChange={(e) => setNewDish((d) => ({ ...d, name: e.target.value }))}
+                        placeholder="e.g. Jollof Rice & Chicken"
+                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-700 block mb-1">Price (CA$) *</label>
+                      <input
+                        type="number"
+                        min={0}
+                        step={0.01}
+                        value={newDish.price}
+                        onChange={(e) => setNewDish((d) => ({ ...d, price: e.target.value }))}
+                        placeholder="0.00"
+                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-700 block mb-1">Photo (optional)</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setDishImageFile(e.target.files?.[0] || null)}
+                        className="w-full text-xs text-gray-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-[#111111] file:text-white file:text-xs file:cursor-pointer"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="text-xs font-semibold text-gray-700 block mb-1">Short description (optional)</label>
+                      <textarea
+                        value={newDish.description}
+                        onChange={(e) => setNewDish((d) => ({ ...d, description: e.target.value }))}
+                        rows={2}
+                        placeholder="A few words about this meal"
+                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addDish}
+                    disabled={addingDish}
+                    className="w-full py-2.5 rounded-lg bg-[#C8952A] text-white text-sm font-semibold disabled:opacity-50"
+                  >
+                    {addingDish ? 'Adding...' : 'Add dish & include this week'}
+                  </button>
+                </div>
+              )}
+
+              <div className="relative mb-2">
+                <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                <input
+                  type="text"
+                  value={dishSearch}
+                  onChange={(e) => setDishSearch(e.target.value)}
+                  placeholder="Search dishes..."
+                  className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm"
+                />
+              </div>
+
               <div className="max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-2 space-y-1">
-                {products.map((p) => (
-                  <label key={p.id} className="flex items-center gap-2 text-sm p-1.5 rounded hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={weekForm.productIds.includes(p.id)}
-                      onChange={() => toggleProduct(p.id)}
-                    />
-                    {p.name}
-                  </label>
-                ))}
+                {products.filter((p) => p.name.toLowerCase().includes(dishSearch.trim().toLowerCase())).length === 0 ? (
+                  <p className="text-sm text-gray-400 text-center py-3">No dishes match. Use &ldquo;Add a new dish&rdquo; above.</p>
+                ) : (
+                  products
+                    .filter((p) => p.name.toLowerCase().includes(dishSearch.trim().toLowerCase()))
+                    .map((p) => (
+                      <label key={p.id} className="flex items-center gap-2 text-sm p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={weekForm.productIds.includes(p.id)}
+                          onChange={() => toggleProduct(p.id)}
+                        />
+                        {p.name}
+                      </label>
+                    ))
+                )}
               </div>
             </div>
 

@@ -80,7 +80,11 @@ function ShopContent() {
 
             if (search) query = query.ilike('name', `%${search}%`);
 
-            if (selectedCategory !== 'all') {
+            if (selectedCategory === 'saturday-menu') {
+              // Saturday menu is driven by the dish's available_days, not category,
+              // so it lines up with the admin Saturday Menu page.
+              query = query.contains('available_days', ['saturday']);
+            } else if (selectedCategory !== 'all') {
               const categoryObj = categories.find((c: any) => c.slug === selectedCategory);
               if (categoryObj && categoryObj.id) {
                 const childIds = categories.filter((c: any) => c.parent_id === categoryObj.id).map((c: any) => c.id);

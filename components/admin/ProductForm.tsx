@@ -196,6 +196,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
         prep_time: prepTime ? parseInt(prepTime) : null,
         calories: calories ? parseInt(calories) : null,
         is_available_today: dishAvailability !== 'unavailable',
+        available_days: saturdayOnly ? ['saturday'] : [],
         allergens,
         ingredients: ingredientsArray,
         seo_title: seoTitle || null,

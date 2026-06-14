@@ -20,8 +20,13 @@ export function getAvailableDays(product: {
   available_days?: string[] | null;
   metadata?: { available_days?: string[] } | null;
 }): string[] {
-  const days = product.available_days ?? product.metadata?.available_days;
-  return Array.isArray(days) ? days.map((d) => d.toLowerCase()) : [];
+  // Prefer the top-level column when it has entries; otherwise fall back to the
+  // legacy metadata copy. This keeps older dishes (saved before the column
+  // existed) working alongside the Saturday Menu admin page.
+  const column = Array.isArray(product.available_days) ? product.available_days : [];
+  const meta = Array.isArray(product.metadata?.available_days) ? product.metadata!.available_days! : [];
+  const days = column.length > 0 ? column : meta;
+  return days.map((d) => d.toLowerCase());
 }
 
 export function isSaturdayOnly(product: {
