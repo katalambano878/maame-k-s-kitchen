@@ -92,7 +92,10 @@ export function defaultSelectionDeadline(deliveryDate: Date, noticeDays: number)
 }
 
 export function formatCalgaryDate(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
+  const raw = typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)
+    ? `${date}T12:00:00`
+    : date;
+  const d = typeof raw === 'string' ? new Date(raw) : raw;
   return d.toLocaleDateString('en-CA', {
     timeZone: CALGARY_TZ,
     ...options,
