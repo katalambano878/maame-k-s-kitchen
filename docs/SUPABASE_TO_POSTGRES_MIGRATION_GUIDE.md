@@ -114,6 +114,7 @@ Migrations live in `supabase/migrations/`:
 | `20260705000000_proteins.sql` | Protein add-ons |
 | `20260802000000_staging_db_hardening.sql` | contact/newsletter/payment_events/sms + RPCs |
 | `20260802130000_store_role_bypassrls.sql` | `ALTER ROLE store_maameks BYPASSRLS` (required) |
+| `20260912000000_meal_prep_one_time.sql` | `subscription_plans.one_time_price_cents` + `meal_prep_one_time_orders` |
 
 **Critical:** leftover Supabase RLS on `auth.users` / `profiles` returns **zero rows** to the store role unless `BYPASSRLS` is granted. App ACL lives in Next.js, not Postgres RLS.
 

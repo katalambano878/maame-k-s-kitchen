@@ -17,6 +17,7 @@ type Plan = {
   description: string | null;
   meals_per_week: number;
   price_cents: number;
+  one_time_price_cents: number | null;
   cancel_notice_days: number;
   delivery_day: string;
   status: string;
@@ -31,6 +32,7 @@ const emptyPlanForm = {
   description: '',
   meals_per_week: 5,
   price_dollars: '',
+  one_time_dollars: '',
   cancel_notice_days: 3,
   delivery_day: 'saturday',
   status: 'active',
@@ -134,6 +136,7 @@ export default function AdminSubscriptionsPage() {
       description: plan.description || '',
       meals_per_week: plan.meals_per_week,
       price_dollars: (plan.price_cents / 100).toFixed(2),
+      one_time_dollars: plan.one_time_price_cents ? (plan.one_time_price_cents / 100).toFixed(2) : '',
       cancel_notice_days: plan.cancel_notice_days,
       delivery_day: plan.delivery_day || 'saturday',
       status: plan.status,
@@ -146,6 +149,13 @@ export default function AdminSubscriptionsPage() {
     if (!planForm.name.trim()) return alert('Plan name is required');
     const priceCents = Math.round(parseFloat(planForm.price_dollars) * 100);
     if (!priceCents || priceCents <= 0) return alert('Enter a valid weekly price');
+    const oneTimeRaw = planForm.one_time_dollars.trim();
+    const oneTimeCents = oneTimeRaw
+      ? Math.round(parseFloat(oneTimeRaw) * 100)
+      : null;
+    if (oneTimeRaw && (!oneTimeCents || oneTimeCents <= 0)) {
+      return alert('Enter a valid one-time price, or leave it blank to match the weekly price');
+    }
 
     const slug = planForm.slug.trim() || slugify(planForm.name);
     const existing = plans.find((p) => p.slug === slug && p.id !== editingPlanId);
@@ -162,6 +172,7 @@ export default function AdminSubscriptionsPage() {
         description: planForm.description.trim() || null,
         meals_per_week: planForm.meals_per_week,
         price_cents: priceCents,
+        one_time_price_cents: oneTimeCents,
         cancel_notice_days: planForm.cancel_notice_days,
         delivery_day: planForm.delivery_day,
         status: planForm.status,
@@ -244,6 +255,13 @@ export default function AdminSubscriptionsPage() {
 
   const saveWeek = async () => {
     if (!weekForm.delivery_date) return alert('Delivery date required');
+    let status = weekForm.status;
+    if (weekForm.productIds.length && status === 'draft') {
+      const publish = window.confirm(
+        'You attached dishes but this week is still a draft. Customers cannot see it on /meal-prep.\n\nOK = Publish now\nCancel = keep as draft'
+      );
+      if (publish) status = 'published';
+    }
     setSavingWeek(true);
     try {
       const delivery = new Date(weekForm.delivery_date + 'T12:00:00');
@@ -255,7 +273,7 @@ export default function AdminSubscriptionsPage() {
         week_start: toDateString(weekStart),
         delivery_date: weekForm.delivery_date,
         selection_deadline: deadline.toISOString(),
-        status: weekForm.status,
+        status,
         notes: weekForm.notes || null,
         updated_at: new Date().toISOString(),
       };
@@ -431,6 +449,7 @@ export default function AdminSubscriptionsPage() {
                     )}
                     <p className="text-sm text-gray-700 mt-2 font-medium">
                       {plan.meals_per_week} meals/week · CA${(plan.price_cents / 100).toFixed(2)}/week
+                      {plan.one_time_price_cents ? ` · one-time CA$${(plan.one_time_price_cents / 100).toFixed(2)}` : ''}
                     </p>
                     <p className="text-xs text-gray-400 mt-1">
                       Cancel notice: {plan.cancel_notice_days} days before {plan.delivery_day} delivery · Stripe:{' '}
@@ -534,6 +553,20 @@ export default function AdminSubscriptionsPage() {
                       className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-semibold text-gray-700 block mb-1">One-time box price (CAD)</label>
+                  <input
+                    type="number"
+                    min={0.01}
+                    step={0.01}
+                    value={planForm.one_time_dollars}
+                    onChange={(e) => setPlanForm((f) => ({ ...f, one_time_dollars: e.target.value }))}
+                    placeholder="Same as weekly if blank"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">Optional. Used for “Buy this week” if different from the subscribe price.</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -657,7 +690,17 @@ export default function AdminSubscriptionsPage() {
           </div>
 
           <div className="p-6 rounded-2xl border border-gray-200 bg-white space-y-5">
-            <h2 className="font-bold text-gray-900">{editingWeekId ? 'Edit Week' : 'Create Weekly Menu'}</h2>
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="font-bold text-gray-900">{editingWeekId ? 'Edit Week' : 'Create Weekly Menu'}</h2>
+              <a
+                href="/meal-prep"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-[#C8952A] font-semibold hover:underline shrink-0"
+              >
+                Customer preview
+              </a>
+            </div>
 
             <div>
               <label className="text-sm font-semibold text-gray-700 block mb-1">Saturday delivery date</label>

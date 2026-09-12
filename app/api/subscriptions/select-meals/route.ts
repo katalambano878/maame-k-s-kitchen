@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/auth';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { normalizeJoinedPlan } from '@/lib/stripe-subscription-helpers';
+import { getPaidOneTimeOrderForWeek } from '@/lib/fulfill-meal-prep-one-time';
 
 export async function POST(req: Request) {
   try {
@@ -18,21 +19,6 @@ export async function POST(req: Request) {
 
     if (!weekId || !Array.isArray(selections)) {
       return NextResponse.json({ success: false, message: 'Invalid request' }, { status: 400 });
-    }
-
-    const { data: sub } = await supabaseAdmin
-      .from('meal_prep_subscriptions')
-      .select(`
-        id,
-        status,
-        subscription_plans ( meals_per_week )
-      `)
-      .eq('user_id', auth.user.id)
-      .in('status', ['active', 'trialing'])
-      .maybeSingle();
-
-    if (!sub) {
-      return NextResponse.json({ success: false, message: 'No active subscription' }, { status: 404 });
     }
 
     const { data: week } = await supabaseAdmin
@@ -53,8 +39,50 @@ export async function POST(req: Request) {
       );
     }
 
-    const plan = normalizeJoinedPlan<{ meals_per_week: number }>(sub.subscription_plans);
-    const mealsPerWeek = plan?.meals_per_week ?? 5;
+    const { data: sub } = await supabaseAdmin
+      .from('meal_prep_subscriptions')
+      .select(`
+        id,
+        status,
+        metadata,
+        subscription_plans ( meals_per_week )
+      `)
+      .eq('user_id', auth.user.id)
+      .in('status', ['active', 'trialing'])
+      .maybeSingle();
+
+    const oneTime = sub ? null : await getPaidOneTimeOrderForWeek(auth.user.id, weekId);
+
+    if (!sub && !oneTime) {
+      return NextResponse.json(
+        { success: false, message: 'Buy this week or subscribe to save your meal picks.' },
+        { status: 404 }
+      );
+    }
+
+    if (sub) {
+      const skipped = ((sub.metadata as { skipped_week_ids?: string[] } | null)?.skipped_week_ids) || [];
+      if (skipped.includes(weekId)) {
+        return NextResponse.json(
+          { success: false, message: 'This week is skipped on your subscription.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    let mealsPerWeek = 5;
+    if (sub) {
+      const plan = normalizeJoinedPlan<{ meals_per_week: number }>(sub.subscription_plans);
+      mealsPerWeek = plan?.meals_per_week ?? 5;
+    } else if (oneTime?.plan_id) {
+      const { data: plan } = await supabaseAdmin
+        .from('subscription_plans')
+        .select('meals_per_week')
+        .eq('id', oneTime.plan_id)
+        .maybeSingle();
+      mealsPerWeek = plan?.meals_per_week ?? 5;
+    }
+
     const totalQty = selections.reduce((sum, s) => sum + (s.quantity || 0), 0);
 
     if (totalQty === 0) {
@@ -73,7 +101,7 @@ export async function POST(req: Request) {
       .select('product_id')
       .eq('week_id', weekId);
 
-    const allowedIds = new Set((allowedItems || []).map((i) => i.product_id));
+    const allowedIds = new Set((allowedItems || []).map((i: { product_id: string }) => i.product_id));
 
     for (const sel of selections) {
       if (!allowedIds.has(sel.productId)) {
@@ -81,25 +109,54 @@ export async function POST(req: Request) {
       }
     }
 
-    await supabaseAdmin
-      .from('meal_prep_selections')
-      .delete()
-      .eq('subscription_id', sub.id)
-      .eq('week_id', weekId);
-
-    const rows = selections
+    const cleaned = selections
       .filter((s) => s.quantity > 0)
-      .map((s) => ({
+      .map((s) => ({ product_id: s.productId, quantity: s.quantity }));
+
+    if (sub) {
+      await supabaseAdmin
+        .from('meal_prep_selections')
+        .delete()
+        .eq('subscription_id', sub.id)
+        .eq('week_id', weekId);
+
+      const rows = cleaned.map((s) => ({
         subscription_id: sub.id,
         week_id: weekId,
-        product_id: s.productId,
+        product_id: s.product_id,
         quantity: s.quantity,
         status: 'pending',
       }));
 
-    if (rows.length) {
-      const { error } = await supabaseAdmin.from('meal_prep_selections').insert(rows);
+      if (rows.length) {
+        const { error } = await supabaseAdmin.from('meal_prep_selections').insert(rows);
+        if (error) throw error;
+      }
+    } else if (oneTime) {
+      const { error } = await supabaseAdmin
+        .from('meal_prep_one_time_orders')
+        .update({ selections: cleaned, updated_at: new Date().toISOString() })
+        .eq('id', oneTime.id);
       if (error) throw error;
+
+      const { data: order } = await supabaseAdmin
+        .from('orders')
+        .select('metadata')
+        .eq('id', oneTime.order_id)
+        .maybeSingle();
+
+      await supabaseAdmin
+        .from('orders')
+        .update({
+          metadata: {
+            ...((order?.metadata as Record<string, unknown>) || {}),
+            type: 'meal_prep_one_time',
+            week_id: weekId,
+            plan_id: oneTime.plan_id,
+            selections: cleaned,
+          },
+        })
+        .eq('id', oneTime.order_id);
     }
 
     return NextResponse.json({ success: true, message: 'Your meals for this week have been saved.' });

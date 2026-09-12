@@ -98,8 +98,10 @@ export async function upsertMealPrepSubscription(params: {
   currentPeriodEnd?: number | null;
   pendingCancelAt?: string | null;
   deliveryMethod?: string;
+  shippingAddress?: Record<string, unknown> | null;
+  metadata?: Record<string, unknown>;
 }) {
-  const row = {
+  const row: Record<string, unknown> = {
     user_id: params.userId,
     plan_id: params.planId,
     stripe_customer_id: params.stripeCustomerId,
@@ -116,6 +118,13 @@ export async function upsertMealPrepSubscription(params: {
     delivery_method: params.deliveryMethod || 'pickup',
     updated_at: new Date().toISOString(),
   };
+
+  if (params.shippingAddress) {
+    row.shipping_address = params.shippingAddress;
+  }
+  if (params.metadata) {
+    row.metadata = params.metadata;
+  }
 
   const { data: existing } = await supabaseAdmin
     .from('meal_prep_subscriptions')

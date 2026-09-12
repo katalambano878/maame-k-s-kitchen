@@ -38,6 +38,15 @@ export async function fulfillSubscriptionCheckout(session: Stripe.Checkout.Sessi
 
   const period = getSubscriptionPeriod(subscription);
 
+  let shippingAddress: Record<string, unknown> | null = null;
+  try {
+    shippingAddress = session.metadata?.shipping_address
+      ? JSON.parse(session.metadata.shipping_address)
+      : null;
+  } catch {
+    shippingAddress = null;
+  }
+
   await upsertMealPrepSubscription({
     userId,
     planId,
@@ -48,6 +57,10 @@ export async function fulfillSubscriptionCheckout(session: Stripe.Checkout.Sessi
     currentPeriodStart: period.currentPeriodStart,
     currentPeriodEnd: period.currentPeriodEnd,
     deliveryMethod: session.metadata?.delivery_method || 'pickup',
+    shippingAddress,
+    metadata: {
+      first_week_id: session.metadata?.week_id || null,
+    },
   });
 }
 
@@ -70,13 +83,15 @@ export async function syncSubscriptionFromStripe(subscription: Stripe.Subscripti
   }
 
   const period = getSubscriptionPeriod(subscription);
+  const paused = Boolean(subscription.pause_collection);
+  const mappedStatus = paused && subscription.status === 'active' ? 'paused' : subscription.status;
 
   await upsertMealPrepSubscription({
     userId,
     planId,
     stripeCustomerId: customerId || '',
     stripeSubscriptionId: subscription.id,
-    status: subscription.status,
+    status: mappedStatus,
     cancelAtPeriodEnd: subscription.cancel_at_period_end,
     currentPeriodStart: period.currentPeriodStart,
     currentPeriodEnd: period.currentPeriodEnd,
@@ -99,11 +114,31 @@ export async function handleSubscriptionInvoicePaid(invoice: Stripe.Invoice) {
 
   if (!sub) return;
 
+  const { data: localMeta } = await supabaseAdmin
+    .from('meal_prep_subscriptions')
+    .select('metadata')
+    .eq('id', sub.id)
+    .maybeSingle();
+
+  const skipped = ((localMeta?.metadata as { skipped_week_ids?: string[] } | null)?.skipped_week_ids) || [];
+
   const { data: pendingSelections } = await supabaseAdmin
     .from('meal_prep_selections')
     .select('id, week_id')
     .eq('subscription_id', sub.id)
     .eq('status', 'pending');
+
+  const { getSellableMealPrepWeek } = await import('@/lib/meal-prep-week');
+  const sellable = await getSellableMealPrepWeek();
+  const weekId = pendingSelections?.[0]?.week_id || sellable.week?.id || null;
+  if (weekId && skipped.includes(weekId)) {
+    await supabaseAdmin
+      .from('meal_prep_selections')
+      .update({ status: 'canceled', updated_at: new Date().toISOString() })
+      .eq('subscription_id', sub.id)
+      .eq('week_id', weekId);
+    return;
+  }
 
   if (pendingSelections?.length) {
     await supabaseAdmin

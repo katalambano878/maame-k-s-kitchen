@@ -14,6 +14,7 @@ export const JSONB_COLUMNS: Record<string, Set<string>> = {
   "coupons": new Set(["metadata"]),
   "customers": new Set(["default_address"]),
   "kitchen_events": new Set(["metadata"]),
+  "meal_prep_one_time_orders": new Set(["selections"]),
   "meal_prep_subscriptions": new Set(["metadata", "shipping_address"]),
   "newsletter_subscribers": new Set(["metadata"]),
   "notifications": new Set(["data"]),
@@ -41,6 +42,11 @@ export const FK_MAP: Record<string, FkEdge[]> = {
   ],
   "daily_menu": [
     { column: "product_id", foreignTable: "products", foreignColumn: "id" },
+  ],
+  "meal_prep_one_time_orders": [
+    { column: "order_id", foreignTable: "orders", foreignColumn: "id" },
+    { column: "plan_id", foreignTable: "subscription_plans", foreignColumn: "id" },
+    { column: "week_id", foreignTable: "meal_prep_weeks", foreignColumn: "id" },
   ],
   "meal_prep_selections": [
     { column: "product_id", foreignTable: "products", foreignColumn: "id" },
