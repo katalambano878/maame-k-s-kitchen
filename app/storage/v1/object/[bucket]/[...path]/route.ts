@@ -6,6 +6,7 @@ import { authorizeStorageWrite } from "@/lib/db/rest-acl";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const maxDuration = 120;
 
 /**
  * Supabase Storage upload:

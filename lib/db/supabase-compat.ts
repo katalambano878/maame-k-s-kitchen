@@ -666,38 +666,56 @@ class QueryBuilder implements PromiseLike<{ data: any; error: any; count: number
         const parentIds = Array.from(new Set(rows.map((r) => r.id).filter(Boolean)));
         const wantId = embedWantsId(embed.select);
         const wantFk = embed.select.star || embed.select.columns.includes(fkCol);
-        const innerCols = this.embedColumns(embed.select, fkCol);
+        const isCountOnly =
+          !embed.select.star &&
+          embed.select.embeds.length === 0 &&
+          embed.select.columns.length === 1 &&
+          embed.select.columns[0] === "count";
         let related: Row[] = [];
         if (parentIds.length) {
           const ph = parentIds.map((_, i) => `$${i + 1}`).join(",");
-          // Prefer stable gallery order only on tables that actually have `position`
-          // (product_variants(*) was incorrectly ORDER BY position → homepage empty).
-          const tablesWithPosition = new Set([
-            "product_images",
-            "review_images",
-            "navigation_items",
-          ]);
-          const orderBy =
-            tablesWithPosition.has(embedTable) &&
-            (embed.select.star || embed.select.columns.includes("position"))
-              ? ` ORDER BY ${ident("position")} ASC NULLS LAST`
-              : "";
-          const res = await pool.query(
-            `SELECT ${innerCols} FROM ${ident(embedTable)} WHERE ${ident(fkCol)} IN (${ph})${orderBy}`,
-            parentIds
-          );
-          related = res.rows;
+          if (isCountOnly) {
+            // PostgREST `related(count)` is an aggregate, not a column named count.
+            const res = await pool.query(
+              `SELECT ${ident(fkCol)}, count(*)::int AS count FROM ${ident(embedTable)} WHERE ${ident(fkCol)} IN (${ph}) GROUP BY ${ident(fkCol)}`,
+              parentIds
+            );
+            related = res.rows;
+          } else {
+            const innerCols = this.embedColumns(embed.select, fkCol);
+            // Prefer stable gallery order only on tables that actually have `position`
+            // (product_variants(*) was incorrectly ORDER BY position → homepage empty).
+            const tablesWithPosition = new Set([
+              "product_images",
+              "review_images",
+              "navigation_items",
+            ]);
+            const orderBy =
+              tablesWithPosition.has(embedTable) &&
+              (embed.select.star || embed.select.columns.includes("position"))
+                ? ` ORDER BY ${ident("position")} ASC NULLS LAST`
+                : "";
+            const res = await pool.query(
+              `SELECT ${innerCols} FROM ${ident(embedTable)} WHERE ${ident(fkCol)} IN (${ph})${orderBy}`,
+              parentIds
+            );
+            related = res.rows;
+          }
         }
-        await this.resolveEmbeds(related, embed.select);
+        if (!isCountOnly) await this.resolveEmbeds(related, embed.select);
         const grouped = new Map<any, Row[]>();
         for (const r of related) {
           const k = r[fkCol];
           if (!grouped.has(k)) grouped.set(k, []);
+          if (isCountOnly) {
+            grouped.get(k)!.push({ count: Number(r.count) || 0 });
+            continue;
+          }
           if (!wantFk) delete r[fkCol];
           if (!wantId) delete r.id;
           grouped.get(k)!.push(r);
         }
-        for (const r of rows) r[embed.alias] = grouped.get(r.id) ?? [];
+        for (const r of rows) r[embed.alias] = grouped.get(r.id) ?? (isCountOnly ? [{ count: 0 }] : []);
       }
     }
   }

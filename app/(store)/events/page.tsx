@@ -24,7 +24,7 @@ type KitchenEvent = {
 };
 
 function EventCard({ event, featured }: { event: KitchenEvent; featured?: boolean }) {
-  const embed = event.video_urls?.[0] ? embedVideoUrl(event.video_urls[0]) : null;
+  const videos = (event.video_urls || []).map((url) => embedVideoUrl(url)).filter(Boolean) as string[];
   const dateStr = event.event_date
     ? new Date(event.event_date).toLocaleDateString('en-CA', {
         weekday: 'long',
@@ -42,15 +42,15 @@ function EventCard({ event, featured }: { event: KitchenEvent; featured?: boolea
           <Image src={event.cover_image_url} alt={event.title} fill className="object-cover" unoptimized />
         </div>
       )}
-      {embed && (
-        <div className="aspect-video bg-black">
-          {embed.includes('youtube') || embed.includes('vimeo') ? (
-            <iframe src={embed} title={event.title} className="w-full h-full" allowFullScreen />
+      {videos.map((src, i) => (
+        <div key={`${src}-${i}`} className="aspect-video bg-black">
+          {src.includes('youtube') || src.includes('vimeo') ? (
+            <iframe src={src} title={`${event.title} video ${i + 1}`} className="w-full h-full" allowFullScreen />
           ) : (
-            <video src={embed} controls className="w-full h-full" />
+            <video src={src} controls playsInline className="w-full h-full" />
           )}
         </div>
-      )}
+      ))}
       <div className="p-6">
         <div className="flex flex-wrap gap-2 mb-3">
           {event.is_upcoming && (

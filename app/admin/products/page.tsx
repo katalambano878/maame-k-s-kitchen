@@ -13,6 +13,7 @@ export default function ProductsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [categories, setCategories] = useState<any[]>([]);
 
   // Statistics
@@ -43,12 +44,12 @@ export default function ProductsPage() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
+      setLoadError('');
       let query = supabase
         .from('products')
         .select(`
           *,
           categories(name),
-          product_variants(count),
           product_images(url, position)
         `);
 
@@ -71,7 +72,7 @@ export default function ProductsPage() {
           image: p.product_images?.find((img: any) => img.position === 0)?.url
             || p.product_images?.[0]?.url
             || 'https://via.placeholder.com/300?text=No+Image',
-          variantsCount: p.product_variants?.[0]?.count || 0,
+          variantsCount: 0,
           stock: p.quantity,
           sales: 0, // Placeholder for now
           rating: p.rating_avg || 0
@@ -89,6 +90,8 @@ export default function ProductsPage() {
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+      setLoadError(error instanceof Error ? error.message : 'Could not load dishes');
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -298,6 +301,11 @@ export default function ProductsPage() {
           <div className="p-12 text-center text-gray-500">
             <i className="ri-loader-4-line animate-spin text-3xl mb-2 inline-block"></i>
             <p>Loading menu...</p>
+          </div>
+        ) : loadError ? (
+          <div className="p-12 text-center text-red-600">
+            <p className="text-lg font-semibold">Could not load dishes</p>
+            <p className="text-sm text-gray-500 mt-1">{loadError}</p>
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="p-12 text-center text-gray-500">

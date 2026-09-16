@@ -32,6 +32,7 @@ export default function AdminEventsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [uploading, setUploading] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
 
   const fetchEvents = async () => {
     setLoading(true);
@@ -91,6 +92,42 @@ export default function AdminEventsPage() {
       alert('Upload failed: ' + err.message);
     } finally {
       setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const uploadVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setUploadingVideo(true);
+    const failed: string[] = [];
+    try {
+      for (const file of files) {
+        const ext = file.name.split('.').pop()?.toLowerCase() || 'mp4';
+        if (!['mp4', 'webm', 'mov', 'm4v'].includes(ext)) {
+          failed.push(`${file.name}: use MP4, WebM, or MOV`);
+          continue;
+        }
+        const path = `events/videos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const { error } = await supabase.storage.from('products').upload(path, file, {
+          contentType: file.type || 'video/mp4',
+        });
+        if (error) {
+          failed.push(`${file.name}: ${error.message}`);
+          continue;
+        }
+        const { data: { publicUrl } } = supabase.storage.from('products').getPublicUrl(path);
+        setForm((f) => ({
+          ...f,
+          video_urls: f.video_urls.trim() ? `${f.video_urls.trim()}\n${publicUrl}` : publicUrl,
+        }));
+      }
+    } catch (err: any) {
+      alert('Video upload failed: ' + (err?.message || 'Please try again.'));
+    } finally {
+      setUploadingVideo(false);
+      e.target.value = '';
+      if (failed.length) alert(`Could not upload ${failed.length} video(s):\n\n${failed.join('\n')}`);
     }
   };
 
@@ -217,8 +254,26 @@ export default function AdminEventsPage() {
               <input type="file" accept="image/*" className="mt-2" onChange={e => uploadImage(e, 'gallery')} disabled={uploading} />
             </div>
             <div>
-              <label className="text-sm font-semibold block mb-2">Video URLs (YouTube, Vimeo, or MP4 — one per line)</label>
-              <textarea className="w-full border-2 rounded-lg px-4 py-3" rows={2} value={form.video_urls} onChange={e => setForm({ ...form, video_urls: e.target.value })} placeholder="https://youtube.com/watch?v=..." />
+              <label className="text-sm font-semibold block mb-2">Videos</label>
+              <p className="text-xs text-gray-500 mb-2">Upload an MP4 from your computer, or paste YouTube / Vimeo / MP4 links (one per line).</p>
+              <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#111111] text-white text-sm font-semibold cursor-pointer disabled:opacity-50">
+                <i className="ri-video-upload-line"></i>
+                {uploadingVideo ? 'Uploading video...' : 'Upload video'}
+                <input
+                  type="file"
+                  accept="video/mp4,video/webm,video/quicktime,video/x-m4v,.mp4,.webm,.mov,.m4v"
+                  className="hidden"
+                  disabled={uploadingVideo}
+                  onChange={uploadVideo}
+                />
+              </label>
+              <textarea
+                className="w-full border-2 rounded-lg px-4 py-3 mt-3"
+                rows={3}
+                value={form.video_urls}
+                onChange={e => setForm({ ...form, video_urls: e.target.value })}
+                placeholder="https://youtube.com/watch?v=... or uploaded file URL"
+              />
             </div>
             <div className="flex gap-3 pt-4">
               <button onClick={() => setShowModal(false)} className="flex-1 border-2 py-3 rounded-lg font-semibold cursor-pointer">Cancel</button>
