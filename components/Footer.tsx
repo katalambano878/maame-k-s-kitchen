@@ -161,7 +161,8 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div className="pt-5 flex flex-col sm:flex-row justify-between items-center gap-3">
             <p className="text-white/35 text-[11px] tracking-wide font-light">
-              &copy; {new Date().getFullYear()} {siteName}. All rights reserved.
+              &copy; {new Date().getFullYear()} {siteName}. All rights reserved. Powered by{" "}
+              <a href="https://doctorbarns.com" target="_blank" rel="noopener" className="text-white/35 hover:text-white/60 hover:underline">Doctor Barns Tech</a>
             </p>
             <div className="flex items-center gap-3 text-white/30">
               <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Visa</span>
